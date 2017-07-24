@@ -6,4 +6,13 @@
 import Foundation
 
 protocol INewsListProvider {
+    func load(offset: Int, count: Int,
+              completion: (() -> Void)?)
+}
+
+extension INewsListProvider {
+    func load(offset: Int = 0, count: Int,
+              completion: (() -> Void)? = nil) {
+        load(offset: offset, count: count, completion: completion)
+    }
 }

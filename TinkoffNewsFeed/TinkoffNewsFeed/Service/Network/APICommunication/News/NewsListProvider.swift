@@ -27,7 +27,7 @@ struct NewsEntityModel: IEntityMappable {
 
 final class NewsListProvider: INewsListProvider {
     func load(offset: Int = 0, count: Int,
-              completion: (() -> Void)?) {
+              completion: (() -> Void)? = nil) {
 
         let config = buildRequestConfig(offset: offset, count: count)
         requestSender.sendJSON(config: config) { [weak self] (result) in

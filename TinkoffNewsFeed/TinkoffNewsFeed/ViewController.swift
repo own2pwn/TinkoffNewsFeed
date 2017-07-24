@@ -80,6 +80,18 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
     private func setupController() {
         initConnectionListener()
         setupView()
+        doThings()
+    }
+    
+    private func doThings() {
+        // TODO: make one protocol for newlist and news content
+        let stack = CDStack()
+        let mapper = StructToEntityMapper.self
+        let cm = NewsListCacheManager(contextManager: stack, objectMapper: mapper)
+        let rs = RequestSender()
+        
+        let newsProvider: INewsListProvider = NewsListProvider(cacheManager: cm, requestSender: rs)
+        newsProvider.load(count: 15)
     }
 
     private func setupView() {
