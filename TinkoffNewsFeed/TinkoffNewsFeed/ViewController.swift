@@ -83,6 +83,8 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
         doThings()
     }
     
+    var newsProvider: INewsListProvider!
+    
     private func doThings() {
         // TODO: make one protocol for newlist and news content
         let stack = CDStack()
@@ -90,7 +92,7 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
         let cm = NewsListCacheManager(contextManager: stack, objectMapper: mapper)
         let rs = RequestSender()
         
-        let newsProvider: INewsListProvider = NewsListProvider(cacheManager: cm, requestSender: rs)
+        newsProvider = NewsListProvider(cacheManager: cm, requestSender: rs)
         newsProvider.load(count: 15)
     }
 

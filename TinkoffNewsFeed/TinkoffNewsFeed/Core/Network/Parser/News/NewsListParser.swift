@@ -7,6 +7,8 @@ import Foundation
 import SwiftyJSON
 import ObjectMapper
 
+// TODO: let parser to save all right away to core data
+
 final class NewsListParser: IParser<[NewsEntityModel], JSON> {
     override func parse(_ response: JSON) -> [NewsEntityModel]? {
 
@@ -25,7 +27,7 @@ final class NewsListParser: IParser<[NewsEntityModel], JSON> {
             }
         }
 
-        return nil
+        return newsModel
     }
 
     // MARK: - Private
