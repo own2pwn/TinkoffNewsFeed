@@ -33,6 +33,15 @@ final class ViewController: UIViewController {
 
     private func setupController() {
         initConnectionListener()
+        setupView()
+    }
+    
+    private func setupView() {
+        let color = UIColor.init(red: 0.944989, green: 0.912527, blue: 0.518278, alpha: 0.751766)
+        
+        newsFeedTableView.estimatedRowHeight = 75
+        newsFeedTableView.rowHeight = UITableViewAutomaticDimension
+        navigationController?.navigationBar.barTintColor = color
     }
 
     private func initConnectionListener() {
@@ -72,6 +81,8 @@ final class ViewController: UIViewController {
 
     fileprivate func loadMore() {
         // TODO: check if we've already reached end
+        
+        if itemsCount == 40 {return}
 
         itemsCount += itemsPerBatch
         newsFeedTableView.reloadData()
@@ -89,6 +100,7 @@ final class ViewController: UIViewController {
     }
 }
 
+// MARK: - UITableViewDataSource
 
 extension ViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -98,9 +110,21 @@ extension ViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: feedCellId, for: indexPath) as! NewsFeedCell
 
-        cell.newsTitleLabel.text = "news number: \(indexPath.row)"
-
         let row = indexPath.row
+        cell.newsTitleLabel.text = "news number: \(row)"
+        
+        if row > 22 {
+            cell.newsTitleLabel.text = "long news news news news"
+        }
+        
+        if row == 15 || row == 25 {
+            cell.newsTitleLabel.text = "long news news\n news news"
+        }
+        
+        if row == 23 {
+            cell.newsTitleLabel.text = "К ипотечной платформе Тинькофф Банка подключились два новых партнера: ЮниКредит Банк и СМП Банк"
+        }
+
         if row == itemsCount - 2 {
 
             DispatchQueue.main.async { [unowned self] in
@@ -109,18 +133,16 @@ extension ViewController: UITableViewDataSource {
         }
         return cell
     }
+}
 
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return CGFloat.leastNormalMagnitude
-    }
+// MARK: - UITableViewDelegate
 
+extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return CGFloat.leastNormalMagnitude
     }
-
-}
-
-
-extension ViewController: UITableViewDelegate {
-
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 10.0
+    }
 }

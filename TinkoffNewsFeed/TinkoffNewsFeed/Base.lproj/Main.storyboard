@@ -22,37 +22,37 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="70" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="kHi-FJ-mif">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="75" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="kHi-FJ-mif">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="idNewsFeedCell" id="k29-Kp-OcB" customClass="NewsFeedCell" customModule="TinkoffNewsFeed" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="55.5" width="375" height="70"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="375" height="75"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k29-Kp-OcB" id="UHJ-qg-Iwk">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="69.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="74.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="24.07.2017 в 23:59" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CPE-ls-O2r">
-                                                    <rect key="frame" x="8" y="8" width="146" height="17.5"/>
+                                                    <rect key="frame" x="8" y="8" width="146" height="20.5"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Some cool news Some cool news Some cool news Some cool news" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8YI-ht-TSb">
-                                                    <rect key="frame" x="8" y="33.5" width="351" height="20"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Some cool news" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8YI-ht-TSb">
+                                                    <rect key="frame" x="8" y="36.5" width="126.5" height="20"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottomMargin" secondItem="8YI-ht-TSb" secondAttribute="bottom" constant="8" id="80E-lG-ham"/>
                                                 <constraint firstItem="CPE-ls-O2r" firstAttribute="top" secondItem="UHJ-qg-Iwk" secondAttribute="topMargin" id="Abb-dA-TQy"/>
-                                                <constraint firstItem="8YI-ht-TSb" firstAttribute="top" secondItem="CPE-ls-O2r" secondAttribute="bottom" constant="8" id="LuN-Ze-i8i"/>
-                                                <constraint firstItem="8YI-ht-TSb" firstAttribute="leading" secondItem="UHJ-qg-Iwk" secondAttribute="leadingMargin" id="Qqr-ul-vj0"/>
+                                                <constraint firstItem="8YI-ht-TSb" firstAttribute="leading" secondItem="UHJ-qg-Iwk" secondAttribute="leadingMargin" id="SmJ-qJ-nUI"/>
                                                 <constraint firstItem="CPE-ls-O2r" firstAttribute="leading" secondItem="UHJ-qg-Iwk" secondAttribute="leadingMargin" id="UDZ-xB-A9h"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="8YI-ht-TSb" secondAttribute="trailing" constant="8" id="cer-vd-rW4"/>
+                                                <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="8YI-ht-TSb" secondAttribute="trailing" constant="8" id="gp5-x9-4HP"/>
+                                                <constraint firstItem="8YI-ht-TSb" firstAttribute="top" secondItem="CPE-ls-O2r" secondAttribute="bottom" constant="8" id="oEr-Uw-wXd"/>
+                                                <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="8YI-ht-TSb" secondAttribute="bottom" constant="8" id="ssm-Lx-iWe"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -67,7 +67,6 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="kHi-FJ-mif" secondAttribute="bottom" id="2o5-Q9-Fvk"/>
                             <constraint firstItem="kHi-FJ-mif" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="6X8-yK-v88"/>
