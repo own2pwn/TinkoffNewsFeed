@@ -19,10 +19,10 @@ struct NewsListAPIModel {
 }
 
 struct NewsEntityModel: IEntityMappable {
-    let id: String
-    let pubDate: Date
-    let title: String
-    let titleHash: String
+    var id: String
+    var pubDate: Date
+    var title: String
+    var titleHash: String
 }
 
 final class NewsListProvider: INewsListProvider {
