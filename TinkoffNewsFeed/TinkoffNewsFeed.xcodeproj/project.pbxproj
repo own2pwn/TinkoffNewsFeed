@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		865CE61B31A84DDC8DE9A1DF /* Pods_TinkoffNewsFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 442A130EC7E9DF11BC28F57D /* Pods_TinkoffNewsFeed.framework */; };
 		B97BDF1D1F25FE0300568C3F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97BDF1C1F25FE0300568C3F /* AppDelegate.swift */; };
 		B97BDF1F1F25FE0300568C3F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97BDF1E1F25FE0300568C3F /* ViewController.swift */; };
 		B97BDF221F25FE0300568C3F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B97BDF201F25FE0300568C3F /* Main.storyboard */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		442A130EC7E9DF11BC28F57D /* Pods_TinkoffNewsFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinkoffNewsFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B97BDF191F25FE0300568C3F /* TinkoffNewsFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinkoffNewsFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B97BDF1C1F25FE0300568C3F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B97BDF1E1F25FE0300568C3F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -22,6 +24,8 @@
 		B97BDF231F25FE0300568C3F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B97BDF261F25FE0300568C3F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B97BDF281F25FE0300568C3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BEC257A59A58469B7AA05447 /* Pods-TinkoffNewsFeed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinkoffNewsFeed.release.xcconfig"; path = "Pods/Target Support Files/Pods-TinkoffNewsFeed/Pods-TinkoffNewsFeed.release.xcconfig"; sourceTree = "<group>"; };
+		C17511B1132E6AFDE7C994E9 /* Pods-TinkoffNewsFeed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinkoffNewsFeed.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TinkoffNewsFeed/Pods-TinkoffNewsFeed.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,17 +33,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				865CE61B31A84DDC8DE9A1DF /* Pods_TinkoffNewsFeed.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2908066EF0A85BBC7B70E852 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				442A130EC7E9DF11BC28F57D /* Pods_TinkoffNewsFeed.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B97BDF101F25FE0300568C3F = {
 			isa = PBXGroup;
 			children = (
 				B97BDF1B1F25FE0300568C3F /* TinkoffNewsFeed */,
 				B97BDF1A1F25FE0300568C3F /* Products */,
+				CB20571C03ED6F8F7A8C2D9C /* Pods */,
+				2908066EF0A85BBC7B70E852 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -64,6 +79,15 @@
 			path = TinkoffNewsFeed;
 			sourceTree = "<group>";
 		};
+		CB20571C03ED6F8F7A8C2D9C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C17511B1132E6AFDE7C994E9 /* Pods-TinkoffNewsFeed.debug.xcconfig */,
+				BEC257A59A58469B7AA05447 /* Pods-TinkoffNewsFeed.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -71,9 +95,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B97BDF2B1F25FE0300568C3F /* Build configuration list for PBXNativeTarget "TinkoffNewsFeed" */;
 			buildPhases = (
+				19ACCC2E7749E8B58142BCC6 /* [CP] Check Pods Manifest.lock */,
 				B97BDF151F25FE0300568C3F /* Sources */,
 				B97BDF161F25FE0300568C3F /* Frameworks */,
 				B97BDF171F25FE0300568C3F /* Resources */,
+				F8CFFB9E8B359BF876A65197 /* [CP] Embed Pods Frameworks */,
+				81A6DF8B7C1E087E5A7BD404 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -131,6 +158,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		19ACCC2E7749E8B58142BCC6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		81A6DF8B7C1E087E5A7BD404 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinkoffNewsFeed/Pods-TinkoffNewsFeed-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F8CFFB9E8B359BF876A65197 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinkoffNewsFeed/Pods-TinkoffNewsFeed-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B97BDF151F25FE0300568C3F /* Sources */ = {
@@ -259,6 +334,7 @@
 		};
 		B97BDF2C1F25FE0300568C3F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C17511B1132E6AFDE7C994E9 /* Pods-TinkoffNewsFeed.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = VD97XKT54M;
@@ -272,6 +348,7 @@
 		};
 		B97BDF2D1F25FE0300568C3F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BEC257A59A58469B7AA05447 /* Pods-TinkoffNewsFeed.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = VD97XKT54M;
