@@ -8,11 +8,12 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
+        doThings()
     }
 
     override func didReceiveMemoryWarning() {
@@ -21,5 +22,8 @@ class ViewController: UIViewController {
     }
 
 
+    private func doThings() {
+        // TODO: check for internet connection
+    }
 }
 
