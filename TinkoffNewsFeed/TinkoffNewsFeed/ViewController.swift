@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ReachabilitySwift
 
 final class ViewController: UIViewController {
 
@@ -20,8 +21,27 @@ final class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
 
+    let connectionChecker = Reachability()
 
     private func doThings() {
         // TODO: check for internet connection
+        try? connectionChecker?.startNotifier()
+        connectionChecker?.whenReachable = onActiveConnection
+        connectionChecker?.whenUnreachable = onLostConnection
+    }
+    
+    private func onActiveConnection(_ info: Reachability) {
+        let m = "Internet is available!\nInfo: \(info)"
+        
+        print(m)
+    }
+    
+    private func onLostConnection(_ info: Reachability) {
+        
+        // TODO: Use HUD to display connection error
+        
+        let m = "Internet is unavailable!\nInfo: \(info)"
+        
+        print(m)
     }
 }
