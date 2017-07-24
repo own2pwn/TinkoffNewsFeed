@@ -39,6 +39,7 @@ final class ViewController: UIViewController {
     private func onLostConnection(_ info: Reachability) {
         
         // TODO: Use HUD to display connection error
+        // show 
         
         let m = "Internet is unavailable!\nInfo: \(info)"
         

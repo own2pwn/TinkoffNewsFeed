@@ -14,6 +14,8 @@
 		B97BDF221F25FE0300568C3F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B97BDF201F25FE0300568C3F /* Main.storyboard */; };
 		B97BDF241F25FE0300568C3F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B97BDF231F25FE0300568C3F /* Assets.xcassets */; };
 		B97BDF271F25FE0300568C3F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B97BDF251F25FE0300568C3F /* LaunchScreen.storyboard */; };
+		B9D0CE5B1F26058100117C9B /* NewsFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0CE5A1F26058100117C9B /* NewsFeedCell.swift */; };
+		B9D0CE5D1F26059600117C9B /* NewsDetailedInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0CE5C1F26059600117C9B /* NewsDetailedInfoCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,8 @@
 		B97BDF231F25FE0300568C3F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B97BDF261F25FE0300568C3F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B97BDF281F25FE0300568C3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B9D0CE5A1F26058100117C9B /* NewsFeedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsFeedCell.swift; sourceTree = "<group>"; };
+		B9D0CE5C1F26059600117C9B /* NewsDetailedInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsDetailedInfoCell.swift; sourceTree = "<group>"; };
 		BEC257A59A58469B7AA05447 /* Pods-TinkoffNewsFeed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinkoffNewsFeed.release.xcconfig"; path = "Pods/Target Support Files/Pods-TinkoffNewsFeed/Pods-TinkoffNewsFeed.release.xcconfig"; sourceTree = "<group>"; };
 		C17511B1132E6AFDE7C994E9 /* Pods-TinkoffNewsFeed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinkoffNewsFeed.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TinkoffNewsFeed/Pods-TinkoffNewsFeed.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -42,6 +46,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1064A42D044E383FE474305E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B9D0CE5A1F26058100117C9B /* NewsFeedCell.swift */,
+				B9D0CE5C1F26059600117C9B /* NewsDetailedInfoCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		1064A4B02AA09C613C86BA5F /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -81,6 +94,14 @@
 			path = Libs;
 			sourceTree = "<group>";
 		};
+		1064ADE9C28A23E2B4D1FF14 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				1064A42D044E383FE474305E /* View */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
 		2908066EF0A85BBC7B70E852 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -118,6 +139,7 @@
 				B97BDF281F25FE0300568C3F /* Info.plist */,
 				1064A8FBB10478229B90262F /* Constants */,
 				1064A9835D2D1785894509E6 /* Common */,
+				1064ADE9C28A23E2B4D1FF14 /* Presentation */,
 			);
 			path = TinkoffNewsFeed;
 			sourceTree = "<group>";
@@ -257,6 +279,8 @@
 			files = (
 				B97BDF1F1F25FE0300568C3F /* ViewController.swift in Sources */,
 				B97BDF1D1F25FE0300568C3F /* AppDelegate.swift in Sources */,
+				B9D0CE5D1F26059600117C9B /* NewsDetailedInfoCell.swift in Sources */,
+				B9D0CE5B1F26058100117C9B /* NewsFeedCell.swift in Sources */,
 				1064A312A63DD1361038088E /* TNFAPIRequestConstants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -423,6 +447,7 @@
 				B97BDF2D1F25FE0300568C3F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
