@@ -5,7 +5,7 @@
 
 import Foundation
 
-private struct NewsListResponse {
+private struct NewsListAPIResponse {
     let statusCode: String
     //let payload:
 }
@@ -18,5 +18,5 @@ struct NewsListAPIModel {
 }
 
 final class NewsListProvider: INewsListProvider {
-    // func load
+     func load(offset: Int, count: Int, completion: () )
 }
