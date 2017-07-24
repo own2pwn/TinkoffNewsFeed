@@ -20,10 +20,11 @@ struct NewsListAPIModel {
 final class NewsListProvider: INewsListProvider {
     func load(offset: Int = 0, count: Int,
               completion: ([NewsListAPIModel]?) -> Void) {
+        let request = buildRequest()
 
     }
 
-    private func constructRequest(offset: Int, count: Int) -> URLRequest {
+    private func buildRequest(offset: Int, count: Int) -> URLRequest {
         let urlFmt = "%@/%@/%@"
         let url = String(format: urlFmt, apiHost, apiVersion, apiMethod)
 
@@ -37,7 +38,7 @@ final class NewsListProvider: INewsListProvider {
     }
 
     // MARK: - DI
-    
+
     init(cacheManager: INewsListCacheManager, requestSender: IRequestSender) {
         self.cacheManager = cacheManager
         self.requestSender = requestSender
