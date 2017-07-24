@@ -9,7 +9,7 @@
 import UIKit
 import ReachabilitySwift
 
-final class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+final class ViewController: UIViewController {
 
     // MARK: - Outlets
 
@@ -63,18 +63,53 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
     }
 
     fileprivate let feedCellId = "idNewsFeedCell"
+
+    fileprivate var itemsCount = 20
+
+    fileprivate let itemsPerBatch = 20
+
+    fileprivate var offset = 0
+
+    fileprivate func loadMore() {
+        // TODO: check if we've already reached end
+
+        itemsCount += itemsPerBatch
+        newsFeedTableView.reloadData()
+    }
 }
 
 
-extension ViewController {
+extension ViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 20
+        return itemsCount
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: feedCellId, for: indexPath) as! NewsFeedCell
 
+        cell.newsTitleLabel.text = "news number: \(indexPath.row)"
+
+        let row = indexPath.row
+        if row == itemsCount - 2 {
+
+            DispatchQueue.main.async { [unowned self] in
+                self.loadMore()
+            }
+        }
         return cell
     }
+
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return CGFloat.leastNormalMagnitude
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return CGFloat.leastNormalMagnitude
+    }
+
+}
+
+
+extension ViewController: UITableViewDelegate {
 
 }
