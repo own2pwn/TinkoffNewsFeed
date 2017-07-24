@@ -1,5 +1,5 @@
 //
-//  NewsDetailedInfoCell.swift
+//  NewsContentCell.swift
 //  TinkoffNewsFeed
 //
 //  Created by Evgeniy on 24.07.17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class NewsDetailedInfoCell: UITableViewCell {
+class NewsContentCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -20,5 +20,4 @@ class NewsDetailedInfoCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
 }

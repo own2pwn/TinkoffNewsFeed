@@ -106,7 +106,7 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
     }
 
     private func onActiveConnection(_ info: Reachability) {
-        let m = "Internet is available!\nInfo: \(info)"
+        let m = "Internet is available! | Info: \(info)"
         log.info(m)
     }
 
@@ -114,7 +114,7 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
         // TODO: Use HUD to display connection error
         // show
 
-        let m = "Internet is unavailable!\nInfo: \(info)"
+        let m = "Internet is unavailable! | Info: \(info)"
         log.info(m)
     }
 
@@ -133,6 +133,7 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
         // TODO: use core data to insert new rows
 
         newsFeedTableView.beginUpdates()
+        // TODO: insert rows here
         newsFeedTableView.endUpdates()
     }
 }

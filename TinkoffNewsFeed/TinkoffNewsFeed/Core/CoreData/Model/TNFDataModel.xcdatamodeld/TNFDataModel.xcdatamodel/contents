@@ -4,8 +4,17 @@
         <attribute name="id" attributeType="String" syncable="YES"/>
         <attribute name="pubDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="title" attributeType="String" syncable="YES"/>
+        <attribute name="titleHash" optional="YES" syncable="YES"/>
+        <relationship name="content" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NewsContent" inverseName="news" inverseEntity="NewsContent" syncable="YES"/>
+    </entity>
+    <entity name="NewsContent" representedClassName="NewsContent" syncable="YES" codeGenerationType="class">
+        <attribute name="content" attributeType="String" syncable="YES"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="modifiedAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="news" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="News" inverseName="content" inverseEntity="News" syncable="YES"/>
     </entity>
     <elements>
-        <element name="News" positionX="-63" positionY="-18" width="128" height="90"/>
+        <element name="News" positionX="-254" positionY="-30" width="128" height="120"/>
+        <element name="NewsContent" positionX="-54" positionY="18" width="128" height="105"/>
     </elements>
 </model>
