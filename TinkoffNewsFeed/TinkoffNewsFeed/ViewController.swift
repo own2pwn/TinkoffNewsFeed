@@ -76,6 +76,17 @@ final class ViewController: UIViewController {
         itemsCount += itemsPerBatch
         newsFeedTableView.reloadData()
     }
+    
+    fileprivate func onNewNewsLoaded() {
+        
+        // TODO: use core data to insert new rows
+        
+        newsFeedTableView.beginUpdates()
+        
+        
+        
+        newsFeedTableView.endUpdates()
+    }
 }
 
 

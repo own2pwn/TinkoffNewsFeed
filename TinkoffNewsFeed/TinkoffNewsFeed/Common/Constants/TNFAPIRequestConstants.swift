@@ -6,9 +6,9 @@
 import Foundation
 
 enum CTNFAPIRequest {
-    static let TNF_NEWS_BATCH_SIZE = 20
+    static let NEWS_BATCH_SIZE = 20
 }
 
 extension Int {
-    static let TNF_NEWS_BATCH_SIZE = CTNFAPIRequest.TNF_NEWS_BATCH_SIZE
+    static let TNF_API_REQUEST_NEWS_BATCH_SIZE = CTNFAPIRequest.NEWS_BATCH_SIZE
 }
