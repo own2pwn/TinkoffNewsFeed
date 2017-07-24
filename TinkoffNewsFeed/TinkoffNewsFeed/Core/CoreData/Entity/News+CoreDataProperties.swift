@@ -19,7 +19,7 @@ extension News {
     @NSManaged public var id: String?
     @NSManaged public var pubDate: NSDate?
     @NSManaged public var title: String?
-    @NSManaged public var titleHash: NSObject?
+    @NSManaged public var titleHash: String?
     @NSManaged public var content: NewsContent?
 
 }

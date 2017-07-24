@@ -10,17 +10,12 @@ import CoreData
 
 
 final class NewsListCacheManager: INewsListCacheManager {
-    func cache(_ news: NewsEntityModel...) {
+    func cache(_ news: [NewsEntityModel]) {
         for single in news {
-            let mObject = News(context: saveContext)
-
+            var mObject = News(context: saveContext)
+            objectMapper.map(single, &mObject)
         }
-    }
-
-    private func mapModelToObject(_ model: NewsEntityModel) {
-        let mObject = News(context: saveContext)
-        objectMapper.map(model, &mObject)
-        try? contextManager.performSave(context: saveContext) { error in
+        contextManager.performSave(context: saveContext) { error in
             if let e = error {
                 log.error(e)
             }

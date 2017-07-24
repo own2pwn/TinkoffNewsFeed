@@ -4,7 +4,7 @@
         <attribute name="id" attributeType="String" syncable="YES"/>
         <attribute name="pubDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="title" attributeType="String" syncable="YES"/>
-        <attribute name="titleHash" optional="YES" syncable="YES"/>
+        <attribute name="titleHash" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="content" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NewsContent" inverseName="news" inverseEntity="NewsContent" syncable="YES"/>
     </entity>
     <entity name="NewsContent" representedClassName="NewsContent" syncable="YES">

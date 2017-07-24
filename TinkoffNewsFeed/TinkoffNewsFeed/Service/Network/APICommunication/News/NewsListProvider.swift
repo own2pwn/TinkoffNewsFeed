@@ -29,29 +29,32 @@ final class NewsListProvider: INewsListProvider {
     func load(offset: Int = 0, count: Int,
               completion: (() -> Void)?) {
 
-        let config = buildRequestConfig()
-        requestSender.sendJSON(config: config) { (result) in
+        let config = buildRequestConfig(offset: offset, count: count)
+        requestSender.sendJSON(config: config) { [weak self] (result) in
+            self?.cache(result)
+            // TODO: check if it save here to use unowned
+            // or not to
         }
     }
 
-    private func parseResponse(_ response: IResult<[NewsEntityModel]>) {
+    private func cache(_ response: IResult<[NewsEntityModel]>) {
         switch response {
         case .error(let e):
             log.error(e)
         case .success(let result):
-            
+            cacheManager.cache(result)
         }
     }
 
     // TODO: load config as dependency
 
-    private func buildRequestConfig() ->
+    private func buildRequestConfig(offset: Int, count: Int) ->
             RequestConfig<[NewsEntityModel], JSON> {
         let request = buildRequest(offset, count)
         let parser = newsListParser()
 
         let config: RequestConfig<[NewsEntityModel], JSON> =
-                (request: request, parser: parser)
+                RequestConfig(request: request, parser: parser)
 
         return config
     }

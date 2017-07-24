@@ -6,4 +6,5 @@
 import Foundation
 
 protocol INewsListCacheManager {
+    func cache(_ news: [NewsEntityModel])
 }
