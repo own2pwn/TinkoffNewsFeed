@@ -4,6 +4,11 @@
 //
 
 import Foundation
+import SwiftyJSON
 
-class NewsListParser: IParser<> {
+final class NewsListParser: IParser<[NewsEntityModel], JSON> {
+    override func parse(_ response: JSON) -> [NewsEntityModel]? {
+
+        return nil
+    }
 }

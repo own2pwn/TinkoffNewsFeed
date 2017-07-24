@@ -5,6 +5,7 @@
 
 import Foundation
 import Alamofire
+import SwiftyJSON
 
 private struct NewsListAPIResponse {
     let statusCode: String
@@ -17,14 +18,51 @@ struct NewsListAPIModel {
     let publicationDate: String
 }
 
+struct NewsEntityModel {
+    let id: String
+    let pubDate: Date
+    let title: String
+    let titleHash: String
+}
+
 final class NewsListProvider: INewsListProvider {
     func load(offset: Int = 0, count: Int,
-              completion: ([NewsListAPIModel]?) -> Void) {
-        let request = buildRequest()
+              completion: (() -> Void)?) {
 
+        let config = buildRequestConfig()
+        requestSender.sendJSON(config: config) { (result) in
+        }
     }
 
-    private func buildRequest(offset: Int, count: Int) -> URLRequest {
+    private func parseResponse(_ response: IResult<[NewsEntityModel]>) {
+        switch response {
+        case .error(let e):
+            log.error(e)
+        case .success(let result):
+            
+        }
+    }
+
+    // TODO: load config as dependency
+
+    private func buildRequestConfig() ->
+            RequestConfig<[NewsEntityModel], JSON> {
+        let request = buildRequest(offset, count)
+        let parser = newsListParser()
+
+        let config: RequestConfig<[NewsEntityModel], JSON> =
+                (request: request, parser: parser)
+
+        return config
+    }
+
+    private func newsListParser() -> NewsListParser {
+        let parser = NewsListParser()
+
+        return parser
+    }
+
+    private func buildRequest(_ offset: Int, _ count: Int) -> URLRequest {
         let urlFmt = "%@/%@/%@"
         let url = String(format: urlFmt, apiHost, apiVersion, apiMethod)
 

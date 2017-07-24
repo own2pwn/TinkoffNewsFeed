@@ -10,4 +10,6 @@ target 'TinkoffNewsFeed' do
   pod 'SwiftyJSON'
   pod 'SwiftyBeaver'
 
+  pod 'SwiftKVC'
+
 end
