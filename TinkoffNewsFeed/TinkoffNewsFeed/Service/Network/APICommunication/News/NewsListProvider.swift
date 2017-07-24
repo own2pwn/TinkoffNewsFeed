@@ -12,7 +12,6 @@ private struct NewsListAPIResponse {
 
 struct NewsListAPIModel {
     let newsId: String
-    let name: String
     let title: String
     let publicationDate: String
 }
