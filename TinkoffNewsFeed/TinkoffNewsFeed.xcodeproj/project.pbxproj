@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1064A3C81FB1A8309A167C9B /* TNFAPIRequestConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1064A98128490620F9631068 /* TNFAPIRequestConstants.swift */; };
 		1064A3DC617510857688D676 /* TNFCDConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1064A4EFE4CFFB3931F9960C /* TNFCDConstants.swift */; };
+		1064A63D5100D454BCFD7122 /* IParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1064A6C71C3D4CB2A29F0FCB /* IParser.swift */; };
+		1064A7F175B7037E5A527560 /* IResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1064AAED5464D319CFB57E5A /* IResult.swift */; };
 		1064A853603D870F8EEA4D67 /* CDStackAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1064AFA844455238177AB6A8 /* CDStackAssembler.swift */; };
 		1064AF0CD930BCC63DE76129 /* ICDStackAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1064A204F5E85F816D524634 /* ICDStackAssembler.swift */; };
 		865CE61B31A84DDC8DE9A1DF /* Pods_TinkoffNewsFeed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 442A130EC7E9DF11BC28F57D /* Pods_TinkoffNewsFeed.framework */; };
@@ -24,12 +26,17 @@
 		B9D0CE651F2617A500117C9B /* ICDStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0CE631F2617A500117C9B /* ICDStack.swift */; };
 		B9D0CE681F261A5100117C9B /* TNFDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B9D0CE661F261A5100117C9B /* TNFDataModel.xcdatamodeld */; };
 		B9D0CE6A1F261D0600117C9B /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0CE691F261D0600117C9B /* Logger.swift */; };
+		B9D0CE6C1F261E6D00117C9B /* RequestSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0CE6B1F261E6D00117C9B /* RequestSender.swift */; };
+		B9D0CE6F1F261E7400117C9B /* IRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0CE6D1F261E7400117C9B /* IRequest.swift */; };
+		B9D0CE701F261E7400117C9B /* IRequestSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0CE6E1F261E7400117C9B /* IRequestSender.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1064A204F5E85F816D524634 /* ICDStackAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ICDStackAssembler.swift; sourceTree = "<group>"; };
 		1064A4EFE4CFFB3931F9960C /* TNFCDConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TNFCDConstants.swift; sourceTree = "<group>"; };
+		1064A6C71C3D4CB2A29F0FCB /* IParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IParser.swift; sourceTree = "<group>"; };
 		1064A98128490620F9631068 /* TNFAPIRequestConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TNFAPIRequestConstants.swift; sourceTree = "<group>"; };
+		1064AAED5464D319CFB57E5A /* IResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IResult.swift; sourceTree = "<group>"; };
 		1064AFA844455238177AB6A8 /* CDStackAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDStackAssembler.swift; sourceTree = "<group>"; };
 		442A130EC7E9DF11BC28F57D /* Pods_TinkoffNewsFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinkoffNewsFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B97BDF191F25FE0300568C3F /* TinkoffNewsFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinkoffNewsFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,6 +53,9 @@
 		B9D0CE631F2617A500117C9B /* ICDStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ICDStack.swift; sourceTree = "<group>"; };
 		B9D0CE671F261A5100117C9B /* TNFDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TNFDataModel.xcdatamodel; sourceTree = "<group>"; };
 		B9D0CE691F261D0600117C9B /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		B9D0CE6B1F261E6D00117C9B /* RequestSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestSender.swift; sourceTree = "<group>"; };
+		B9D0CE6D1F261E7400117C9B /* IRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IRequest.swift; sourceTree = "<group>"; };
+		B9D0CE6E1F261E7400117C9B /* IRequestSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IRequestSender.swift; sourceTree = "<group>"; };
 		BEC257A59A58469B7AA05447 /* Pods-TinkoffNewsFeed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinkoffNewsFeed.release.xcconfig"; path = "Pods/Target Support Files/Pods-TinkoffNewsFeed/Pods-TinkoffNewsFeed.release.xcconfig"; sourceTree = "<group>"; };
 		C17511B1132E6AFDE7C994E9 /* Pods-TinkoffNewsFeed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinkoffNewsFeed.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TinkoffNewsFeed/Pods-TinkoffNewsFeed.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -80,6 +90,23 @@
 			path = Interface;
 			sourceTree = "<group>";
 		};
+		1064A1B2D5798EE368B92197 /* Parser */ = {
+			isa = PBXGroup;
+			children = (
+				1064A6C71C3D4CB2A29F0FCB /* IParser.swift */,
+			);
+			path = Parser;
+			sourceTree = "<group>";
+		};
+		1064A3DBD8ED6531DCD93DFA /* RequestSender */ = {
+			isa = PBXGroup;
+			children = (
+				B9D0CE6B1F261E6D00117C9B /* RequestSender.swift */,
+				1064A86245B1FC830DBEADC6 /* Interface */,
+			);
+			path = RequestSender;
+			sourceTree = "<group>";
+		};
 		1064A42D044E383FE474305E /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -111,12 +138,29 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		1064A7479FF81C4F0CDD81BE /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				1064AAED5464D319CFB57E5A /* IResult.swift */,
+			);
+			path = Interface;
+			sourceTree = "<group>";
+		};
 		1064A81225005244FF5A8A69 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				B9D0CE661F261A5100117C9B /* TNFDataModel.xcdatamodeld */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		1064A86245B1FC830DBEADC6 /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				B9D0CE6D1F261E7400117C9B /* IRequest.swift */,
+				B9D0CE6E1F261E7400117C9B /* IRequestSender.swift */,
+			);
+			path = Interface;
 			sourceTree = "<group>";
 		};
 		1064A882E62741D4C28719EC /* Core */ = {
@@ -147,6 +191,9 @@
 		1064AA3833099DAAB9AB8376 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				1064AE5FF3363206E7376EAA /* Common */,
+				1064A3DBD8ED6531DCD93DFA /* RequestSender */,
+				1064A1B2D5798EE368B92197 /* Parser */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -164,6 +211,14 @@
 				1064A42D044E383FE474305E /* View */,
 			);
 			path = Presentation;
+			sourceTree = "<group>";
+		};
+		1064AE5FF3363206E7376EAA /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				1064A7479FF81C4F0CDD81BE /* Interface */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		1064AF06B8184BF9C0637CEF /* Constants */ = {
@@ -351,6 +406,7 @@
 			files = (
 				B97BDF1F1F25FE0300568C3F /* ViewController.swift in Sources */,
 				B97BDF1D1F25FE0300568C3F /* AppDelegate.swift in Sources */,
+				B9D0CE6C1F261E6D00117C9B /* RequestSender.swift in Sources */,
 				B9D0CE5D1F26059600117C9B /* NewsDetailedInfoCell.swift in Sources */,
 				B9D0CE641F2617A500117C9B /* ICDContextProvider.swift in Sources */,
 				B9D0CE681F261A5100117C9B /* TNFDataModel.xcdatamodeld in Sources */,
@@ -359,9 +415,13 @@
 				B9D0CE651F2617A500117C9B /* ICDStack.swift in Sources */,
 				1064A3C81FB1A8309A167C9B /* TNFAPIRequestConstants.swift in Sources */,
 				B9D0CE6A1F261D0600117C9B /* Logger.swift in Sources */,
+				B9D0CE701F261E7400117C9B /* IRequestSender.swift in Sources */,
+				B9D0CE6F1F261E7400117C9B /* IRequest.swift in Sources */,
 				1064A853603D870F8EEA4D67 /* CDStackAssembler.swift in Sources */,
 				1064AF0CD930BCC63DE76129 /* ICDStackAssembler.swift in Sources */,
 				1064A3DC617510857688D676 /* TNFCDConstants.swift in Sources */,
+				1064A7F175B7037E5A527560 /* IResult.swift in Sources */,
+				1064A63D5100D454BCFD7122 /* IParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
