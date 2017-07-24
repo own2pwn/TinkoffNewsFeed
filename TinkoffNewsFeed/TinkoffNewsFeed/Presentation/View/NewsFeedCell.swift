@@ -8,8 +8,16 @@
 
 import UIKit
 
-class NewsFeedCell: UITableViewCell {
+final class NewsFeedCell: UITableViewCell {
 
+    // MARK: - Outlets
+    
+    @IBOutlet weak var newsDateLabel: UILabel!
+    
+    @IBOutlet weak var newsTitleLabel: UILabel!
+    
+    // MARK: - Overrides
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

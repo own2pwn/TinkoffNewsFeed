@@ -55,8 +55,16 @@
                                                 <constraint firstAttribute="trailingMargin" secondItem="8YI-ht-TSb" secondAttribute="trailing" constant="8" id="cer-vd-rW4"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="newsDateLabel" destination="CPE-ls-O2r" id="5sz-J4-RXJ"/>
+                                            <outlet property="newsTitleLabel" destination="8YI-ht-TSb" id="fWo-H4-i9F"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="pyl-Zj-IWz"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="ifi-wU-15J"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -68,6 +76,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="TInkoff News Feed" id="pOb-Au-FNr"/>
+                    <connections>
+                        <outlet property="newsFeedTableView" destination="kHi-FJ-mif" id="dgJ-ix-dWJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
