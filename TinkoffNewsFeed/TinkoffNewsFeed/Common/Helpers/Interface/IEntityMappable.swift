@@ -6,4 +6,4 @@
 import Foundation
 import SwiftKVC
 
-protocol IManagedObjectMappable: Value {}
+protocol IEntityMappable: Value {}

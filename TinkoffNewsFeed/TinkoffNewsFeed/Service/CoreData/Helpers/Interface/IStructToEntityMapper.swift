@@ -5,6 +5,6 @@
 
 import Foundation
 
-protocol IStructToManagedObjectMapper {
-    static func map<T>(_ model: IManagedObjectMappable, _ object: inout T)
+protocol IStructToEntityMapper {
+    static func map<T>(_ model: IEntityMappable, _ object: inout T)
 }

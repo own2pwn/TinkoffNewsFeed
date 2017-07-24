@@ -8,11 +8,11 @@ import Foundation
 import Foundation
 import CoreData
 
-final class StructToManagedObjectMapper: IStructToManagedObjectMapper {
+final class StructToEntityMapper: IStructToEntityMapper {
 
-    // MARK: - IStructToManagedObjectMapper
+    // MARK: - IStructToEntityMapper
 
-    class func map<T>(_ model: IManagedObjectMappable, _ object: inout T) {
+    class func map<T>(_ model: IEntityMappable, _ object: inout T) {
         let object = object as! NSManagedObject
         let entity = object.entity
         let attributes = entity.attributesByName

@@ -18,7 +18,7 @@ struct NewsListAPIModel {
     let publicationDate: String
 }
 
-struct NewsEntityModel {
+struct NewsEntityModel: IEntityMappable {
     let id: String
     let pubDate: Date
     let title: String

@@ -4,9 +4,9 @@
 //
 
 import Foundation
+import CoreData
 
 // TODO: move to core layer
-
 
 
 final class NewsListCacheManager: INewsListCacheManager {
@@ -19,14 +19,25 @@ final class NewsListCacheManager: INewsListCacheManager {
 
     private func mapModelToObject(_ model: NewsEntityModel) {
         let mObject = News(context: saveContext)
-
+        objectMapper.map(model, &mObject)
+        try? contextManager.performSave(context: saveContext) { error in
+            if let e = error {
+                log.error(e)
+            }
+        }
     }
 
     // TODO: extract to assembler
 
-    init(saveContext: NSManagedObjectContext) {
-        self.saveContext = saveContext
+    init(contextManager: ICDContextManager,
+         objectMapper: IStructToEntityMapper.Type) {
+        self.contextManager = contextManager
+        saveContext = contextManager.saveContext
+
+        self.objectMapper = objectMapper
     }
 
+    private let contextManager: ICDContextManager
     private let saveContext: NSManagedObjectContext
+    private let objectMapper: IStructToEntityMapper.Type
 }
