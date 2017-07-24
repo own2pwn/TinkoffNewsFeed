@@ -38,7 +38,7 @@ final class ViewController: UIViewController {
     private func initConnectionListener() {
         if connectionChecker == nil {
             //TODO: add logger
-            print("error while initializing connectionChecker!")
+            log.info("error while initializing connectionChecker!")
         }
 
         try? connectionChecker?.startNotifier()
@@ -49,7 +49,7 @@ final class ViewController: UIViewController {
     private func onActiveConnection(_ info: Reachability) {
         let m = "Internet is available!\nInfo: \(info)"
 
-        print(m)
+        log.info(m)
     }
 
     private func onLostConnection(_ info: Reachability) {
@@ -59,7 +59,7 @@ final class ViewController: UIViewController {
 
         let m = "Internet is unavailable!\nInfo: \(info)"
 
-        print(m)
+        log.info(m)
     }
 
     fileprivate let feedCellId = "idNewsFeedCell"
