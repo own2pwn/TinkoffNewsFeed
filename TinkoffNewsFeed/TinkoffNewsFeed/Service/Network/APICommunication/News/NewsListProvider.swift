@@ -20,6 +20,7 @@ struct NewsListAPIModel {
 
 // TODO: rename to `NewsListAPIModel`
 // or something else
+
 struct NewsEntityModel: IEntityMappable {
     var id: String
     var pubDate: Date
@@ -28,12 +29,22 @@ struct NewsEntityModel: IEntityMappable {
 }
 
 final class NewsListProvider: INewsListProvider {
+    
+    func loadNew(completion: (() -> Void)?) {
+        // get last saved news
+        // while we've got this news, load with updated offset again
+        
+        
+    }
+    
     func load(offset: Int = 0, count: Int,
               completion: (() -> Void)? = nil) {
+        // offset always have to be lower than count
+        let count = offset < count ? count : count + offset
 
         let config = buildRequestConfig(offset: offset, count: count)
-        requestSender.sendJSON(config: config) { [weak self] (result) in
-            self?.cache(result)
+        requestSender.sendJSON(config: config) { [unowned self] (result) in
+            self.cache(result)
             // TODO: check if it save here to use unowned
             // or not to
         }
