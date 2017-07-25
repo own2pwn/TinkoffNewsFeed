@@ -8,8 +8,11 @@
 
 import UIKit
 import ReachabilitySwift
+import CoreData
 
-final class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+// TODO: add loading indicator while fetching
+
+final class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate {
 
     // MARK: - Outlets
 
@@ -25,6 +28,10 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+
+    deinit {
+        connectionChecker?.stopNotifier()
     }
 
     // MARK: - UITableViewDataSource
@@ -54,18 +61,74 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return NL_FOOTER_HEIGHT
+        return footerHeight
+    }
+
+    // MARK: - NSFetchedResultsControllerDelegate
+
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        newsFeedTableView.beginUpdates()
+    }
+
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        newsFeedTableView.endUpdates()
+    }
+
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
+                    didChange anObject: Any, at indexPath: IndexPath?,
+                    for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            log.info("FRC insert obj: \(anObject)")
+            if let indexPath = newIndexPath {
+
+                newsFeedTableView.insertRows(at: [indexPath], with: .fade)
+            }
+            break
+        case .delete:
+            if let indexPath = indexPath {
+                log.info("FRC delete obj: \(anObject)")
+                log.info("New IP: \(indexPath)")
+                newsFeedTableView.deleteRows(at: [indexPath], with: .fade)
+            }
+            break
+        case .update:
+            if let indexPath = indexPath {
+                log.info("FRC upd obj: \(anObject)")
+                log.info("New IP: \(indexPath)")
+                //let cell = newsFeedTableView.cellForRow(at: indexPath) as! NewsFeedCell
+                //configureCell(cell, at: indexPath)
+            }
+            break
+        case .move:
+            log.info("FRC move obj: \(anObject)")
+            log.info("Old IP: \(indexPath) | New IP: \(newIndexPath)")
+            if let indexPath = indexPath {
+                newsFeedTableView.deleteRows(at: [indexPath], with: .fade)
+            }
+            if let newIndexPath = newIndexPath {
+                newsFeedTableView.insertRows(at: [newIndexPath], with: .fade)
+            }
+            break
+        }
+    }
+
+    private func display(_ object: Any) {
+        // cell.selectionStyle = .none do i need this?
+
+
     }
 
     // MARK: - Private
 
     // MARK: - Constants
 
-    private let NL_FOOTER_HEIGHT: CGFloat = 10.0
+    private let footerHeight: CGFloat = 10.0
 
     // MARK: - Instance members
 
-    private let connectionChecker = Reachability()
+    private let connectionChecker = Reachability(hostname: "api.tinkoff.ru")
+    // https:// ?
 
     private let feedCellId = "idNewsFeedCell"
 
@@ -82,24 +145,21 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
         setupView()
         doThings()
     }
-    
+
     var newsProvider: INewsListProvider!
-    
+
     private func doThings() {
         // TODO: make one protocol for newlist and news content
         let stack = CDStack()
         let mapper = StructToEntityMapper.self
         let cm = NewsListCacheManager(contextManager: stack, objectMapper: mapper)
         let rs = RequestSender()
-        
+
         newsProvider = NewsListProvider(cacheManager: cm, requestSender: rs)
         newsProvider.load(count: 15)
     }
 
     private func setupView() {
-        // MARK: - UI
-        let color = UIColor.init(red: 0.944989, green: 0.912527, blue: 0.518278, alpha: 0.751766)
-        navigationController?.navigationBar.barTintColor = color
 
         // MARK: - TableView
         newsFeedTableView.estimatedRowHeight = 75
