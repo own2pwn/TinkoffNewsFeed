@@ -10,7 +10,7 @@ import CryptoSwift
 
 // TODO: let parser to save all right away to core data
 
-class NewsListParser: IParser<[NewsEntityModel], JSON> {
+final class NewsListParser: IParser<[NewsEntityModel], JSON> {
     override func parse(_ response: JSON) -> [NewsEntityModel]? {
         let resultCode = response[statusCodeKey].string ?? "nil"
         verifyResponseCode(resultCode)

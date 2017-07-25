@@ -29,14 +29,14 @@ struct NewsEntityModel: IEntityMappable {
 }
 
 final class NewsListProvider: INewsListProvider {
-    
+
     func loadNew(completion: (() -> Void)?) {
         // get last saved news
         // while we've got this news, load with updated offset again
-        
-        
+
+
     }
-    
+
     func load(offset: Int = 0, count: Int,
               completion: (() -> Void)? = nil) {
         // offset always have to be lower than count
@@ -78,14 +78,14 @@ final class NewsListProvider: INewsListProvider {
         return parser
     }
 
+    // TODO: extract to request builder
+    // TODO: or make a r. config builder
+
     private func buildRequest(_ offset: Int, _ count: Int) -> URLRequest {
-        let urlFmt = "%@/%@/%@"
         let url = String(format: urlFmt, apiHost, apiVersion, apiMethod)
-
-        let queryFmt = "?%@=%d&%@=%d"
         let query = String(format: queryFmt, apiFetchFrom, offset, apiFetchTo, count)
-
         let endpoint = url + query
+
         let request = try! URLRequest(url: endpoint, method: apiRequestMethod)
 
         return request
@@ -104,9 +104,11 @@ final class NewsListProvider: INewsListProvider {
     // MARK: - Constants
 
     private let apiHost: String = .TNF_API_HOST
-    private let apiVersion: String = .TNF_API_NEWS_LIST_VERSION
+    private let apiVersion: String = .TNF_API_NEWS_VERSION
     private let apiMethod: String = .TNF_API_NEWS_LIST_METHOD
     private let apiFetchFrom: String = .TNF_API_NEWS_LIST_FETCH_PARAM_FIRST
     private let apiFetchTo: String = .TNF_API_NEWS_LIST_FETCH_PARAM_LAST
     private let apiRequestMethod: HTTPMethod = .TNF_API_NEWS_LIST_REQUEST_METHOD
+    private let urlFmt: String = .TNF_API_NEWS_REQUEST_URL_FMT
+    private let queryFmt: String = .TNF_API_NEWS_LIST_REQUEST_QUERY_FMT
 }

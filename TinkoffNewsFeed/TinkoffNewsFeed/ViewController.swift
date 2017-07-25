@@ -13,6 +13,11 @@ import PullToRefreshSwift
 
 // TODO: add loading indicator while fetching
 
+struct NewsInfo {
+    let id: String
+    let title: String
+}
+
 final class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate {
 
     // MARK: - Outlets
@@ -74,9 +79,10 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let cell = sender as? NewsFeedCell,
+        if let info = sender as? NewsInfo,
            let dest = segue.destination as? NewsContentViewController {
-            dest.newsTitle = cell.newsTitleLabel.text
+            dest.newsId = info.id
+            dest.newsTitle = info.title
         }
     }
 
@@ -196,8 +202,13 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) {
-            performSegue(withIdentifier: segueId, sender: cell)
+        if let cell = tableView.cellForRow(at: indexPath) as? NewsFeedCell {
+            let object = newsListFRC.object(at: indexPath)
+            let id = object.id!
+            let title = cell.newsTitleLabel.text!
+            
+            let info = NewsInfo(id: id, title: title)
+            performSegue(withIdentifier: segueId, sender: info)
         }
     }
 

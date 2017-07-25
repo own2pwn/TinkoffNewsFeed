@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PullToRefreshSwift
 
 class NewsContentViewController: UIViewController {
 
@@ -27,21 +28,26 @@ class NewsContentViewController: UIViewController {
     // MARK: - Setup
     
     private func setupController() {
+        contentTextView.addPullToRefresh(refreshCompletion: nil)
         loadContent()
     }
     
     private func loadContent() {
+        
+        loadingIndicator.startAnimating()
         
         let style = NSMutableParagraphStyle()
         style.alignment = .natural
         let attr = [NSFontAttributeName : UIFont.helveticaBold(17.0),
                     NSParagraphStyleAttributeName: style]
         
-        let content = NSAttributedString(string: newsTitle, attributes: attr)
+        let newsContent = newsTitle + "\n\n"
+        let content = NSAttributedString(string: newsContent, attributes: attr)
         contentTextView.attributedText = content
     }
     
     // MARK: - Members
     
+    var newsId: String!
     var newsTitle: String!
 }
