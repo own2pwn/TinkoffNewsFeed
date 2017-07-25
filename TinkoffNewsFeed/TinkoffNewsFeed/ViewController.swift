@@ -97,6 +97,10 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     private func onPull() {
+        
+        // TODO: disable after treshold to not block ui
+        // and show warning that data hasn't been loaded
+        
         DispatchQueue.main.async {
             log.debug("pulled")
             sleep(1)
@@ -107,6 +111,10 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     private func onLoadMore() {
+        
+        // TODO: disable after treshold to not block ui
+        // and show warning that data hasn't been loaded
+        
         DispatchQueue.main.async {
             log.debug("pushed")
             sleep(1)
@@ -199,35 +207,23 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
                     for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
-            log.info("FRC insert obj: \(anObject)")
             if let indexPath = newIndexPath {
-
                 newsFeedTableView.insertRows(at: [indexPath], with: .fade)
             }
             break
         case .delete:
             if let indexPath = indexPath {
-                log.info("FRC delete obj: \(anObject)")
-                log.info("New IP: \(indexPath)")
                 newsFeedTableView.deleteRows(at: [indexPath], with: .fade)
             }
             break
         case .update:
             if let indexPath = indexPath {
-                log.info("FRC upd obj: \(anObject)")
-                log.info("New IP: \(indexPath)")
-                //let cell = newsFeedTableView.cellForRow(at: indexPath) as! NewsFeedCell
-                //configureCell(cell, at: indexPath)
+                newsFeedTableView.reloadRows(at: [indexPath], with: .fade)
             }
             break
         case .move:
-            log.info("FRC move obj: \(anObject)")
-            log.info("Old IP: \(indexPath) | New IP: \(newIndexPath)")
-            if let indexPath = indexPath {
-                newsFeedTableView.deleteRows(at: [indexPath], with: .fade)
-            }
-            if let newIndexPath = newIndexPath {
-                newsFeedTableView.insertRows(at: [newIndexPath], with: .fade)
+            if let oldPath = indexPath, let newPath = newIndexPath {
+                newsFeedTableView.moveRow(at: oldPath, to: newPath)
             }
             break
         }
