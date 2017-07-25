@@ -11,37 +11,105 @@ import ReachabilitySwift
 
 final class ViewController: UIViewController {
 
+    // MARK: - Outlets
+
+    @IBOutlet weak var newsFeedTableView: UITableView!
+
+    // MARK: - Overrides
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        doThings()
+        setupController()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
 
-    let connectionChecker = Reachability()
+    // MARK: - Private
 
-    private func doThings() {
-        // TODO: check for internet connection
+    private let connectionChecker = Reachability()
+
+    private func setupController() {
+        initConnectionListener()
+    }
+
+    private func initConnectionListener() {
+        if connectionChecker == nil {
+            //TODO: add logger
+            print("error while initializing connectionChecker!")
+        }
+
         try? connectionChecker?.startNotifier()
         connectionChecker?.whenReachable = onActiveConnection
         connectionChecker?.whenUnreachable = onLostConnection
     }
-    
+
     private func onActiveConnection(_ info: Reachability) {
         let m = "Internet is available!\nInfo: \(info)"
-        
+
         print(m)
     }
-    
+
     private func onLostConnection(_ info: Reachability) {
-        
+
         // TODO: Use HUD to display connection error
-        
+        // show 
+
         let m = "Internet is unavailable!\nInfo: \(info)"
-        
+
         print(m)
     }
+
+    fileprivate let feedCellId = "idNewsFeedCell"
+
+    fileprivate var itemsCount = 20
+
+    fileprivate let itemsPerBatch = 20
+
+    fileprivate var offset = 0
+
+    fileprivate func loadMore() {
+        // TODO: check if we've already reached end
+
+        itemsCount += itemsPerBatch
+        newsFeedTableView.reloadData()
+    }
+}
+
+
+extension ViewController: UITableViewDataSource {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return itemsCount
+    }
+
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: feedCellId, for: indexPath) as! NewsFeedCell
+
+        cell.newsTitleLabel.text = "news number: \(indexPath.row)"
+
+        let row = indexPath.row
+        if row == itemsCount - 2 {
+
+            DispatchQueue.main.async { [unowned self] in
+                self.loadMore()
+            }
+        }
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return CGFloat.leastNormalMagnitude
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return CGFloat.leastNormalMagnitude
+    }
+
+}
+
+
+extension ViewController: UITableViewDelegate {
+
 }
