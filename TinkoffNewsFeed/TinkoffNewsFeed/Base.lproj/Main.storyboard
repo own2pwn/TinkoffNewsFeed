@@ -46,9 +46,18 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="9999" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="79Z-g6-YbA">
+                                                    <rect key="frame" x="329" y="8" width="38" height="21"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="79Z-g6-YbA" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="CPE-ls-O2r" secondAttribute="trailing" constant="8" id="7ub-Sq-QS2"/>
                                                 <constraint firstItem="CPE-ls-O2r" firstAttribute="top" secondItem="UHJ-qg-Iwk" secondAttribute="topMargin" id="Abb-dA-TQy"/>
+                                                <constraint firstItem="79Z-g6-YbA" firstAttribute="trailing" secondItem="UHJ-qg-Iwk" secondAttribute="trailingMargin" id="ELh-3r-4ol"/>
+                                                <constraint firstItem="79Z-g6-YbA" firstAttribute="top" secondItem="UHJ-qg-Iwk" secondAttribute="topMargin" id="RAu-up-8sF"/>
                                                 <constraint firstItem="8YI-ht-TSb" firstAttribute="leading" secondItem="UHJ-qg-Iwk" secondAttribute="leadingMargin" id="SmJ-qJ-nUI"/>
                                                 <constraint firstItem="CPE-ls-O2r" firstAttribute="leading" secondItem="UHJ-qg-Iwk" secondAttribute="leadingMargin" id="UDZ-xB-A9h"/>
                                                 <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="8YI-ht-TSb" secondAttribute="trailing" constant="8" id="gp5-x9-4HP"/>
@@ -59,6 +68,7 @@
                                         <connections>
                                             <outlet property="newsDateLabel" destination="CPE-ls-O2r" id="5sz-J4-RXJ"/>
                                             <outlet property="newsTitleLabel" destination="8YI-ht-TSb" id="fWo-H4-i9F"/>
+                                            <outlet property="newsViewsCountLabel" destination="79Z-g6-YbA" id="es8-OH-eE5"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -108,9 +118,8 @@
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" text="News content" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="eGU-Cd-Ong">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="News content" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="eGU-Cd-Ong">
+                                <rect key="frame" x="8" y="0.0" width="359" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -122,6 +131,12 @@
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="eGU-Cd-Ong" firstAttribute="top" secondItem="p4b-tN-1ca" secondAttribute="bottom" id="PVo-x7-y4p"/>
+                            <constraint firstItem="6Rp-eB-hup" firstAttribute="top" secondItem="eGU-Cd-Ong" secondAttribute="bottom" id="Q8S-5Q-D5c"/>
+                            <constraint firstItem="eGU-Cd-Ong" firstAttribute="leading" secondItem="Q0h-SY-qKB" secondAttribute="leading" constant="8" id="dcv-xx-J6K"/>
+                            <constraint firstAttribute="trailing" secondItem="eGU-Cd-Ong" secondAttribute="trailing" constant="8" id="mmM-YC-L1l"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="contentTextView" destination="eGU-Cd-Ong" id="wO5-xR-d5w"/>

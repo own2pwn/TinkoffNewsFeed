@@ -11,4 +11,10 @@ extension UIFont {
         
         return font
     }
+    
+    static func helvetica(_ size: CGFloat) -> UIFont {
+        let font = UIFont(name: "Helvetica", size: size)!
+        
+        return font
+    }
 }

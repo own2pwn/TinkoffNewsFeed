@@ -16,6 +16,8 @@ final class NewsFeedCell: UITableViewCell {
     
     @IBOutlet weak var newsTitleLabel: UILabel!
     
+    @IBOutlet weak var newsViewsCountLabel: UILabel!
+    
     // MARK: - Overrides
     
     override func awakeFromNib() {

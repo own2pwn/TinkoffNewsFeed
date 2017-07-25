@@ -31,8 +31,8 @@ final class NewsListParser: IParser<[NewsEntityModel], JSON> {
     // MARK: - Private
 
     private func verifyResponseCode(_ code: String) {
-        if code != exStatusCode {
-            log.warning("API response status code: \(code) | expected: \(exStatusCode)")
+        if code != expectedCode {
+            log.warning("API response status code: \(code) | expected: \(expectedCode)")
             log.warning("Received data may be wrong!")
         }
     }
@@ -41,7 +41,7 @@ final class NewsListParser: IParser<[NewsEntityModel], JSON> {
 
     // MARK: - Constants
 
-    private let exStatusCode: String = .TNF_API_NEWS_LIST_RESPONSE_EXPECTED_STATUS_CODE
+    private let expectedCode: String = .TNF_API_NEWS_RESPONSE_CODE_OK
     private let statusCodeKey: String = .TNF_API_NEWS_LIST_RESPONSE_STATUS_CODE_KEY
     private let payloadKey: String = .TNF_API_NEWS_LIST_RESPONSE_PAYLOAD_KEY
 }

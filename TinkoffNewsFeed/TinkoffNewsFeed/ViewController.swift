@@ -23,7 +23,7 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
     // MARK: - Outlets
 
     @IBOutlet weak var newsFeedTableView: UITableView!
-
+    
     @IBAction func didTapLoadButton(_ sender: UIButton) {
         newsProvider.load(count: 20)
     }
@@ -184,11 +184,16 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
 
     private func configure(_ cell: NewsFeedCell, at indexPath: IndexPath) {
         let object = newsListFRC.object(at: indexPath)
-        let row = indexPath.row
-
         let date = object.pubDate! as Date
-        cell.newsDateLabel.text = date.day()
-        cell.newsTitleLabel.text = "r: \(row) " + object.title!
+        let viewsCount = object.viewsCount
+        let title = object.title!
+        let day = date.day
+        
+        //TODO: various date formatting
+        
+        cell.newsDateLabel.text = day
+        cell.newsTitleLabel.text = title
+        cell.newsViewsCountLabel.text = viewsCount.stringValue
     }
 
     // MARK: - UITableViewDelegate

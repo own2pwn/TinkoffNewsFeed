@@ -26,6 +26,7 @@ struct NewsEntityModel: IEntityMappable {
     var pubDate: Date
     var title: String
     var titleHash: String
+    let viewsCount = 0
 }
 
 final class NewsListProvider: INewsListProvider {

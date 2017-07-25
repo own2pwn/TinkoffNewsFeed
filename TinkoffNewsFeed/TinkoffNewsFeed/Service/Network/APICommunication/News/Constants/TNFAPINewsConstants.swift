@@ -9,10 +9,12 @@ enum CTNFAPINews {
     static let API_HOST = "https://api.tinkoff.ru"
     static let API_VERSION = "v1"
     static let API_REQUEST_URL_FMT = "%@/%@/%@"
+    static let API_RESPONSE_CODE_OK = "OK"
 }
 
 extension String {
     static let TNF_API_HOST = CTNFAPINews.API_HOST
     static let TNF_API_NEWS_VERSION = CTNFAPINews.API_VERSION
     static let TNF_API_NEWS_REQUEST_URL_FMT = CTNFAPINews.API_REQUEST_URL_FMT
+    static let TNF_API_NEWS_RESPONSE_CODE_OK = CTNFAPINews.API_RESPONSE_CODE_OK
 }
