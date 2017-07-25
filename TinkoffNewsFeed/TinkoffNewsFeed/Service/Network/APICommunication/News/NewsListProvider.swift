@@ -18,6 +18,8 @@ struct NewsListAPIModel {
     let publicationDate: String
 }
 
+// TODO: rename to `NewsListAPIModel`
+// or something else
 struct NewsEntityModel: IEntityMappable {
     var id: String
     var pubDate: Date
