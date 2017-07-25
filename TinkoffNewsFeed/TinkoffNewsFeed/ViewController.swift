@@ -22,43 +22,43 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
     @IBAction func didTapLoadButton(_ sender: UIButton) {
         newsProvider.load(count: 20)
     }
-    
+
     private func initFRC() {
         let controller = buildNewsFRC()
         newsListFRC = controller
     }
-    
+
     private func buildNewsFRC() -> NSFetchedResultsController<News> {
         let name = String(describing: News.self)
         let fr = NSFetchRequest<News>(entityName: name)
-        
+
         let dateSorter = NSSortDescriptor(key: "pubDate", ascending: false)
         let sortDescriptors = [dateSorter]
         fr.sortDescriptors = sortDescriptors
         fr.fetchBatchSize = 20
         fr.fetchLimit = 20
         // fr.fetchOffset = 5
-        
+
         let frc = NSFetchedResultsController(fetchRequest: fr,
-                                             managedObjectContext: stack.mainContext,
-                                             sectionNameKeyPath: nil, cacheName: nil)
+                managedObjectContext: stack.mainContext,
+                sectionNameKeyPath: nil, cacheName: nil)
         frc.delegate = self
         // TODO: perform fetch only when needed
         try! frc.performFetch()
         fetchedNewsCount = frc.sections![0].numberOfObjects
-        
+
         return frc
     }
-    
+
     private func updateFetchedNewsCount() {
         fetchedNewsCount = newsListFRC.sections![0].numberOfObjects
         log.debug("New items count: \(fetchedNewsCount)")
     }
-    
+
     private var newsListFRC: NSFetchedResultsController<News>!
-    
+
     private let stack = CDStack()
-    
+
     private var fetchedNewsCount = 0
 
     // MARK: - Overrides
@@ -70,12 +70,21 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
         initDepend()
         setupController()
     }
-    
+
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let cell = sender as? NewsFeedCell,
+           let dest = segue.destination as? NewsContentViewController {
+            dest.newsTitle = cell.newsTitleLabel.text
+        }
+    }
+
     private func initDepend() {
         initFRC()
         initNewsProvider()
     }
-    
+
     private func addPull2R() {
         if newsFeedTableView.viewWithTag(PullToRefreshConst.pullTag) == nil {
             newsFeedTableView.addPullToRefresh(refreshCompletion: self.onPull)
@@ -84,52 +93,52 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
             }
         }
     }
-    
+
     private func addPush2R(force: Bool = false) {
         if force || newsFeedTableView.viewWithTag(PullToRefreshConst.pushTag) == nil {
             newsFeedTableView.addPushToRefresh(refreshCompletion: self.onLoadMore)
         }
     }
-    
+
     private func removeP2R() {
         newsFeedTableView.removePullToRefreshView()
         newsFeedTableView.removePushToRefreshView()
     }
-    
+
     private func onPull() {
-        
+
         // TODO: disable after treshold to not block ui
         // and show warning that data hasn't been loaded
-        
+
         DispatchQueue.main.async {
             log.debug("pulled")
             sleep(1)
             log.debug("pulled [2]")
-            
+
             self.newsFeedTableView.stopPullRefreshing()
         }
     }
-    
+
     private func onLoadMore() {
-        
+
         // TODO: disable after treshold to not block ui
         // and show warning that data hasn't been loaded
-        
+
         DispatchQueue.main.async {
             log.debug("pushed")
             sleep(1)
             log.debug("pushed [2]")
-            
+
             self.newsFeedTableView.stopPushRefreshing()
         }
     }
-    
+
     private func initNewsProvider() {
         // TODO: make one protocol for newlist and news content
         let mapper = StructToEntityMapper.self
         let cm = NewsListCacheManager(contextManager: stack, objectMapper: mapper)
         let rs = RequestSender()
-        
+
         newsProvider = NewsListProvider(cacheManager: cm, requestSender: rs)
     }
 
@@ -146,9 +155,9 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sections = newsListFRC.sections!
         let sectionInfo = sections[section]
-        
+
         return sectionInfo.numberOfObjects
-        
+
         // return newsListFRC.fetchedObjects?.count ?? 0
     }
 
@@ -157,7 +166,7 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
         configure(cell, at: indexPath)
 
         let row = indexPath.row
-        
+
         if row == fetchedNewsCount - 2 {
             DispatchQueue.main.async { [unowned self] in
                 // self.loadMore()
@@ -166,11 +175,11 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
 
         return cell
     }
-    
+
     private func configure(_ cell: NewsFeedCell, at indexPath: IndexPath) {
         let object = newsListFRC.object(at: indexPath)
         let row = indexPath.row
-        
+
         let date = object.pubDate! as Date
         cell.newsDateLabel.text = date.day()
         cell.newsTitleLabel.text = "r: \(row) " + object.title!
@@ -186,6 +195,12 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
         return footerHeight
     }
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) {
+            performSegue(withIdentifier: segueId, sender: cell)
+        }
+    }
+
     // MARK: - NSFetchedResultsControllerDelegate
 
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
@@ -197,35 +212,23 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
         addPush2R()
         newsFeedTableView.endUpdates()
     }
-    
+
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        log.debug("controller didChange sectionInfo")
+        assertionFailure()
     }
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
                     didChange anObject: Any, at indexPath: IndexPath?,
                     for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
-        case .insert:
-            if let indexPath = newIndexPath {
-                newsFeedTableView.insertRows(at: [indexPath], with: .fade)
-            }
-            break
         case .delete:
-            if let indexPath = indexPath {
-                newsFeedTableView.deleteRows(at: [indexPath], with: .fade)
-            }
-            break
+            newsFeedTableView.deleteRows(at: [indexPath!], with: .fade)
         case .update:
-            if let indexPath = indexPath {
-                newsFeedTableView.reloadRows(at: [indexPath], with: .fade)
-            }
-            break
+            newsFeedTableView.reloadRows(at: [indexPath!], with: .fade)
+        case .insert:
+            newsFeedTableView.insertRows(at: [newIndexPath!], with: .fade)
         case .move:
-            if let oldPath = indexPath, let newPath = newIndexPath {
-                newsFeedTableView.moveRow(at: oldPath, to: newPath)
-            }
-            break
+            newsFeedTableView.moveRow(at: indexPath!, to: newIndexPath!)
         }
     }
 
@@ -235,6 +238,7 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
 
     private let footerHeight: CGFloat = 10.0
     private let feedCellId = "idNewsFeedCell"
+    private let segueId = "idShowNewsContentSegue"
 
     // MARK: - Instance members
 
@@ -279,7 +283,7 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
     private func onActiveConnection(_ info: Reachability) {
         let m = "Internet is available! | Info: \(info)"
         log.info(m)
-        
+
         DispatchQueue.main.async { [unowned self] in
             self.addPull2R()
         }
@@ -298,15 +302,15 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
 
     private func loadMore() {
         // TODO: check if we've already reached end
-        
+
         DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
             log.debug("Load more fetched count: \(self.fetchedNewsCount)")
             self.newsProvider.load(offset: self.fetchedNewsCount, count: 2) {
                 log.debug("News were loaded")
             }
         }
-        
-        if fetchedNewsCount == 40 {
+
+        if fetchedNewsCount >= 40 {
             return
         }
     }
