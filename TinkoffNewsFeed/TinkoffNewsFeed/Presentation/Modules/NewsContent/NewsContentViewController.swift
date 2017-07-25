@@ -83,11 +83,7 @@ class NewsContentViewController: UIViewController {
     
     private func makeMainContent(_ string: NSAttributedString) -> NSAttributedString {
         let style = NSMutableParagraphStyle()
-        // style.firstLineHeadIndent = 2.0
-        // style.headIndent = 10.0
-        // style.lineSpacing = 10.0
-        // style.paragraphSpacing = 10.0
-        style.maximumLineHeight = 17.0 / 2
+        style.paragraphSpacing = 10.0
         
         let attr = [NSFontAttributeName : UIFont.helvetica(17.0),
                     NSParagraphStyleAttributeName: style]

@@ -86,6 +86,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Tinkoff News Feed" id="pOb-Au-FNr">
+                        <barButtonItem key="backBarButtonItem" title="News Feed" id="waO-Py-Jst"/>
                         <barButtonItem key="rightBarButtonItem" title="Load" style="plain" id="rfP-fC-BWA">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="2OK-Az-DOL">
                                 <rect key="frame" x="276" y="7" width="83" height="30"/>
