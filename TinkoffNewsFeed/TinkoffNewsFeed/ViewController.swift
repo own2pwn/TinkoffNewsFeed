@@ -18,11 +18,49 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
 
     @IBOutlet weak var newsFeedTableView: UITableView!
 
+    @IBAction func didTapLoadButton(_ sender: UIButton) {
+        // TODO: make one protocol for newlist and news content
+        let mapper = StructToEntityMapper.self
+        let cm = NewsListCacheManager(contextManager: stack, objectMapper: mapper)
+        let rs = RequestSender()
+
+        newsProvider = NewsListProvider(cacheManager: cm, requestSender: rs)
+        newsProvider.load(count: 15)
+    }
+    
+    private func initFRC() {
+        let controller = buildNewsFRC()
+        newsListFRC = controller
+    }
+    
+    private func buildNewsFRC() -> NSFetchedResultsController<News> {
+        let name = String(describing: News.self)
+        let fr = NSFetchRequest<News>(entityName: name)
+        
+        let dateSorter = NSSortDescriptor(key: "pubDate", ascending: false)
+        let sortDescriptors = [dateSorter]
+        fr.sortDescriptors = sortDescriptors
+        
+        let frc = NSFetchedResultsController(fetchRequest: fr,
+                                             managedObjectContext: stack.saveContext,
+                                             sectionNameKeyPath: nil, cacheName: nil)
+        frc.delegate = self
+        try! frc.performFetch()
+        
+        return frc
+    }
+    
+    private var newsListFRC: NSFetchedResultsController<News>!
+    
+    private let stack = CDStack()
+
     // MARK: - Overrides
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // TODO: remove
+        initFRC()
         setupController()
     }
 
@@ -37,21 +75,31 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
     // MARK: - UITableViewDataSource
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemsCount
+        return newsListFRC.fetchedObjects?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: feedCellId, for: indexPath) as! NewsFeedCell
+        configure(cell, at: indexPath)
 
-        let row = indexPath.row
-        cell.newsTitleLabel.text = "news number: \(row)"
+//        let row = indexPath.row
+//        cell.newsTitleLabel.text = "news number: \(row)"
+//
+//        if row == itemsCount - 2 {
+//            DispatchQueue.main.async { [unowned self] in
+//                self.loadMore()
+//            }
+//        }
 
-        if row == itemsCount - 2 {
-            DispatchQueue.main.async { [unowned self] in
-                self.loadMore()
-            }
-        }
         return cell
+    }
+    
+    private func configure(_ cell: NewsFeedCell, at indexPath: IndexPath) {
+        let object = newsListFRC.object(at: indexPath)
+        
+        let date = object.pubDate! as Date
+        cell.newsDateLabel.text = date.day()
+        cell.newsTitleLabel.text = object.title
     }
 
     // MARK: - UITableViewDelegate
@@ -149,14 +197,6 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
     var newsProvider: INewsListProvider!
 
     private func doThings() {
-        // TODO: make one protocol for newlist and news content
-        let stack = CDStack()
-        let mapper = StructToEntityMapper.self
-        let cm = NewsListCacheManager(contextManager: stack, objectMapper: mapper)
-        let rs = RequestSender()
-
-        newsProvider = NewsListProvider(cacheManager: cm, requestSender: rs)
-        newsProvider.load(count: 15)
     }
 
     private func setupView() {

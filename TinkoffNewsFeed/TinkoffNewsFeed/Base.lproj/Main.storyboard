@@ -75,7 +75,18 @@
                             <constraint firstItem="kHi-FJ-mif" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="uJV-LU-gzP"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Tinkoff News Feed" id="pOb-Au-FNr"/>
+                    <navigationItem key="navigationItem" title="Tinkoff News Feed" id="pOb-Au-FNr">
+                        <barButtonItem key="rightBarButtonItem" title="Load" style="plain" id="rfP-fC-BWA">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="2OK-Az-DOL">
+                                <rect key="frame" x="276" y="7" width="83" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Load"/>
+                                <connections>
+                                    <action selector="didTapLoadButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pmM-J0-oBp"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="newsFeedTableView" destination="kHi-FJ-mif" id="dgJ-ix-dWJ"/>
                     </connections>
