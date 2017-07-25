@@ -6,6 +6,7 @@
 import Foundation
 import SwiftyJSON
 import ObjectMapper
+import CryptoSwift
 
 // TODO: let parser to save all right away to core data
 
@@ -45,31 +46,27 @@ class NewsListParser: IParser<[NewsEntityModel], JSON> {
     private let payloadKey: String = .TNF_API_NEWS_LIST_RESPONSE_PAYLOAD_KEY
 }
 
-
-//let id: String
-//let pubDate: Date
-//let title: String
-//let titleHash: String
-
 extension NewsEntityModel: Mappable {
     init?(map: Map) {
         let json = JSON(map.JSON)
         
         let id = json[NewsEntityModel.idKey].string
         let title = json[NewsEntityModel.titleKey].string
-        let pubTime = json[NewsEntityModel.pubDateKeyPath].double
+        let pubTime = json[NewsEntityModel.pubDateKey][NewsEntityModel.pubDateKeyTime].double
         let pubDate = NewsEntityModel.convertTimeToDate(pubTime)
-        // let titileHash =
+        let hash = title?.sha1()
 
-        if let id = id, let title = title, let pubDate = pubDate {
+        if let id = id, let title = title, let pubDate = pubDate, let hash = hash {
             self.id = id
             self.pubDate = pubDate
             self.title = title
-            titleHash = "\(arc4random_uniform(100_000_000))" // todo: hash
+            self.titleHash = hash
         } else {
             return nil
         }
     }
+    
+    mutating func mapping(map: Map) {}
     
     private static func convertTimeToDate(_ time: Double?) -> Date? {
         guard let time = time else {
@@ -81,24 +78,10 @@ extension NewsEntityModel: Mappable {
         return date
     }
     
-    private static func hash(_ string: String) {
-        
-    }
-
-    /// This function is where all variable mappings should occur. It is executed by Mapper during the mapping (serialization and deserialization) process.
-    mutating func mapping(map: Map) {
-        // let pubDate = json["publicationDate"]["milliseconds"] // cast to date
-
-        id <- map["id"]
-        // pubDate <- map["publicationDate"]["milliseconds"]
-        title <- map["text"]
-        titleHash = "\(arc4random_uniform(100_000_000))" // todo: hash
-        pubDate = Date()
-    }
-    
     // MARK: - Constants
     private static let idKey: String = .TNF_API_NEWS_LIST_RESPONSE_ID_KEY
     private static let titleKey: String = .TNF_API_NEWS_LIST_RESPONSE_TITLE_KEY
-    private static let pubDateKeyPath: String = .TNF_API_NEWS_LIST_RESPONSE_PUB_DATE_KEY_PATH
+    private static let pubDateKey: String = .TNF_API_NEWS_LIST_RESPONSE_PUB_DATE_KEY
+    private static let pubDateKeyTime: String = .TNF_API_NEWS_LIST_RESPONSE_PUB_DATE_KEY_TIME
     private static let timeFormat = TNFNewsListAPITimeFormat.millisecs.rawValue
 }
