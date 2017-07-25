@@ -9,6 +9,7 @@
 import UIKit
 import ReachabilitySwift
 import CoreData
+import PullToRefreshSwift
 
 // TODO: add loading indicator while fetching
 
@@ -75,6 +76,46 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
         initNewsProvider()
     }
     
+    private func addPull2R() {
+        if newsFeedTableView.viewWithTag(PullToRefreshConst.pullTag) == nil {
+            newsFeedTableView.addPullToRefresh(refreshCompletion: self.onPull)
+            if fetchedNewsCount > 0 {
+                addPush2R(force: true)
+            }
+        }
+    }
+    
+    private func addPush2R(force: Bool = false) {
+        if force || newsFeedTableView.viewWithTag(PullToRefreshConst.pushTag) == nil {
+            newsFeedTableView.addPushToRefresh(refreshCompletion: self.onLoadMore)
+        }
+    }
+    
+    private func removeP2R() {
+        newsFeedTableView.removePullToRefreshView()
+        newsFeedTableView.removePushToRefreshView()
+    }
+    
+    private func onPull() {
+        DispatchQueue.main.async {
+            log.debug("pulled")
+            sleep(1)
+            log.debug("pulled [2]")
+            
+            self.newsFeedTableView.stopPullRefreshing()
+        }
+    }
+    
+    private func onLoadMore() {
+        DispatchQueue.main.async {
+            log.debug("pushed")
+            sleep(1)
+            log.debug("pushed [2]")
+            
+            self.newsFeedTableView.stopPushRefreshing()
+        }
+    }
+    
     private func initNewsProvider() {
         // TODO: make one protocol for newlist and news content
         let mapper = StructToEntityMapper.self
@@ -111,7 +152,7 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
         
         if row == fetchedNewsCount - 2 {
             DispatchQueue.main.async { [unowned self] in
-                self.loadMore()
+                // self.loadMore()
             }
         }
 
@@ -145,6 +186,7 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         updateFetchedNewsCount()
+        addPush2R()
         newsFeedTableView.endUpdates()
     }
     
@@ -241,6 +283,10 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
     private func onActiveConnection(_ info: Reachability) {
         let m = "Internet is available! | Info: \(info)"
         log.info(m)
+        
+        DispatchQueue.main.async { [unowned self] in
+            self.addPull2R()
+        }
     }
 
     private func onLostConnection(_ info: Reachability) {
@@ -249,6 +295,9 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
 
         let m = "Internet is unavailable! | Info: \(info)"
         log.info(m)
+        DispatchQueue.main.async { [unowned self] in
+            self.removeP2R()
+        }
     }
 
     private func loadMore() {

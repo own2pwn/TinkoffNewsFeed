@@ -15,6 +15,6 @@ target 'TinkoffNewsFeed' do
 
   pod 'CryptoSwift'
 
-  pod 'PullToRefreshSwift', :git => 'https://github.com/own2pwn/PullToRefreshSwift.git'
+  pod 'PullToRefreshSwift', :git => 'https://github.com/own2pwn/PullToRefreshSwift.git', :tag => '3.0.4'
 
 end
