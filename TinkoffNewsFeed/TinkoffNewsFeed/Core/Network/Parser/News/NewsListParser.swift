@@ -59,7 +59,7 @@ extension NewsEntityModel: Mappable {
         if let id = id, let title = title, let pubDate = pubDate, let hash = hash {
             self.id = id
             self.pubDate = pubDate
-            self.title = title
+            self.title = title.decodeHTML()
             self.titleHash = hash
         } else {
             return nil

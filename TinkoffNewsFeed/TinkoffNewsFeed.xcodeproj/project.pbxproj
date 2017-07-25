@@ -20,6 +20,7 @@
 		1064A786ED8A0ACE1AB8A7C8 /* StructToEntityMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1064ADB691FBF2D10EE94042 /* StructToEntityMapper.swift */; };
 		1064A7F175B7037E5A527560 /* IResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1064AAED5464D319CFB57E5A /* IResult.swift */; };
 		1064A853603D870F8EEA4D67 /* CDStackAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1064AFA844455238177AB6A8 /* CDStackAssembler.swift */; };
+		1064A96215C3A38B3E911A89 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1064A0BBCF3DE709E476872B /* StringExtension.swift */; };
 		1064ABAE3C367E38329CDC90 /* INewsListCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1064A1817C0948CC172D2C6F /* INewsListCacheManager.swift */; };
 		1064ABB1A563485081728F7C /* NewsListParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1064A27DEA06056B2BDEB2BB /* NewsListParser.swift */; };
 		1064ACC6685CAD6EAFB167F4 /* IEntityMappable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1064AE2A01E99D24942C6A46 /* IEntityMappable.swift */; };
@@ -49,6 +50,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1064A0BBCF3DE709E476872B /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		1064A1817C0948CC172D2C6F /* INewsListCacheManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = INewsListCacheManager.swift; sourceTree = "<group>"; };
 		1064A204F5E85F816D524634 /* ICDStackAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ICDStackAssembler.swift; sourceTree = "<group>"; };
 		1064A21B178F6CB537D7BC5C /* NewsListCacheManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsListCacheManager.swift; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 			children = (
 				1064A4E6140C49A0E491F9AA /* JSONExtension.swift */,
 				B92B96AB1F274110003B767E /* DateExtension.swift */,
+				1064A0BBCF3DE709E476872B /* StringExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -610,6 +613,7 @@
 				1064ACC6685CAD6EAFB167F4 /* IEntityMappable.swift in Sources */,
 				1064A7365E6F3730650240B9 /* NewsListParserConstants.swift in Sources */,
 				1064A19F9A98FAA9A9827B28 /* JSONExtension.swift in Sources */,
+				1064A96215C3A38B3E911A89 /* StringExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
