@@ -12,7 +12,7 @@ import PullToRefreshSwift
 
 /**
  
- If `error` is `true` then `content` is error message to be presented to user
+ If `error` is `true` then `content` is error message to be shown to user
  
  Else news content stored in `content`
 */
@@ -96,7 +96,7 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     func present(_ content: NewsContentDisplayModel) {
         let error = content.error
         if error {
-            // TODO: present error to user
+            // TODO: show error to user
         } else {
             let loadedContent = content.content.decodeHTMLToAttributed()!
             let mainContent = makeMainContent(loadedContent)
@@ -161,7 +161,7 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
 
     private func loadContent() {
         
-        presentNewsTitle()
+        displayNewsTitle()
         
         model = inejctModel()
         model.view = self
@@ -169,7 +169,7 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
         model.loadNewsContent(by: newsId)
     }
     
-    private func presentNewsTitle() {
+    private func displayNewsTitle() {
         let heading = makeHeading(newsTitle)
         currentContent = heading
     }

@@ -18,6 +18,27 @@ struct NewsInfo {
     let title: String
 }
 
+
+struct NewsListDisplayModel {
+    let date: Date
+    let title: String
+    let viewsCount: Int
+}
+
+final class NewsListModel {
+    func update(_ batch: Int) {
+        
+    }
+    
+    func loadMore(_ count: Int) {
+        
+    }
+    
+    
+}
+
+// MARK: -
+
 final class NewsListViewController: UIViewController,
         UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate {
 
