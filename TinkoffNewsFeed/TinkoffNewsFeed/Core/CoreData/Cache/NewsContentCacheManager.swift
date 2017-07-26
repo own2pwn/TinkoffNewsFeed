@@ -6,92 +6,6 @@
 import Foundation
 import CoreData
 
-protocol ICoreDataWorker {
-    func find<T:NSManagedObject>(by attribute: String, value: String, entity: T.Type) -> [T]?
-
-    func findFirst<T:NSManagedObject>(by attribute: String, value: String, entity: T.Type) -> T?
-
-    func get<T:NSManagedObject>(type: T.Type,
-                                predicate: NSPredicate?,
-                                sortDescriptors: [NSSortDescriptor]?,
-                                fetchLimit: Int?) -> [T]?
-
-    func getFirst<T:NSManagedObject>(type: T.Type,
-                                     predicate: NSPredicate?,
-                                     sortDescriptors: [NSSortDescriptor]?,
-                                     fetchLimit: Int?) -> T?
-}
-
-extension ICoreDataWorker {
-    func get<T:NSManagedObject>(type: T.Type,
-                                predicate: NSPredicate? = nil,
-                                sortDescriptors: [NSSortDescriptor]? = nil,
-                                fetchLimit: Int? = nil) -> [T]? {
-        return get(type: type, predicate: predicate, sortDescriptors: sortDescriptors, fetchLimit: fetchLimit)
-    }
-
-    func getFirst<T:NSManagedObject>(type: T.Type,
-                                     predicate: NSPredicate? = nil,
-                                     sortDescriptors: [NSSortDescriptor]? = nil,
-                                     fetchLimit: Int? = nil) -> T? {
-        return getFirst(type: type, predicate: predicate, sortDescriptors: sortDescriptors, fetchLimit: fetchLimit)
-    }
-}
-
-final class CoreDataWorker: ICoreDataWorker {
-
-    // MARK: - ICoreDataWorker
-
-    func find<T:NSManagedObject>(by attribute: String, value: String, entity: T.Type) -> [T]? {
-        let name = T.entityName
-        let fr = NSFetchRequest<T>(entityName: name)
-        let predicate = NSPredicate(format: "%K == %@", attribute, value)
-        fr.predicate = predicate
-
-        let result = try? context.fetch(fr)
-
-        return result
-    }
-
-    func findFirst<T:NSManagedObject>(by attribute: String, value: String, entity: T.Type) -> T? {
-        let result = find(by: attribute, value: value, entity: entity)
-
-        return result?.first
-    }
-
-    //TODO: use threads
-
-    func get<T:NSManagedObject>(type: T.Type,
-                                predicate: NSPredicate? = nil,
-                                sortDescriptors: [NSSortDescriptor]? = nil,
-                                fetchLimit: Int? = nil) -> [T]? {
-        let fr = type.fetchRequest()
-        fr.predicate = predicate
-        fr.sortDescriptors = sortDescriptors
-        if let limit = fetchLimit {
-            fr.fetchLimit = limit
-        }
-        let result = try? context.fetch(fr)
-
-        return result as? [T]
-    }
-
-    func getFirst<T:NSManagedObject>(type: T.Type,
-                                     predicate: NSPredicate? = nil,
-                                     sortDescriptors: [NSSortDescriptor]? = nil,
-                                     fetchLimit: Int? = nil) -> T? {
-        return get(type: type, predicate: predicate, sortDescriptors: sortDescriptors, fetchLimit: fetchLimit)?.first
-    }
-
-    // MARK: - DI
-
-    init(context: NSManagedObjectContext) {
-        self.context = context
-    }
-
-    private let context: NSManagedObjectContext
-}
-
 final class NewsContentCacheManager {
     func cache(_ id: String, _ data: NewsContentPayload) {
         if let news = coreDataWorker.findFirst(by: "id", value: id, entity: News.self) {
@@ -135,31 +49,8 @@ final class NewsContentCacheManager {
     }
 
     private let contextManager: ICDContextManager
-    //TODO: pass context in construct, rename member to context
+    //TODO: pass context in constructor, rename member to context
     private let saveContext: NSManagedObjectContext
     private let coreDataWorker: ICoreDataWorker
     private let objectMapper: IStructToEntityMapper.Type
 }
-
-
-/**
-
- let name = String(describing: News.self)
-        let fr = NSFetchRequest<News>(entityName: name)
-
-        let dateSorter = NSSortDescriptor(key: "pubDate", ascending: false)
-        let sortDescriptors = [dateSorter]
-        fr.sortDescriptors = sortDescriptors
-        fr.fetchBatchSize = 20
-        fr.fetchLimit = 20
-        // fr.fetchOffset = 5
-
-        let frc = NSFetchedResultsController(fetchRequest: fr,
-                managedObjectContext: stack.mainContext,
-                sectionNameKeyPath: nil, cacheName: nil)
-        frc.delegate = self
-        // TODO: perform fetch only when needed
-        try! frc.performFetch()
-        fetchedNewsCount = frc.sections![0].numberOfObjects
-
-*/
