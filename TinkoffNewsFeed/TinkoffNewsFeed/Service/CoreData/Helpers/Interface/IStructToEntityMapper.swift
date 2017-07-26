@@ -9,15 +9,15 @@ protocol IStructToEntityMapper {
 
     /**
      
-     Maps structure values to `object` ones.
+     Maps KVC-compliant object values to `object` ones.
      
-     It dead simple iterates through passed object attributes
+     Simple iterates through passed object attributes
      and uses `setValue` where
      
      - `keyPath` is *attribute name*.
-     - `value`   is structure member with *the same* name value or nil if there is no such member.
+     - `value`   is object member with *the same* name value or nil if there is no such member.
      
-     - Parameter model: Struct that conforms to KVC
+     - Parameter model: Object that conforms to KVC
      
      - Parameter object: Generic `NSManagedObject`
      

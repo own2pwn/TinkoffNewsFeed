@@ -9,14 +9,14 @@
 import Foundation
 
 extension Date {
-    func time() -> String {
+    var time: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "HH:mm"
 
         return dateFormatter.string(from: self)
     }
 
-    func day() -> String {
+    var day: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd MMM"
 
