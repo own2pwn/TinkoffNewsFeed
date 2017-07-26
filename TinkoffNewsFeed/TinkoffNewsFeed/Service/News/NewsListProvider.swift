@@ -44,23 +44,23 @@ final class NewsListProvider: INewsListProvider {
         log.debug("Retrieved news count: \(news?.count)")
         completion(news)
     }
-    
+
     // TODO: DI
-    
+
     private func initContextManager() -> ICDContextManager {
         let manager = CDStack()
         contextManager = manager
-        
+
         return manager
     }
-    
-    private func initCoreDataWorker() -> ICoreDataWorker{
+
+    private func initCoreDataWorker() -> ICoreDataWorker {
         let worker = CoreDataWorker(context: contextManager.saveContext)
         coreDataWorker = worker
-        
+
         return worker
     }
-    
+
     private var coreDataWorker: ICoreDataWorker!
     private var contextManager: ICDContextManager!
 
@@ -124,7 +124,7 @@ final class NewsListProvider: INewsListProvider {
     init(cacheManager: INewsListCacheManager, requestSender: IRequestSender) {
         self.cacheManager = cacheManager
         self.requestSender = requestSender
-        
+
         _ = initContextManager()
         _ = initCoreDataWorker()
     }
