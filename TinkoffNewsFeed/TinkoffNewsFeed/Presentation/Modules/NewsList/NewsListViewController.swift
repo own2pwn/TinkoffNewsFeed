@@ -30,7 +30,7 @@ protocol NewsListViewDelegate: class {
 }
 
 protocol INewsListModel: class {
-    weak var view: NewsListViewDelegate! { get set }
+    weak var view: (NewsListViewDelegate & NSFetchedResultsControllerDelegate)! { get set }
     
     func load()
     func loadMore(_ count: Int)
@@ -42,20 +42,25 @@ final class NewsListModel: INewsListModel{
     
     // MARK: - Members
     
-    weak var view: NewsListViewDelegate!
+    weak var view: (NewsListViewDelegate & NSFetchedResultsControllerDelegate)!
     
     // MARK: - INewsListModel
     
     func load() {
         newsProvider.loadCached { (result) in
             if let cachedNews = result, cachedNews.count > 0 {
-                // there are some cached news
                 log.debug("there are some cached news")
             } else {
-                // load from api
+                newsProvider.load(count: 20, completion: { 
+                    log.debug("Loaded news from api")
+                })
                 log.debug("there are not any cached news!")
             }
         }
+    }
+    
+    private func initFetchedResultsController() {
+        let fr = fetchRequestProvider.fetchRequest(object: News.self)
     }
     
     func loadMore(_ count: Int) {
@@ -72,11 +77,13 @@ final class NewsListModel: INewsListModel{
     
     // MARK: - DI 
     
-    init(newsProvider: INewsListProvider) {
+    init(newsProvider: INewsListProvider, fetchRequestProvider: IFetchRequestProvider.Type) {
         self.newsProvider = newsProvider
+        self.fetchRequestProvider = fetchRequestProvider
     }
     
     private let newsProvider: INewsListProvider
+    private let fetchRequestProvider: IFetchRequestProvider.Type
 }
 
 // MARK: -
@@ -106,8 +113,9 @@ final class NewsListViewController: UIViewController,
         initCacheManager()
         initReqSender()
         
+        let frp = FetchRequestProvider.self
         let newsProvider = buildNewsProvider()
-        let model = NewsListModel(newsProvider: newsProvider)
+        let model = NewsListModel(newsProvider: newsProvider, fetchRequestProvider: frp)
         
         return model
     }
