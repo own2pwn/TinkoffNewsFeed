@@ -8,14 +8,6 @@
 
 import Foundation
 
-protocol INewsContentAssembler {
-    static func assembly() -> NewsContentDependencies
-}
-
-struct NewsContentDependencies {
-    let model: INewsContentModel
-}
-
 final class NewsContentAssembler: INewsContentAssembler {
     class func assembly() -> NewsContentDependencies {
         let d = NewsContentDependencies(model: newsContentModel)

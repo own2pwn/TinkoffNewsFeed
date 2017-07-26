@@ -5,7 +5,7 @@
 
 import Foundation
 
-final class NewsContentModelAssembler {
+final class NewsContentModelAssembler: INewsContentModelAssembler {
     class func assembly() -> INewsContentModel {
         let model = NewsContentModel(contentProvider: newsContentProvider)
 

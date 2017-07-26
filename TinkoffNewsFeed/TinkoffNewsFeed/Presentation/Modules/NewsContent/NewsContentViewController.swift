@@ -9,12 +9,17 @@
 import UIKit
 import PullToRefreshSwift
 
+struct NewsContentDependencies {
+    let model: INewsContentModel
+}
+
 protocol NewsContentViewDelegate: class {
     func startLoadingAnimation()
     func stopLoadingAnimation()
 
     func present(_ content: NewsContentDisplayModel)
 }
+
 
 final class NewsContentViewController: UIViewController, NewsContentViewDelegate {
 
@@ -28,7 +33,7 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupController()
         setupView()
         loadContent()
@@ -55,21 +60,22 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     }
 
     // MARK: - DI
-    
-    let assembler = NewsContentAssembler()
-    
+
+    let assembler = NewsContentAssembler.self
+
     var model: INewsContentModel!
-    
+
     // MARK: - Methods
-    
+
     private func setupController() {
-        
+        let d = assembler.assembly()
+        model = d.model
     }
-    
+
     private func setupView() {
         contentTextView.addPullToRefresh(refreshCompletion: onUpdate)
     }
-    
+
     private func loadContent() {
         if newsContent == nil {
             log.debug("using api to load news content")
@@ -81,20 +87,20 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
             present(newsContent!)
         }
     }
-    
+
     private func onUpdate() {
         // TODO: upd content
         contentTextView.stopPullRefreshing()
     }
-    
+
     private func present(_ content: String) {
         let parsed = content.decodeHTMLToAttributed()!
         let mainContent = makeMainContent(parsed)
-        
+
         let newContent = NSMutableAttributedString()
         newContent.append(currentContent)
         newContent.append(mainContent)
-        
+
         currentContent = newContent
     }
 
@@ -128,12 +134,12 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     private var contentProvider: INewsContentProvider!
 
     // MARK: - Content presentation
-    
+
     private func displayNewsTitle() {
         let heading = makeHeading(newsTitle)
         currentContent = heading
     }
-    
+
     private func makeHeading(_ string: String) -> NSAttributedString {
         let font = UIFont.helveticaBold(17.0)
         let style = NSMutableParagraphStyle()
@@ -160,9 +166,9 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
 
         return content
     }
-    
+
     // MARK: - View 
-    
+
     private func setLoadingEnabled(_ state: Bool) {
         DispatchQueue.main.async { [weak self] in
             UIApplication.shared.isNetworkActivityIndicatorVisible = state
