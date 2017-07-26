@@ -9,17 +9,8 @@
 import UIKit
 import PullToRefreshSwift
 
-
-/**
- 
- If `error` is `true` then `content` is error message to be shown to user
- 
- Else news content stored in `content`
-*/
-
-struct NewsContentDisplayModel {
-    let error: Bool
-    let content: String
+struct NewsContentDependencies {
+    let model: INewsContentModel
 }
 
 protocol NewsContentViewDelegate: class {
@@ -27,43 +18,6 @@ protocol NewsContentViewDelegate: class {
     func stopLoadingAnimation()
 
     func present(_ content: NewsContentDisplayModel)
-}
-
-protocol INewsContentModel: class {
-    weak var view: NewsContentViewDelegate! { get set }
-    func loadNewsContent(by id: String, completion: (() -> Void)?)
-}
-
-extension INewsContentModel {
-    func loadNewsContent(by id: String, completion: (() -> Void)? = nil) {
-        loadNewsContent(by: id, completion: completion)
-    }
-}
-
-final class NewsContentModel: INewsContentModel {
-
-    // MARK: - Members
-
-    weak var view: NewsContentViewDelegate!
-
-    // MARK: - INewsContentModel
-
-    func loadNewsContent(by id: String, completion: (() -> Void)? = nil) {
-        view.startLoadingAnimation()
-        contentProvider.load(by: id) { [weak self] (displayModel) in
-            completion?()
-            self?.view.stopLoadingAnimation()
-            self?.view.present(displayModel)
-        }
-    }
-
-    // MARK: - DI
-
-    init(contentProvider: INewsContentProvider) {
-        self.contentProvider = contentProvider
-    }
-
-    private let contentProvider: INewsContentProvider
 }
 
 final class NewsContentViewController: UIViewController, NewsContentViewDelegate {
@@ -76,10 +30,16 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
 
     // MARK: - Overrides
 
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupController()
+        injectDependencies()
+        setupView()
+        loadContent()
     }
 
     // MARK: - NewsContentViewDelegate
@@ -101,43 +61,34 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
             present(loadedContent)
         }
     }
-    
-    private func present(_ content: String) {
-        let parsed = content.decodeHTMLToAttributed()!
-        let mainContent = makeMainContent(parsed)
-        
-        let newContent = NSMutableAttributedString()
-        newContent.append(currentContent)
-        newContent.append(mainContent)
-        
-        currentContent = newContent
-    }
 
-    private func setLoadingEnabled(_ state: Bool) {
-        DispatchQueue.main.async { [weak self] in
-            UIApplication.shared.isNetworkActivityIndicatorVisible = state
-            if state {
-                self?.loadingIndicator.startAnimating()
-            } else {
-                self?.loadingIndicator.stopAnimating()
-            }
-        }
+    // MARK: - DI
+    
+    var model: INewsContentModel!
+    
+    var assembler: INewsContentDependencyManager!
+
+    private func injectDependencies() {
+        model = assembler.newsContenModel()
     }
 
     // MARK: - Members
 
-    var model: INewsContentModel!
-
-    private func inejctModel() -> INewsContentModel {
-        let contentProvider = buildContentProvider()
-        let model = NewsContentModel(contentProvider: contentProvider)
-
-        return model
-    }
-
     var newsId: String!
     var newsTitle: String!
     var newsContent: String?
+
+    // MARK: - Methods
+
+    private func setupView() {
+        model.view = self
+        contentTextView.addPullToRefresh(refreshCompletion: onUpdate)
+    }
+
+    private func onUpdate() {
+        // TODO: upd content
+        contentTextView.stopPullRefreshing()
+    }
 
     private var currentContent: NSAttributedString! {
         didSet {
@@ -145,42 +96,29 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
         }
     }
 
-    // MARK: - Setup
+    // MARK: - Content presentation
 
-    private func setupController() {
-        contentTextView.addPullToRefresh(refreshCompletion: nil)
-
-        //TODO: model.loadContent(_ id:)
-        
+    private func loadContent() {
+        displayNewsTitle()
         if newsContent == nil {
             log.debug("using api to load news content")
-            loadContent()
+            model.loadNewsContent(by: newsId)
         } else {
-            displayNewsTitle()
             present(newsContent!)
         }
     }
 
-    // TODO: use protocol
+    private func present(_ content: String) {
+        let parsed = content.decodeHTMLToAttributed()!
+        let mainContent = makeMainContent(parsed)
 
-    private func buildContentProvider() -> INewsContentProvider {
-        let provider = NewsContentProvider()
+        let newContent = NSMutableAttributedString()
+        newContent.append(currentContent)
+        newContent.append(mainContent)
 
-        return provider
+        currentContent = newContent
     }
 
-    private var contentProvider: INewsContentProvider!
-
-    private func loadContent() {
-        
-        displayNewsTitle()
-        
-        model = inejctModel()
-        model.view = self
-
-        model.loadNewsContent(by: newsId)
-    }
-    
     private func displayNewsTitle() {
         let heading = makeHeading(newsTitle)
         currentContent = heading
@@ -211,6 +149,19 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
         content.addAttributes(attr, range: range)
 
         return content
+    }
+
+    // MARK: - View 
+
+    private func setLoadingEnabled(_ state: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            UIApplication.shared.isNetworkActivityIndicatorVisible = state
+            if state {
+                self?.loadingIndicator.startAnimating()
+            } else {
+                self?.loadingIndicator.stopAnimating()
+            }
+        }
     }
 
     // MARK: - Helpers

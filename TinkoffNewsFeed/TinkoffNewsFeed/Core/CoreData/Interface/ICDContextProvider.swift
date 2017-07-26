@@ -6,8 +6,6 @@
 import Foundation
 import CoreData
 
-//TODO: what's `NSManagedObjectID` and why it changes after save
-
 protocol ICDContextManager {
 
     func performSave(context: NSManagedObjectContext,
