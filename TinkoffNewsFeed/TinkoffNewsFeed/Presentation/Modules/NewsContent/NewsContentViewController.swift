@@ -151,13 +151,13 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
 
     // TODO: use protocol
 
-    private func buildContentProvider() -> NewsContentProvider {
+    private func buildContentProvider() -> INewsContentProvider {
         let provider = NewsContentProvider()
 
         return provider
     }
 
-    private var contentProvider: NewsContentProvider!
+    private var contentProvider: INewsContentProvider!
 
     private func loadContent() {
         

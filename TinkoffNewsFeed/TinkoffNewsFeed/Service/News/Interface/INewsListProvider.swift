@@ -6,6 +6,8 @@
 import Foundation
 
 protocol INewsListProvider {
+    func loadCached(completion: ([News]?) -> Void)
+    
     func load(offset: Int, count: Int,
               completion: (() -> Void)?)
 }

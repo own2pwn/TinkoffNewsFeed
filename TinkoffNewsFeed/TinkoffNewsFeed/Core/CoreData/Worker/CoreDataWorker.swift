@@ -33,7 +33,8 @@ final class CoreDataWorker: ICoreDataWorker {
                                 predicate: NSPredicate? = nil,
                                 sortDescriptors: [NSSortDescriptor]? = nil,
                                 fetchLimit: Int? = nil) -> [T]? {
-        let fr = type.fetchRequest()
+        let name = T.entityName
+        let fr = NSFetchRequest<T>(entityName: name)
         fr.predicate = predicate
         fr.sortDescriptors = sortDescriptors
         if let limit = fetchLimit {

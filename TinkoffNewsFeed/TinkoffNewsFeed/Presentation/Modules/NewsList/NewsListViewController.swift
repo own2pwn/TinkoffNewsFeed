@@ -25,10 +25,37 @@ struct NewsListDisplayModel {
     let viewsCount: Int
 }
 
-final class NewsListModel {
+protocol NewsListViewDelegate: class {
+    
+}
+
+protocol INewsListModel: class {
+    weak var view: NewsListViewDelegate! { get set }
+    
+    func load()
+    func loadMore(_ count: Int)
+    func update(_ batch: Int)
+    func presentNewsContent(at indexPath: IndexPath)
+}
+
+final class NewsListModel: INewsListModel{
+    
+    // MARK: - Members
+    
+    weak var view: NewsListViewDelegate!
+    
+    // MARK: - INewsListModel
     
     func load() {
-        
+        newsProvider.loadCached { (result) in
+            if let cachedNews = result, cachedNews.count > 0 {
+                // there are some cached news
+                log.debug("there are some cached news")
+            } else {
+                // load from api
+                log.debug("there are not any cached news!")
+            }
+        }
     }
     
     func loadMore(_ count: Int) {
@@ -42,6 +69,14 @@ final class NewsListModel {
     func presentNewsContent(at indexPath: IndexPath) {
         
     }
+    
+    // MARK: - DI 
+    
+    init(newsProvider: INewsListProvider) {
+        self.newsProvider = newsProvider
+    }
+    
+    private let newsProvider: INewsListProvider
 }
 
 // MARK: -
@@ -54,12 +89,62 @@ final class NewsListViewController: UIViewController,
     @IBOutlet weak var newsFeedTableView: UITableView!
 
     @IBAction func didTapLoadButton(_ sender: UIButton) {
-        newsProvider.load(count: 20)
+        //newsProvider.load(count: 20)
+        model.load()
     }
 
     private func initFRC() {
         let controller = buildNewsFRC()
         newsListFRC = controller
+    }
+    
+    var model: INewsListModel!
+    
+    private func inejctModel() -> INewsListModel {
+        initContextManager()
+        initObjectMapper()
+        initCacheManager()
+        initReqSender()
+        
+        let newsProvider = buildNewsProvider()
+        let model = NewsListModel(newsProvider: newsProvider)
+        
+        return model
+    }
+    
+    private var cacheManager: INewsListCacheManager!
+    private var requestSender: IRequestSender!
+    private var contextManager: ICDContextManager!
+    private var objectMapper: IStructToEntityMapper.Type!
+    
+    private func initContextManager() -> ICDContextManager {
+        let manager = CDStack()
+        contextManager = manager
+        
+        return manager
+    }
+    
+    private func initObjectMapper() -> IStructToEntityMapper.Type {
+        let mapper = StructToEntityMapper.self
+        objectMapper = mapper
+        
+        return mapper
+    }
+    
+    private func initCacheManager() {
+        let cm = NewsListCacheManager(contextManager: contextManager, objectMapper: objectMapper)
+        cacheManager = cm
+    }
+    
+    private func initReqSender() {
+        let rs = RequestSender()
+        requestSender = rs
+    }
+    
+    private func buildNewsProvider() -> INewsListProvider {
+        let provider = NewsListProvider(cacheManager: cacheManager, requestSender: requestSender)
+        
+        return provider
     }
 
     private func buildNewsFRC() -> NSFetchedResultsController<News> {
@@ -101,6 +186,7 @@ final class NewsListViewController: UIViewController,
         super.viewDidLoad()
 
         // TODO: remove
+        model = inejctModel()
         initDepend()
         setupController()
     }
