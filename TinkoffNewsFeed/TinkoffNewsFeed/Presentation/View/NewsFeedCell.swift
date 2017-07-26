@@ -11,22 +11,10 @@ import UIKit
 final class NewsFeedCell: UITableViewCell {
 
     // MARK: - Outlets
-    
+
     @IBOutlet weak var newsDateLabel: UILabel!
-    
+
     @IBOutlet weak var newsTitleLabel: UILabel!
-    
-    // MARK: - Overrides
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
+    @IBOutlet weak var newsViewsCountLabel: UILabel!
 }
