@@ -227,7 +227,12 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     private func initCacheManager() {
-        let cm = NewsListCacheManager(contextManager: contextManager, objectMapper: objectMapper)
+        
+        let cdw = CoreDataWorker(context: stack.saveContext)
+        
+        let cm = NewsListCacheManager(contextManager: stack,
+                                      objectMapper: objectMapper,
+                                      coreDataWorker: cdw)
         cacheManager = cm
     }
 
@@ -334,7 +339,8 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     private func initNewsProvider() {
         // TODO: make one protocol for newlist and news content
         let mapper = StructToEntityMapper.self
-        let cm = NewsListCacheManager(contextManager: stack, objectMapper: mapper)
+        let cdw = CoreDataWorker(context: stack.saveContext)
+        let cm = NewsListCacheManager(contextManager: stack, objectMapper: mapper, coreDataWorker: cdw)
         let rs = RequestSender()
 
         newsProvider = NewsListProvider(cacheManager: cm, requestSender: rs)
@@ -359,14 +365,6 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: feedCellId, for: indexPath) as! NewsFeedCell
         configure(cell, at: indexPath)
-
-        let row = indexPath.row
-
-        if row == fetchedNewsCount - 2 {
-            DispatchQueue.main.async {// [unowned self] in
-                // self.loadMore()
-            }
-        }
 
         return cell
     }

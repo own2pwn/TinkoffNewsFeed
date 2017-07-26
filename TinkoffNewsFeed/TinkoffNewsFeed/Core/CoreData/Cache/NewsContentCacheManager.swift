@@ -6,14 +6,14 @@
 import Foundation
 import CoreData
 
-final class NewsContentCacheManager {
+final class NewsContentCacheManager: INewsContentCacheManager {
     func cache(_ id: String, _ data: NewsContentPayload) {
-        
+
         // TODO: use threads
-        
+
         // search for existing news
         if let news = coreDataWorker.findFirst(by: "id", value: id, entity: News.self) {
-            
+
             // if there is then check to update its content
             if let content = news.content {
                 // Updating existing cache

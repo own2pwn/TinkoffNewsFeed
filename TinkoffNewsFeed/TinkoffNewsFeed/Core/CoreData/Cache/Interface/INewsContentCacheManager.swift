@@ -6,4 +6,5 @@
 import Foundation
 
 protocol INewsContentCacheManager {
+    func cache(_ id: String, _ data: NewsContentPayload)
 }
