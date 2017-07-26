@@ -11,7 +11,6 @@ import CoreData
 
 
 extension News {
-
     @nonobjc public class func fetchRequest() -> NSFetchRequest<News> {
         return NSFetchRequest<News>(entityName: "News")
     }
@@ -20,6 +19,6 @@ extension News {
     @NSManaged public var pubDate: NSDate?
     @NSManaged public var title: String?
     @NSManaged public var titleHash: String?
+    @NSManaged public var viewsCount: Int64
     @NSManaged public var content: NewsContent?
-
 }

@@ -24,8 +24,7 @@ final class NewsListCacheManager: INewsListCacheManager {
 
     // TODO: extract to assembler
 
-    init(contextManager: ICDContextManager,
-         objectMapper: IStructToEntityMapper.Type) {
+    init(contextManager: ICDContextManager, objectMapper: IStructToEntityMapper.Type) {
         self.contextManager = contextManager
         saveContext = contextManager.saveContext
 

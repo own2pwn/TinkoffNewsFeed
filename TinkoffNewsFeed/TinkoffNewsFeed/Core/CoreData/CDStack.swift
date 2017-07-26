@@ -7,6 +7,7 @@ import Foundation
 import CoreData
 
 final class CDStack: ICDStack {
+
     // MARK: - ICDStack
 
     var managedObjectModel: NSManagedObjectModel {
@@ -40,17 +41,17 @@ final class CDStack: ICDStack {
         }
     }
 
-    var masterContext: NSManagedObjectContext {
+    lazy var masterContext: NSManagedObjectContext = {
         return self.initMasterContext()
-    }
+    }()
 
-    var mainContext: NSManagedObjectContext {
+    lazy var mainContext: NSManagedObjectContext = {
         return self.initMainContext()
-    }
+    }()
 
-    var saveContext: NSManagedObjectContext {
-        return initSaveContext()
-    }
+    lazy var saveContext: NSManagedObjectContext = {
+        return self.initSaveContext()
+    }()
 
     // MARK: - CDStack
 
@@ -60,12 +61,13 @@ final class CDStack: ICDStack {
 
     // MARK: - Constants
 
-    private let MODEL_EXT = "momd"
+    private let model: String = .TNF_CD_MODEL_NAME
+    private let storeName: String = .TNF_CD_STORE_NAME
+    private let modelExt = "momd"
 
     // MARK: - Instance members
 
     private var objectModel: NSManagedObjectModel!
-
     private var storeCoordinator: NSPersistentStoreCoordinator!
 
     // MARK: - Methods
@@ -76,7 +78,7 @@ final class CDStack: ICDStack {
     }
 
     private func initObjectModel() {
-        if let url = Bundle.main.url(forResource: .TNF_CD_MODEL_NAME, withExtension: MODEL_EXT) {
+        if let url = Bundle.main.url(forResource: model, withExtension: modelExt) {
             let model = NSManagedObjectModel(contentsOf: url)
 
             objectModel = model
@@ -130,7 +132,7 @@ final class CDStack: ICDStack {
 
     private func constructStorePath() -> URL {
         let docDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let storePath = docDir.appendingPathComponent(.TNF_CD_STORE_NAME)
+        let storePath = docDir.appendingPathComponent(storeName)
         log.info("DB store path: \(storePath)")
 
         return storePath

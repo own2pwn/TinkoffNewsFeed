@@ -18,20 +18,34 @@ struct NewsListAPIModel {
     let publicationDate: String
 }
 
+// TODO: rename to `NewsListAPIModel`
+// or something else
+
 struct NewsEntityModel: IEntityMappable {
-    let id: String
-    let pubDate: Date
-    let title: String
-    let titleHash: String
+    var id: String
+    var pubDate: Date
+    var title: String
+    var titleHash: String
+    let viewsCount = 0
 }
 
 final class NewsListProvider: INewsListProvider {
+
+    func loadNew(completion: (() -> Void)?) {
+        // get last saved news
+        // while we've got this news, load with updated offset again
+
+
+    }
+
     func load(offset: Int = 0, count: Int,
-              completion: (() -> Void)?) {
+              completion: (() -> Void)? = nil) {
+        // offset always have to be lower than count
+        let count = offset < count ? count : count + offset
 
         let config = buildRequestConfig(offset: offset, count: count)
-        requestSender.sendJSON(config: config) { [weak self] (result) in
-            self?.cache(result)
+        requestSender.sendJSON(config: config) { [unowned self] (result) in
+            self.cache(result)
             // TODO: check if it save here to use unowned
             // or not to
         }
@@ -65,14 +79,14 @@ final class NewsListProvider: INewsListProvider {
         return parser
     }
 
+    // TODO: extract to request builder
+    // TODO: or make a r. config builder
+
     private func buildRequest(_ offset: Int, _ count: Int) -> URLRequest {
-        let urlFmt = "%@/%@/%@"
         let url = String(format: urlFmt, apiHost, apiVersion, apiMethod)
-
-        let queryFmt = "?%@=%d&%@=%d"
         let query = String(format: queryFmt, apiFetchFrom, offset, apiFetchTo, count)
-
         let endpoint = url + query
+
         let request = try! URLRequest(url: endpoint, method: apiRequestMethod)
 
         return request
@@ -91,9 +105,11 @@ final class NewsListProvider: INewsListProvider {
     // MARK: - Constants
 
     private let apiHost: String = .TNF_API_HOST
-    private let apiVersion: String = .TNF_API_NEWS_LIST_VERSION
+    private let apiVersion: String = .TNF_API_NEWS_VERSION
     private let apiMethod: String = .TNF_API_NEWS_LIST_METHOD
     private let apiFetchFrom: String = .TNF_API_NEWS_LIST_FETCH_PARAM_FIRST
     private let apiFetchTo: String = .TNF_API_NEWS_LIST_FETCH_PARAM_LAST
     private let apiRequestMethod: HTTPMethod = .TNF_API_NEWS_LIST_REQUEST_METHOD
+    private let urlFmt: String = .TNF_API_NEWS_REQUEST_URL_FMT
+    private let queryFmt: String = .TNF_API_NEWS_LIST_REQUEST_QUERY_FMT
 }
