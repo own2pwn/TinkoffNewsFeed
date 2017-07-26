@@ -11,7 +11,21 @@ import CoreData
 
 typealias NewsListModelViewConstraint = (NSFetchedResultsControllerDelegate & NewsListViewDelegate)
 
-final class DependencyManager {
+protocol IDependencyManager: INewsListDependencyManager, INewsContentDependencyManager {
+    
+}
+
+protocol INewsListDependencyManager {
+    func newsListModel(for view: NewsListModelViewConstraint) -> INewsListModel
+}
+
+protocol INewsContentDependencyManager {
+    func newsContenModel() -> INewsContentModel
+}
+
+final class DependencyManager: IDependencyManager {
+    
+    // MARK: - INewsListDependencyManager
     
     func newsListModel(for view: NewsListModelViewConstraint) -> INewsListModel {
         let model = NewsListModel(view: view, dependencies: newsListModelDependencies)
@@ -19,6 +33,8 @@ final class DependencyManager {
         return model
         
     }
+    
+    // MARK: - INewsContentDependencyManager
     
     func newsContenModel() -> INewsContentModel {
         let model = NewsContentModel(contentProvider: newsContentProvider)
@@ -29,7 +45,7 @@ final class DependencyManager {
     // MARK: - Private
     
     private lazy var newsContentProvider: INewsContentProvider = {
-        let provider = NewsContentProvider()
+        let provider = NewsContentProvider(dependencies: self.newsContentProviderDependencies)
         
         return provider
     }()
@@ -61,6 +77,17 @@ final class DependencyManager {
         return d
     }()
     
+    private lazy var newsContentProviderDependencies: NewsContentProviderDependencies = {
+        let d = NewsContentProviderDependencies(contextManager: self.contextManager,
+                                                coreDataWorker: self.coreDataWorker,
+                                                objectMapper: self.objectMapper,
+                                                cacheManager: self.newsContentCacheManager,
+                                                requstSender: self.requestSender,
+                                                configBuilder: self.newsContentConfigBuilder)
+        
+        return d
+    }()
+    
     // MARK: -
     
     // MARK: - CoreData
@@ -72,7 +99,15 @@ final class DependencyManager {
     }()
     
     private lazy var fetchedResultsControllerManager:IFetchedResultsControllerManager = {
-        let manager = FetchedResultsControllerManager(context: self.masterContext)
+        let manager = FetchedResultsControllerManager(context: self.mainContext)
+        
+        return manager
+    }()
+    
+    private lazy var newsContentCacheManager: INewsContentCacheManager = {
+        let manager = NewsContentCacheManager(contextManager: self.contextManager,
+                                              coreDataWorker: self.coreDataWorker,
+                                              objectMapper: self.objectMapper)
         
         return manager
     }()
@@ -92,8 +127,8 @@ final class DependencyManager {
         return worker
     }()
     
-    private lazy var masterContext: NSManagedObjectContext = {
-        return self.contextManager.masterContext
+    private lazy var mainContext: NSManagedObjectContext = {
+        return self.contextManager.mainContext
     }()
     
     private lazy var saveContext: NSManagedObjectContext = {
@@ -109,6 +144,12 @@ final class DependencyManager {
     }
     
     // MARK: - Network
+    
+    private lazy var newsContentConfigBuilder: INewsContentConfigBuilder = {
+        let builder = NewsContentConfigBuilder()
+        
+        return builder
+    }()
     
     private lazy var newsListConfigBuilder: INewsListConfigBuilder = {
         let builder = NewsListConfigBuilder()

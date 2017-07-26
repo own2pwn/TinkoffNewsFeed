@@ -67,8 +67,6 @@ final class NewsListModel: INewsListModel {
         syncer.sync(object) { (error) in
             if let e = error {
                 log.debug("Error while syncing: \(e)!")
-            } else {
-                log.debug("successfully have synced obj!")
             }
         }
 

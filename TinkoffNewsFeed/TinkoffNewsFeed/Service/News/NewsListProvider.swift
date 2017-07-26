@@ -7,23 +7,6 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-//struct NewsListAPIModel {
-//    let newsId: String
-//    let title: String
-//    let publicationDate: String
-//}
-
-// TODO: rename to `NewsListAPIModel`
-// or something else
-
-struct NewsEntityModel: IEntityMappable {
-    var id: String
-    var pubDate: Date
-    var title: String
-    var titleHash: String
-    let viewsCount = 0
-}
-
 struct NewsListProviderDependencies {
     let requestSender: IRequestSender
     let cacheManager: INewsListCacheManager
@@ -37,8 +20,6 @@ final class NewsListProvider: INewsListProvider {
     func loadNew(completion: (() -> Void)?) {
         // get last saved news
         // while we've got this news, load with updated offset again
-        
-        
     }
     
     func loadCached(completion: ([News]?) -> Void) {
