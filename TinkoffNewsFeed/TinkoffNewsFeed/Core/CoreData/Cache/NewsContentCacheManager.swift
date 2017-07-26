@@ -53,7 +53,7 @@ final class NewsContentCacheManager {
                     log.debug("Updating existing cache")
                     return
                 }
-                //TODO: do check in another place!
+                // TODO: do check in another place!
                 log.debug("There is existing content")
                 log.debug("Skipping caching!")
                 return
