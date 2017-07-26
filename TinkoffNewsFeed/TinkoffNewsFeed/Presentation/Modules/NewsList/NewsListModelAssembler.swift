@@ -5,18 +5,35 @@
 
 import Foundation
 
-final class NewsListModelAssembler {
-    class func assembly() -> INewsListModel {
-        let model = NewsListModel(view: <#T##(NewsListViewDelegate & NSFetchedResultsControllerDelegate)##(TinkoffNewsFeed.NewsListViewDelegate & CoreData.NSFetchedResultsControllerDelegate)#>, dependencies: <#T##NewsListModelDependencies##TinkoffNewsFeed.NewsListModelDependencies#>)
+final class NewsListModelDependenciesAssembler {
+    class func assembly() -> NewsListModelDependencies {
+        let d = NewsListModelDependencies(newsProvider: newsListProvider,
+                                          fetchRequestProvider: fetchRequestProvider,
+                                          frcManager: fetchedResultsControllerManager,
+                                          syncer: managedObjectSynchronizer)
+        
+        return d
     }
 
     // MARK: - Private
 
-    private class func assemblyDependencies() -> NewsListModelDependencies {
-        let d = NewsListModelDependencies(newsProvider: <#T##INewsListProvider##TinkoffNewsFeed.INewsListProvider#>, fetchRequestProvider: <#T##IFetchRequestProvider.Protocol##TinkoffNewsFeed.IFetchRequestProvider.Protocol#>, frcManager: <#T##IFetchedResultsControllerManager##TinkoffNewsFeed.IFetchedResultsControllerManager#>, syncer: <#T##IManagedObjectSynchronizer##TinkoffNewsFeed.IManagedObjectSynchronizer#>)
+    private static var newsListProvider: INewsListProvider {
+        return NewsListProviderAssembler.assembly()
     }
 
-    private static var newsListProvider: INewsContentProvider {
+    private static var fetchRequestProvider: IFetchRequestProvider.Type {
+        return FetchRequestProviderAssembler.assembly()
+    }
 
+    private static var fetchedResultsControllerManager: IFetchedResultsControllerManager {
+        return FetchedResultsControllerManagerAssembler.assembly()
+    }
+
+    private static var managedObjectSynchronizer: IManagedObjectSynchronizer {
+        return ManagedObjectSynchronizerAssembler.assembly()
+    }
+
+    private static var requestSender: IRequestSender {
+        return RequestSenderAssembler.assembly()
     }
 }

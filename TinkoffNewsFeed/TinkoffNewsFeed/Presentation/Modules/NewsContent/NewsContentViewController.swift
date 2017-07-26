@@ -20,7 +20,6 @@ protocol NewsContentViewDelegate: class {
     func present(_ content: NewsContentDisplayModel)
 }
 
-
 final class NewsContentViewController: UIViewController, NewsContentViewDelegate {
 
     // MARK: - Outlets
@@ -102,11 +101,11 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     // MARK: - Content presentation
 
     private func loadContent() {
+        displayNewsTitle()
         if newsContent == nil {
             log.debug("using api to load news content")
             model.loadNewsContent(by: newsId)
         } else {
-            displayNewsTitle()
             present(newsContent!)
         }
     }
