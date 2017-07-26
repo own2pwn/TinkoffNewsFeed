@@ -8,11 +8,12 @@ import CoreData
 
 protocol INewsListModel: class {
     weak var view: (NewsListViewDelegate & NSFetchedResultsControllerDelegate)! { get set }
-
+    
     func loadNews()
     func update(_ batch: Int)
     func loadMore(_ count: Int)
 
+    var fetchedNewsCount: Int { get }
     func rowsCount(for section: Int) -> Int
     func displayModel(for indexPath: IndexPath) -> NewsListDisplayModel
 

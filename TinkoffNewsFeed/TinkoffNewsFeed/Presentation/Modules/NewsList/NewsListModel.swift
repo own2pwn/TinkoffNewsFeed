@@ -21,33 +21,10 @@ final class NewsListModel: INewsListModel {
 
     func loadNews() {
         view.startLoadingAnimation()
-        let cachedNews = initFRC()
-
-        // TODO: if no internet then dont use api
-
-        if cachedNews == 0 {
-            newsProvider.load(count: newsBatchSize, completion: { [unowned self] in
-                self.view.stopLoadingAnimation()
-                log.debug("Loaded news from api")
-            })
-            log.debug("there are not any cached news!")
-        } else {
-            view.stopLoadingAnimation()
+        newsProvider.load(count: newsBatchSize) { [unowned self] in
+            self.view.stopLoadingAnimation()
+            log.debug("News were loaded from API")
         }
-    }
-
-    private func initFRC() -> Int {
-        let dateSorter = NSSortDescriptor(key: sortByKey, ascending: false)
-        let sortDescriptors = [dateSorter]
-        let fr = fetchRequestProvider.fetchRequest(object: News.self, sortDescriptors: sortDescriptors, predicate: nil, fetchLimit: newsBatchSize)
-        // TODO: extract to a const
-        fr.fetchBatchSize = newsBatchSize
-
-        frc = frcManager.initialize(delegate: view, fetchRequest: fr)
-        try? frc.performFetch()
-        let fetchedNewsCount = frc.sections?[0].numberOfObjects
-
-        return fetchedNewsCount ?? 0
     }
 
     func update(_ batch: Int) {
@@ -74,6 +51,10 @@ final class NewsListModel: INewsListModel {
         view.presentNewsDetails(model)
     }
 
+    var fetchedNewsCount: Int {
+        return rowsCount(for: 0)
+    }
+    
     func rowsCount(for section: Int) -> Int {
         let sections = frc.sections!
         let sectionInfo = sections[section]
@@ -96,7 +77,21 @@ final class NewsListModel: INewsListModel {
     // MARK: - Members
 
     private var frc: NSFetchedResultsController<News>!
-
+    
+    // MARK: - Methods
+    
+    private func initFRC() {
+        let dateSorter = NSSortDescriptor(key: sortByKey, ascending: false)
+        let sortDescriptors = [dateSorter]
+        let fr = fetchRequestProvider.fetchRequest(object: News.self, sortDescriptors: sortDescriptors, predicate: nil, fetchLimit: newsBatchSize)
+        fr.fetchBatchSize = newsBatchSize
+        
+        frc = frcManager.initialize(delegate: view, fetchRequest: fr)
+        try? frc.performFetch()
+    }
+    
+    // MARK: - Constants
+    
     private let newsBatchSize = 20
     private let sortByKey = "pubDate"
 

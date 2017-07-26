@@ -11,10 +11,6 @@ import ReachabilitySwift
 import CoreData
 import PullToRefreshSwift
 
-struct NewsListDependencies {
-    let model: INewsListModel
-}
-
 struct NewsListDisplayModel {
     let date: Date
     let viewsCount: Int
@@ -247,8 +243,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
 
     // MARK: - Instance members
 
-    private let connectionChecker = Reachability(hostname: "api.tinkoff.ru")
-    // https:// ?
+    private let connectionChecker = Reachability(hostname: "api.tinkoff.ru") //https?
 
     private var itemsCount = 20
 
@@ -268,8 +263,14 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
         newsFeedTableView.estimatedRowHeight = 75
         newsFeedTableView.rowHeight = UITableViewAutomaticDimension
 
-        // TODO: maybe use lib to p2r?
-        // MARK: - Pull2Refresh
+        if connectionChecker!.isReachable {
+            if model.fetchedNewsCount == 0 {
+                // first time fetch
+                model.loadNews()
+            }
+        } else {
+            //show no internet
+        }
     }
 
     private func initConnectionListener() {
