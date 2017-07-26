@@ -35,7 +35,7 @@ struct NewsContentRoutingModel {
     let content: String?
 }
 
-// MARK: -
+
 
 final class NewsListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,
         NewsListViewDelegate, NSFetchedResultsControllerDelegate {
@@ -94,11 +94,12 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     
     var model: INewsListModel!
     
-    private let assembler = NewsListAssembler.self
+    // private let assembler = NewsListAssembler.self
+    
+    private let assembler = DependencyManager.self
     
     private func injectDependencies() {
-        let d = assembler.assembly(for: self)
-        model = d.model
+        model = assembler.newsListModel(for: self)
     }
 
     // MARK: - Navigation

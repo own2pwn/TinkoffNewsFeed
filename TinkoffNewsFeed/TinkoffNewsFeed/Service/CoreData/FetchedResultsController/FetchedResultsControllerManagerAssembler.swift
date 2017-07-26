@@ -7,6 +7,13 @@ import Foundation
 import CoreData
 
 final class FetchedResultsControllerManagerAssembler: IFetchedResultsControllerManagerAssembler {
+    
+    class func assembly(mainContext: NSManagedObjectContext) -> IFetchedResultsControllerManager {
+        let manager = FetchedResultsControllerManager(context: mainContext)
+        
+        return manager
+    }
+    
     class func assembly() -> IFetchedResultsControllerManager {
         let manager = FetchedResultsControllerManager(context: mainContext)
         

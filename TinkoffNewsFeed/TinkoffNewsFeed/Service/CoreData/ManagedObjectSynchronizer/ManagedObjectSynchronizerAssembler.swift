@@ -6,6 +6,13 @@
 import Foundation
 
 final class ManagedObjectSynchronizerAssembler: IManagedObjectSynchronizerAssembler {
+    
+    class func assembly(contextManager: ICDContextManager) -> IManagedObjectSynchronizer {
+        let syncer = ManagedObjectSynchronizer(contextManager: contextManager)
+        
+        return syncer
+    }
+    
     class func assembly() -> IManagedObjectSynchronizer {
         let syncer = ManagedObjectSynchronizer(contextManager: contextManager)
         

@@ -83,6 +83,7 @@
 		B92B96AC1F274110003B767E /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92B96AB1F274110003B767E /* DateExtension.swift */; };
 		B92B96AE1F27A46A003B767E /* NewsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92B96AD1F27A46A003B767E /* NewsContentViewController.swift */; };
 		B961C5B91F27C46700AD30B6 /* IntegerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B961C5B81F27C46700AD30B6 /* IntegerExtension.swift */; };
+		B96FB7D11F290124006EE83F /* DependencyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96FB7D01F290124006EE83F /* DependencyManager.swift */; };
 		B9D0CE5B1F26058100117C9B /* NewsFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0CE5A1F26058100117C9B /* NewsFeedCell.swift */; };
 		B9D0CE601F26172E00117C9B /* CDStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0CE5E1F26172E00117C9B /* CDStack.swift */; };
 		B9D0CE641F2617A500117C9B /* ICDContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0CE621F2617A500117C9B /* ICDContextProvider.swift */; };
@@ -179,6 +180,7 @@
 		B92B96AB1F274110003B767E /* DateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		B92B96AD1F27A46A003B767E /* NewsContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsContentViewController.swift; sourceTree = "<group>"; };
 		B961C5B81F27C46700AD30B6 /* IntegerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntegerExtension.swift; sourceTree = "<group>"; };
+		B96FB7D01F290124006EE83F /* DependencyManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DependencyManager.swift; sourceTree = "<group>"; };
 		B97BDF191F25FE0300568C3F /* TinkoffNewsFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinkoffNewsFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9D0CE5A1F26058100117C9B /* NewsFeedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsFeedCell.swift; sourceTree = "<group>"; };
 		B9D0CE5E1F26172E00117C9B /* CDStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDStack.swift; sourceTree = "<group>"; };
@@ -543,6 +545,7 @@
 				1064A63AA64DF92B06AD8245 /* Extensions */,
 				1064A2219CCEAC45884F8581 /* AppDelegate.swift */,
 				1064AE9D14040D726FF4090E /* Info.plist */,
+				B96FB7D01F290124006EE83F /* DependencyManager.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -853,6 +856,7 @@
 				B9D0CE601F26172E00117C9B /* CDStack.swift in Sources */,
 				B9D0CE5B1F26058100117C9B /* NewsFeedCell.swift in Sources */,
 				B9D0CE651F2617A500117C9B /* ICDStack.swift in Sources */,
+				B96FB7D11F290124006EE83F /* DependencyManager.swift in Sources */,
 				1064A3C81FB1A8309A167C9B /* TNFAPIRequestConstants.swift in Sources */,
 				B9D0CE6A1F261D0600117C9B /* Logger.swift in Sources */,
 				B92B96AE1F27A46A003B767E /* NewsContentViewController.swift in Sources */,
