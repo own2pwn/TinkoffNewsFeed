@@ -11,8 +11,6 @@ import ReachabilitySwift
 import CoreData
 import PullToRefreshSwift
 
-// TODO: add loading indicator while fetching
-
 struct NewsListDisplayModel {
     let date: Date
     let viewsCount: Int
@@ -394,10 +392,9 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) as? NewsFeedCell {
-            model.presentNewsContent(for: indexPath)
-            tableView.deselectRow(at: indexPath, animated: true)
-        }
+        log.debug("on cell selection")
+        model.presentNewsContent(for: indexPath)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
     // MARK: - NSFetchedResultsControllerDelegate
