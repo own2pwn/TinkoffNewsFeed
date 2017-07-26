@@ -97,15 +97,20 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
         if error {
             // TODO: show error to user
         } else {
-            let loadedContent = content.content.decodeHTMLToAttributed()!
-            let mainContent = makeMainContent(loadedContent)
-
-            let newContent = NSMutableAttributedString()
-            newContent.append(currentContent)
-            newContent.append(mainContent)
-
-            currentContent = newContent
+            let loadedContent = content.content
+            present(loadedContent)
         }
+    }
+    
+    private func present(_ content: String) {
+        let parsed = content.decodeHTMLToAttributed()!
+        let mainContent = makeMainContent(parsed)
+        
+        let newContent = NSMutableAttributedString()
+        newContent.append(currentContent)
+        newContent.append(mainContent)
+        
+        currentContent = newContent
     }
 
     private func setLoadingEnabled(_ state: Bool) {
@@ -143,10 +148,17 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     // MARK: - Setup
 
     private func setupController() {
-        // contentTextView.addPullToRefresh(refreshCompletion: nil)
+        contentTextView.addPullToRefresh(refreshCompletion: nil)
 
         //TODO: model.loadContent(_ id:)
-        loadContent()
+        
+        if newsContent == nil {
+            log.debug("using api to load news content")
+            loadContent()
+        } else {
+            displayNewsTitle()
+            present(newsContent!)
+        }
     }
 
     // TODO: use protocol
