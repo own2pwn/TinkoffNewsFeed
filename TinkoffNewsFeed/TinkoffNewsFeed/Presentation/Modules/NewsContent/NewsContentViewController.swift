@@ -31,10 +31,15 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
 
     // MARK: - Overrides
 
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+
+        injectDependencies()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupController()
         setupView()
         loadContent()
     }
@@ -60,37 +65,50 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     }
 
     // MARK: - DI
-
-    let assembler = NewsContentAssembler.self
-
+    
     var model: INewsContentModel!
+    
+    private let assembler = NewsContentAssembler.self
 
-    // MARK: - Methods
-
-    private func setupController() {
+    private func injectDependencies() {
         let d = assembler.assembly()
         model = d.model
     }
 
-    private func setupView() {
-        contentTextView.addPullToRefresh(refreshCompletion: onUpdate)
-    }
+    // MARK: - Members
 
-    private func loadContent() {
-        if newsContent == nil {
-            log.debug("using api to load news content")
-            // TODO: set model view
-            // model.view = self
-            model.loadNewsContent(by: newsId)
-        } else {
-            displayNewsTitle()
-            present(newsContent!)
-        }
+    var newsId: String!
+    var newsTitle: String!
+    var newsContent: String?
+
+    // MARK: - Methods
+
+    private func setupView() {
+        model.view = self
+        contentTextView.addPullToRefresh(refreshCompletion: onUpdate)
     }
 
     private func onUpdate() {
         // TODO: upd content
         contentTextView.stopPullRefreshing()
+    }
+
+    private var currentContent: NSAttributedString! {
+        didSet {
+            contentTextView.attributedText = currentContent
+        }
+    }
+
+    // MARK: - Content presentation
+
+    private func loadContent() {
+        if newsContent == nil {
+            log.debug("using api to load news content")
+            model.loadNewsContent(by: newsId)
+        } else {
+            displayNewsTitle()
+            present(newsContent!)
+        }
     }
 
     private func present(_ content: String) {
@@ -103,37 +121,6 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
 
         currentContent = newContent
     }
-
-    private func inejctModel() -> INewsContentModel {
-        let contentProvider = buildContentProvider()
-        let model = NewsContentModel(contentProvider: contentProvider)
-
-        return model
-    }
-
-    var newsId: String!
-    var newsTitle: String!
-    var newsContent: String?
-
-    private var currentContent: NSAttributedString! {
-        didSet {
-            contentTextView.attributedText = currentContent
-        }
-    }
-
-    // MARK: - Setup
-
-    // TODO: use protocol
-
-    private func buildContentProvider() -> INewsContentProvider {
-        let provider = NewsContentProvider()
-
-        return provider
-    }
-
-    private var contentProvider: INewsContentProvider!
-
-    // MARK: - Content presentation
 
     private func displayNewsTitle() {
         let heading = makeHeading(newsTitle)
