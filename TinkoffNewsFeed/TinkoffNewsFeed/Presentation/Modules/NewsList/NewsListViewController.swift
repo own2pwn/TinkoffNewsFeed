@@ -96,7 +96,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     
     // private let assembler = NewsListAssembler.self
     
-    private let assembler = DependencyManager.self
+    private let assembler = DependencyManager()
     
     private func injectDependencies() {
         model = assembler.newsListModel(for: self)

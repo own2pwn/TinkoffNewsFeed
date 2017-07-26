@@ -13,14 +13,14 @@ typealias NewsListModelViewConstraint = (NSFetchedResultsControllerDelegate & Ne
 
 final class DependencyManager {
     
-    static func newsListModel(for view: NewsListModelViewConstraint) -> INewsListModel {
+    func newsListModel(for view: NewsListModelViewConstraint) -> INewsListModel {
         let model = NewsListModel(view: view, dependencies: newsListModelDependencies)
         
         return model
         
     }
     
-    static func newsContenModel() -> INewsContentModel {
+    func newsContenModel() -> INewsContentModel {
         let model = NewsContentModel(contentProvider: newsContentProvider)
         
         return model
@@ -28,107 +28,107 @@ final class DependencyManager {
     
     // MARK: - Private
     
-    private static var newsContentProvider: INewsContentProvider {
+    private lazy var newsContentProvider: INewsContentProvider = {
         let provider = NewsContentProvider()
         
         return provider
-    }
+    }()
     
-    private static var newsListProvider: INewsListProvider {
-        let provider = NewsListProvider(dependencies: newsListProviderDependencies)
+    private lazy var newsListProvider: INewsListProvider = {
+        let provider = NewsListProvider(dependencies: self.newsListProviderDependencies)
         
         return provider
-    }
+    }()
     
     // MARK: - Dependencies
     
-    private static var newsListModelDependencies: NewsListModelDependencies {
-        let d = NewsListModelDependencies(newsProvider: newsListProvider,
-                                          fetchRequestProvider: fetchRequestProvider,
-                                          frcManager: fetchedResultsControllerManager,
-                                          syncer: managedObjectSynchronizer)
+    private lazy var newsListModelDependencies: NewsListModelDependencies = {
+        let d = NewsListModelDependencies(newsProvider: self.newsListProvider,
+                                          fetchRequestProvider: self.fetchRequestProvider,
+                                          frcManager: self.fetchedResultsControllerManager,
+                                          syncer: self.managedObjectSynchronizer)
         
         return d
-    }
+    }()
     
-    private static var newsListProviderDependencies: NewsListProviderDependencies {
-        let d = NewsListProviderDependencies(requestSender: requestSender,
-                                             cacheManager: newsListCacheManager,
-                                             coreDataWorker: coreDataWorker,
-                                             contextManager: contextManager,
-                                             configBuilder: newsListConfigBuilder)
+    private lazy var newsListProviderDependencies: NewsListProviderDependencies = {
+        let d = NewsListProviderDependencies(requestSender: self.requestSender,
+                                             cacheManager: self.newsListCacheManager,
+                                             coreDataWorker: self.coreDataWorker,
+                                             contextManager: self.contextManager,
+                                             configBuilder: self.newsListConfigBuilder)
         
         return d
-    }
+    }()
     
     // MARK: -
     
     // MARK: - CoreData
     
-    private static var managedObjectSynchronizer: IManagedObjectSynchronizer {
-        let syncer = ManagedObjectSynchronizer(contextManager: contextManager)
+    private lazy var managedObjectSynchronizer: IManagedObjectSynchronizer = {
+        let syncer = ManagedObjectSynchronizer(contextManager: self.contextManager)
         
         return syncer
-    }
+    }()
     
-    private static var fetchedResultsControllerManager:IFetchedResultsControllerManager {
-        let manager = FetchedResultsControllerManager(context: masterContext)
+    private lazy var fetchedResultsControllerManager:IFetchedResultsControllerManager = {
+        let manager = FetchedResultsControllerManager(context: self.masterContext)
         
         return manager
-    }
+    }()
     
-    private static var newsListCacheManager: INewsListCacheManager {
-        let manager = NewsListCacheManager(contextManager: contextManager,
-                                           objectMapper: objectMapper,
-                                           coreDataWorker: coreDataWorker)
+    private lazy var newsListCacheManager: INewsListCacheManager = {
+        let manager = NewsListCacheManager(contextManager: self.contextManager,
+                                           objectMapper: self.objectMapper,
+                                           coreDataWorker: self.coreDataWorker)
         
         return manager
-    }
+    }()
     
     
-    private static var coreDataWorker: ICoreDataWorker {
-        let worker = CoreDataWorker(context: saveContext)
+    private lazy var coreDataWorker: ICoreDataWorker = {
+        let worker = CoreDataWorker(context: self.saveContext)
         
         return worker
-    }
+    }()
     
-    private static var masterContext: NSManagedObjectContext {
-        return contextManager.masterContext
-    }
+    private lazy var masterContext: NSManagedObjectContext = {
+        return self.contextManager.masterContext
+    }()
     
-    private static var saveContext: NSManagedObjectContext {
-        return contextManager.saveContext
-    }
+    private lazy var saveContext: NSManagedObjectContext = {
+        return self.contextManager.saveContext
+    }()
     
-    private static var contextManager: ICDContextManager {
-        return stackAssembler
-    }
+    private lazy var contextManager: ICDContextManager = {
+        return self.stackAssembler
+    }()
     
-    private static var stackAssembler: ICDStack {
+    private var stackAssembler: ICDStack {
         return CDStack()
     }
     
     // MARK: - Network
     
-    private static var newsListConfigBuilder: INewsListConfigBuilder {
+    private lazy var newsListConfigBuilder: INewsListConfigBuilder = {
         let builder = NewsListConfigBuilder()
         
         return builder
-    }
+    }()
     
-    private static var requestSender: IRequestSender {
+    private lazy var requestSender: IRequestSender = {
         return RequestSender()
-    }
+    }()
     
     // MARK: - Static
     
-    private static var fetchRequestProvider: IFetchRequestProvider.Type {
+    private lazy var fetchRequestProvider: IFetchRequestProvider.Type = {
         return FetchRequestProvider.self
-    }
+    }()
     
-    private static var objectMapper: IStructToEntityMapper.Type {
+    private lazy var objectMapper: IStructToEntityMapper.Type = {
         let mapper = StructToEntityMapper.self
         
         return mapper
-    }
+    }()
 }
