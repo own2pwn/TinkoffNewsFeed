@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  NewsListViewController.swift
 //  TinkoffNewsFeed
 //
 //  Created by Evgeniy on 24.07.17.
@@ -18,12 +18,13 @@ struct NewsInfo {
     let title: String
 }
 
-final class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate {
+final class NewsListViewController: UIViewController,
+        UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate {
 
     // MARK: - Outlets
 
     @IBOutlet weak var newsFeedTableView: UITableView!
-    
+
     @IBAction func didTapLoadButton(_ sender: UIButton) {
         newsProvider.load(count: 20)
     }
@@ -188,9 +189,9 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
         let viewsCount = object.viewsCount
         let title = object.title!
         let day = date.day
-        
+
         //TODO: various date formatting
-        
+
         cell.newsDateLabel.text = day
         cell.newsTitleLabel.text = title
         cell.newsViewsCountLabel.text = viewsCount.stringValue
@@ -211,7 +212,7 @@ final class ViewController: UIViewController, UITableViewDataSource, UITableView
             let object = newsListFRC.object(at: indexPath)
             let id = object.id!
             let title = cell.newsTitleLabel.text!
-            
+
             let info = NewsInfo(id: id, title: title)
             performSegue(withIdentifier: segueId, sender: info)
         }

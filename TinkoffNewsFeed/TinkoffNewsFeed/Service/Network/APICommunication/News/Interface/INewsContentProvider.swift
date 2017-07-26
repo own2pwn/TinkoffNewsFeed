@@ -6,4 +6,5 @@
 import Foundation
 
 protocol INewsContentProvider {
+    func load(by id: String, completion: @escaping (NewsContentDisplayModel) -> Void)
 }

@@ -7,13 +7,8 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-struct ContentDisplayModel {
-    let success: Bool
-    let content: String
-}
-
 final class NewsContentProvider: INewsContentProvider {
-    func load(by id: String, completion: @escaping (ContentDisplayModel) -> Void) {
+    func load(by id: String, completion: @escaping (NewsContentDisplayModel) -> Void) {
         let config = buildRequestConfig(id)
         let sender = requestSender()
         
@@ -37,15 +32,15 @@ final class NewsContentProvider: INewsContentProvider {
     }
     
     private func cache(_ response: IResult<NewsContentAPIModel>,
-                       completion: (ContentDisplayModel) -> Void) {
+                       completion: (NewsContentDisplayModel) -> Void) {
         switch response {
         case .error(let e):
             log.error(e)
-            let model = ContentDisplayModel(success: false, content: e)
+            let model = NewsContentDisplayModel(error: true, content: e)
             completion(model)
         case .success(let content):
             let payload = content.payload
-            let model = ContentDisplayModel(success: true, content: payload!.content)
+            let model = NewsContentDisplayModel(error: false, content: payload!.content)
             completion(model)
             // cacheManager.cache(result)
         }
