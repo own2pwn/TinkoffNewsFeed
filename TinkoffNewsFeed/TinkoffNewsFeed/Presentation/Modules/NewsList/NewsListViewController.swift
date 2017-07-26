@@ -11,6 +11,7 @@ import ReachabilitySwift
 import CoreData
 import PullToRefreshSwift
 import SwiftDate
+import PKHUD
 
 struct NewsListDisplayModel {
     let date: Date
@@ -258,10 +259,13 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     private let footerHeight: CGFloat = 10.0
     private let feedCellId = "idNewsFeedCell"
     private let showContentSegueId = "idShowNewsContentSegue"
+    private let hudFlashDelay = 1.0
+    private let noConnectionTitle = "No internet connection"
+    private let noConnectionSubtitle = "You still can see cached news"
 
     // MARK: - Instance members
 
-    private let connectionChecker = Reachability(hostname: "api.tinkoff.ru") //https?
+    private let connectionChecker = Reachability(hostname: "api.tinkoff.ru")
 
     private var itemsCount = 20
 
@@ -282,12 +286,20 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
         newsFeedTableView.rowHeight = UITableViewAutomaticDimension
 
         if connectionChecker!.isReachable {
-            if model.fetchedNewsCount == 0 {
-                // first time fetch
-                model.loadNews()
-            }
+            fillNewsIfEmpty()
         } else {
-            //show no internet
+            showError(title: noConnectionTitle, subtitle: noConnectionSubtitle)
+        }
+    }
+    
+    private func showError(title: String?, subtitle: String?) {
+        let hudContent: HUDContentType = .labeledError(title: title, subtitle: subtitle)
+        HUD.flash(hudContent, delay: hudFlashDelay)
+    }
+    
+    private func fillNewsIfEmpty() {
+        if model.fetchedNewsCount == 0 {
+            model.loadNews()
         }
     }
 
@@ -302,21 +314,15 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     private func onActiveConnection(_ info: Reachability) {
-        let m = "Internet is available! | Info: \(info)"
-        log.info(m)
-
         DispatchQueue.main.async { [unowned self] in
+            self.fillNewsIfEmpty()
             self.addPull2R()
         }
     }
 
     private func onLostConnection(_ info: Reachability) {
-        // TODO: Use HUD to display connection error
-        // show
-
-        let m = "Internet is unavailable! | Info: \(info)"
-        log.info(m)
         DispatchQueue.main.async { [unowned self] in
+            self.showError(title: self.noConnectionTitle, subtitle: self.noConnectionSubtitle)
             self.removeP2R()
         }
     }
