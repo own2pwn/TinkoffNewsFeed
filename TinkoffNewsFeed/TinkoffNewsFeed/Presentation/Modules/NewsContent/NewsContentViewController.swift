@@ -23,11 +23,14 @@ struct NewsContentDisplayModel {
 
 protocol NewsContentViewDelegate: class {
     func startLoadingAnimation()
+
     func stopLoadingAnimation()
+
     func present(_ content: NewsContentDisplayModel)
 }
 
 protocol INewsContentModel: class {
+    weak var view: NewsContentViewDelegate! { get set }
     func loadNewsContent(by id: String, completion: (() -> Void)?)
 }
 
@@ -48,17 +51,18 @@ final class NewsContentModel: INewsContentModel {
     func loadNewsContent(by id: String, completion: (() -> Void)? = nil) {
         view.startLoadingAnimation()
         contentProvider.load(by: id) { [weak self] (displayModel) in
+            completion?()
             self?.view.stopLoadingAnimation()
             self?.view.present(displayModel)
         }
     }
-    
+
     // MARK: - DI
-    
+
     init(contentProvider: INewsContentProvider) {
         self.contentProvider = contentProvider
     }
-    
+
     private let contentProvider: INewsContentProvider
 }
 
@@ -117,18 +121,18 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
 
     // MARK: - Members
 
-    weak var model: INewsContentModel!
-    
+    var model: INewsContentModel!
+
     private func inejctModel() -> INewsContentModel {
         let contentProvider = buildContentProvider()
         let model = NewsContentModel(contentProvider: contentProvider)
-        
+
         return model
     }
-    
+
     var newsId: String!
     var newsTitle: String!
-    
+
     private var currentContent: NSAttributedString! {
         didSet {
             contentTextView.attributedText = currentContent
@@ -155,17 +159,27 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     private var contentProvider: NewsContentProvider!
 
     private func loadContent() {
-        let model = inejctModel()
-        model.loadNewsContent(by: newsId) { 
+        
+        presentNewsTitle()
+        
+        model = inejctModel()
+        model.view = self
+
+        model.loadNewsContent(by: newsId) {
             log.debug("News content was loaded!")
         }
+    }
+    
+    private func presentNewsTitle() {
+        let heading = makeHeading(newsTitle)
+        currentContent = heading
     }
 
     private func makeHeading(_ string: String) -> NSAttributedString {
         let font = UIFont.helveticaBold(17.0)
         let style = NSMutableParagraphStyle()
         style.alignment = .natural
-        
+
         let attr = buildFontAttributes(font, style)
 
         let newsContent = string + "\n\n"
@@ -178,16 +192,16 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
         let font = UIFont.helvetica(17.0)
         let style = NSMutableParagraphStyle()
         style.paragraphSpacing = 10.0
-        
+
         let attr = buildFontAttributes(font, style)
         let range = string.makeRange()
-        
+
         let content = NSMutableAttributedString(attributedString: string)
         content.addAttributes(attr, range: range)
 
         return content
     }
-    
+
     // MARK: - Helpers
 
     private func buildFontAttributes(_ font: UIFont, _ style: NSMutableParagraphStyle) -> [String: NSObject] {

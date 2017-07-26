@@ -11,7 +11,7 @@ final class NewsContentProvider: INewsContentProvider {
     func load(by id: String, completion: @escaping (NewsContentDisplayModel) -> Void) {
         let config = buildRequestConfig(id)
         let sender = requestSender()
-        
+
         sender.sendJSON(config: config) { [unowned self] (response) in
             self.cache(response, completion: completion)
         }
@@ -21,16 +21,16 @@ final class NewsContentProvider: INewsContentProvider {
 
     // TODO: user protocol based generic
     // buildConfig<T> -> T ...
-    
+
     private func buildRequestConfig(_ id: String) -> RequestConfig<NewsContentAPIModel, JSON> {
         let request = buildRequest(id)
         let parser = contentParser()
-        
+
         let config: RequestConfig<NewsContentAPIModel, JSON> = RequestConfig(request: request, parser: parser)
-        
+
         return config
     }
-    
+
     private func cache(_ response: IResult<NewsContentAPIModel>,
                        completion: (NewsContentDisplayModel) -> Void) {
         switch response {
@@ -42,22 +42,22 @@ final class NewsContentProvider: INewsContentProvider {
             let payload = content.payload
             let model = NewsContentDisplayModel(error: false, content: payload!.content)
             completion(model)
-            // cacheManager.cache(result)
+                // cacheManager.cache(result)
         }
     }
-    
+
     // TODO: use protocol based parsers
     // extract it
-    
+
     private func requestSender() -> IRequestSender {
         let sender = RequestSender()
-        
+
         return sender
     }
-    
+
     private func contentParser() -> NewsContentParser {
         let parser = NewsContentParser()
-        
+
         return parser
     }
 
