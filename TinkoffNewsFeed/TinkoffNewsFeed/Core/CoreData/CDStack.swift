@@ -57,6 +57,7 @@ final class CDStack: ICDStack {
 
     init() {
         initStack()
+        log.debug("CD INIT")
     }
 
     // MARK: - Constants

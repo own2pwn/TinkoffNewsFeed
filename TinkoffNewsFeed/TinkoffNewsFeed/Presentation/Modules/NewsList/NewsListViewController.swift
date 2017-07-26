@@ -23,7 +23,6 @@ struct NewsListDisplayModel {
 
 protocol NewsListViewDelegate: class {
     func startLoadingAnimation()
-
     func stopLoadingAnimation()
 
     func presentNewsDetails(_ model: NewsContentRoutingModel)
@@ -35,8 +34,6 @@ struct NewsContentRoutingModel {
     let content: String?
 }
 
-// MARK: -
-
 final class NewsListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,
         NewsListViewDelegate, NSFetchedResultsControllerDelegate {
 
@@ -45,7 +42,6 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     @IBOutlet weak var newsFeedTableView: UITableView!
 
     @IBAction func didTapLoadButton(_ sender: UIButton) {
-        //newsProvider.load(count: 20)
         model.loadNews()
     }
 
@@ -60,7 +56,6 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     func presentNewsDetails(_ model: NewsContentRoutingModel) {
         performSegue(withIdentifier: showContentSegueId, sender: model)
     }
-
 
     private func setLoadingEnabled(_ state: Bool) {
         DispatchQueue.main.async {
@@ -94,11 +89,10 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     
     var model: INewsListModel!
     
-    private let assembler = NewsListAssembler.self
+    private let assembler: INewsListDependencyManager = DependencyManager()
     
     private func injectDependencies() {
-        let d = assembler.assembly(for: self)
-        model = d.model
+        model = assembler.newsListModel(for: self)
     }
 
     // MARK: - Navigation
@@ -106,6 +100,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let info = sender as? NewsContentRoutingModel,
            let dest = segue.destination as? NewsContentViewController {
+            dest.assembler = assembler as! INewsContentDependencyManager
             dest.newsId = info.id
             dest.newsTitle = info.title
             if let content = info.content {
@@ -225,10 +220,6 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
         updateFetchedNewsCount()
         addPush2R()
         newsFeedTableView.endUpdates()
-    }
-
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        assertionFailure()
     }
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,

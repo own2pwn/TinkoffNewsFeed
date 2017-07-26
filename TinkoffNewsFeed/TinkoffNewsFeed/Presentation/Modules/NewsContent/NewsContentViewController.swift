@@ -32,13 +32,12 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-
-        injectDependencies()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        injectDependencies()
         setupView()
         loadContent()
     }
@@ -67,11 +66,10 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     
     var model: INewsContentModel!
     
-    private let assembler = NewsContentAssembler.self
+    var assembler: INewsContentDependencyManager!
 
     private func injectDependencies() {
-        let d = assembler.assembly()
-        model = d.model
+        model = assembler.newsContenModel()
     }
 
     // MARK: - Members

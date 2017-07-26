@@ -23,6 +23,8 @@ final class NewsListAssembler: INewsListAssembler {
 
         return model
     }
+    
+    
 
     private static var newsListModelDependencies: NewsListModelDependencies {
         return NewsListModelDependenciesAssembler.assembly()

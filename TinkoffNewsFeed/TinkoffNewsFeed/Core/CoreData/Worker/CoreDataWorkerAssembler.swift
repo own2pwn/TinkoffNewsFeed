@@ -7,6 +7,13 @@ import Foundation
 import CoreData
 
 final class CoreDataWorkerAssembler: ICoreDataWorkerAssembler {
+    
+    class func assembly(saveContext: NSManagedObjectContext) -> ICoreDataWorker {
+        let worker = CoreDataWorker(context: saveContext)
+        
+        return worker
+    }
+    
     class func assembly() -> ICoreDataWorker {
         let worker = CoreDataWorker(context: saveContext)
 
