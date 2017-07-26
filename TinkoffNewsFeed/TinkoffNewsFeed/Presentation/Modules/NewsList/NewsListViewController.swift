@@ -175,7 +175,7 @@ final class NewsListViewController: UIViewController,
         let row = indexPath.row
 
         if row == fetchedNewsCount - 2 {
-            DispatchQueue.main.async { [unowned self] in
+            DispatchQueue.main.async {// [unowned self] in
                 // self.loadMore()
             }
         }
@@ -192,6 +192,7 @@ final class NewsListViewController: UIViewController,
 
         //TODO: various date formatting
 
+        
         cell.newsDateLabel.text = day
         cell.newsTitleLabel.text = title
         cell.newsViewsCountLabel.text = viewsCount.stringValue
@@ -215,6 +216,7 @@ final class NewsListViewController: UIViewController,
 
             let info = NewsInfo(id: id, title: title)
             performSegue(withIdentifier: segueId, sender: info)
+            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
 

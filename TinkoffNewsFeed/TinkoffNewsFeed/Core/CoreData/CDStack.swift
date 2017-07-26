@@ -59,12 +59,6 @@ final class CDStack: ICDStack {
         initStack()
     }
 
-    deinit {
-        //TODO: remove
-        log.debug("CD deinit")
-        assertionFailure()
-    }
-
     // MARK: - Constants
 
     private let model: String = .TNF_CD_MODEL_NAME

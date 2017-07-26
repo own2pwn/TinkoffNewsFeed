@@ -14,9 +14,7 @@ protocol ICoreDataWorker {
 
 final class CoreDataWorker: ICoreDataWorker {
     func find<T:NSManagedObject>(by attribute: String, value: String, entity: T.Type) -> [T]? {
-
-        // TODO: make an ext
-        let name = String(describing: T.self)
+        let name = T.entityName
         let fr = NSFetchRequest<T>(entityName: name)
         let predicate = NSPredicate(format: "%K == %@", attribute, value)
         fr.predicate = predicate
@@ -31,39 +29,46 @@ final class CoreDataWorker: ICoreDataWorker {
 
         return result?.first
     }
-    
-    func save(_ context: NSManagedObjectContext) {
-        
-    }
 
     // MARK: - DI
 
-    init(contextManager: ICDContextManager) {
-        self.contextManager = contextManager
-        context = contextManager.saveContext
+    init(context: NSManagedObjectContext) {
+        self.context = context
     }
 
-    private let contextManager: ICDContextManager
     private let context: NSManagedObjectContext
 }
 
 final class NewsContentCacheManager {
     func cache(_ id: String, _ data: NewsContentPayload) {
         if let news = coreDataWorker.findFirst(by: "id", value: id, entity: News.self) {
+            if let content = news.content {
+
+                // Updating existing cache
+                if data.modifiedAt > content.modifiedAt! as Date {
+                    content.content = data.content
+                    content.modifiedAt = data.modifiedAt as NSDate
+                    contextManager.performSave(context: saveContext)
+                    
+                    log.debug("Updating existing cache")
+                    return
+                }
+                //TODO: do check in another place!
+                log.debug("There is existing content")
+                log.debug("Skipping caching!")
+                return
+            }
+
             var newsContent = NewsContent(context: saveContext)
             objectMapper.map(data, &newsContent)
             newsContent.news = news
-            co
-            //            newsContent.content = data.content
-            //            newsContent.createdAt = data.createdAt as NSDate
-            //            newsContent.modifiedAt = data.createdAt as NSDate
+            contextManager.performSave(context: saveContext)
         } else {
-            log.error("Couldn't find new entity!")
+            log.warning("Couldn't find news entity with id: \(id)!")
         }
     }
 
     // MARK: - Private
-    // TODO: user CDWorker
 
     // MARK: - DI
 
@@ -77,6 +82,7 @@ final class NewsContentCacheManager {
     }
 
     private let contextManager: ICDContextManager
+    //TODO: pass context in construct, rename member to context
     private let saveContext: NSManagedObjectContext
     private let coreDataWorker: ICoreDataWorker
     private let objectMapper: IStructToEntityMapper.Type
