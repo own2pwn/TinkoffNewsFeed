@@ -20,7 +20,6 @@ protocol NewsContentViewDelegate: class {
     func present(_ content: NewsContentDisplayModel)
 }
 
-
 final class NewsContentViewController: UIViewController, NewsContentViewDelegate {
 
     // MARK: - Outlets

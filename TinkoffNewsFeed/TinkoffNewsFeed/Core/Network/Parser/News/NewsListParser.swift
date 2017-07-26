@@ -24,7 +24,7 @@ final class NewsListPayload: EVObject {
             let value = value as! [String: Double]
             let time = value[msKey]!
             let date = convertTimeToDate(time)
-            createdAt = date
+            pubDate = date
         }
 
         if key == newsTitleKey {
