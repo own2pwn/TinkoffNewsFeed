@@ -37,8 +37,9 @@ final class RequestSender: IRequestSender {
                 
                 completionHandler(success)
             } else {
-                let e = "Received data can't be parsed!\nData: \(json)"
+                let e = "Received data can't be parsed!"
                 log.error(e)
+                log.info("Data: \(json)")
                 
                 completionHandler(error(e))
             }

@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16F73" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Entity" representedClassName="Entity" syncable="YES" codeGenerationType="class"/>
+    <entity name="News" representedClassName="News" syncable="YES">
+        <attribute name="id" attributeType="String" syncable="YES"/>
+        <attribute name="pubDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="title" attributeType="String" syncable="YES"/>
+        <attribute name="titleHash" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="viewsCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="content" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NewsContent" inverseName="news" inverseEntity="NewsContent" syncable="YES"/>
+    </entity>
+    <entity name="NewsContent" representedClassName="NewsContent" syncable="YES">
+        <attribute name="content" attributeType="String" syncable="YES"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="modifiedAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="news" maxCount="1" deletionRule="Nullify" destinationEntity="News" inverseName="content" inverseEntity="News" syncable="YES"/>
+    </entity>
     <elements>
-        <element name="Entity" positionX="-63" positionY="-18" width="128" height="45"/>
+        <element name="News" positionX="-254" positionY="-30" width="128" height="135"/>
+        <element name="NewsContent" positionX="-54" positionY="18" width="128" height="105"/>
     </elements>
 </model>
