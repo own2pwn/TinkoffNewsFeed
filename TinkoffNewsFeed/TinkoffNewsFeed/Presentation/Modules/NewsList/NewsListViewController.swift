@@ -271,8 +271,6 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
         initConnectionListener()
     }
 
-    var newsProvider: INewsListProvider!
-
     private func setupView() {
 
         // MARK: - TableView
@@ -318,9 +316,6 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
 
         DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
             log.debug("Load more fetched count: \(self.fetchedNewsCount)")
-            self.newsProvider.load(offset: self.fetchedNewsCount, count: 2) {
-                log.debug("News were loaded")
-            }
         }
 
         if fetchedNewsCount >= 40 {

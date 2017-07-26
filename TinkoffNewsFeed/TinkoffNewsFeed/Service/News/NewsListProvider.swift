@@ -57,8 +57,8 @@ final class NewsListProvider: INewsListProvider {
         let config = configBuilder.build(offset: offset, count: count)
         requestSender.sendJSON(config: config) { [unowned self] (result) in
             completion?()
-            //TODO: maybe compelte with error if gained no data from api
             self.verify(result)
+            //TODO: maybe compelte with error if gained no data from api
             // TODO: check if it save here to use unowned
             // or not to
         }
@@ -69,7 +69,7 @@ final class NewsListProvider: INewsListProvider {
         case .error(let e):
             log.error(e)
         case .success(let result):
-            // cacheManager.cache(result)
+            cacheManager.cache(result)
             break
         }
     }

@@ -111,6 +111,8 @@ final class NewsListModel: INewsListModel {
         fetchRequestProvider = dependencies.fetchRequestProvider
         frcManager = dependencies.frcManager
         syncer = dependencies.syncer
+        
+        initFRC()
     }
 
     private let newsProvider: INewsListProvider
