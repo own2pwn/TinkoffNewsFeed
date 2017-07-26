@@ -13,12 +13,6 @@ import PullToRefreshSwift
 
 // TODO: add loading indicator while fetching
 
-struct NewsInfo {
-    let id: String
-    let title: String
-}
-
-
 struct NewsListDisplayModel {
     let date: Date
     let viewsCount: Int
@@ -26,19 +20,33 @@ struct NewsListDisplayModel {
 }
 
 protocol NewsListViewDelegate: class {
+    func startLoadingAnimation()
 
+    func stopLoadingAnimation()
+
+    func presentNewsDetails(_ model: NewsContentRoutingModel)
 }
 
 protocol INewsListModel: class {
     weak var view: (NewsListViewDelegate & NSFetchedResultsControllerDelegate)! { get set }
 
     func loadNews()
+
     func loadMore(_ count: Int)
+
     func update(_ batch: Int)
-    func presentNewsContent(at indexPath: IndexPath)
-    
+
+    func presentNewsContent(for indexPath: IndexPath)
+
     func rowsCount(for section: Int) -> Int
+
     func displayModel(for indexPath: IndexPath) -> NewsListDisplayModel
+}
+
+struct NewsContentRoutingModel {
+    let id: String
+    let title: String
+    let content: String?
 }
 
 final class NewsListModel: INewsListModel {
@@ -51,28 +59,34 @@ final class NewsListModel: INewsListModel {
     // MARK: - INewsListModel
 
     func loadNews() {
+        view.startLoadingAnimation()
         let cachedNews = loadFromCache()
-        
+
+        // TODO: if no internet then dont use api
+
         if cachedNews == 0 {
-            newsProvider.load(count: 20, completion: { 
+            newsProvider.load(count: 20, completion: { [unowned self] in
+                self.view.stopLoadingAnimation()
                 log.debug("Loaded news from api")
             })
             log.debug("there are not any cached news!")
+        } else {
+            view.stopLoadingAnimation()
         }
     }
-    
+
     private func loadFromCache() -> Int {
         let dateSorter = NSSortDescriptor(key: "pubDate", ascending: false)
         let sortDescriptors = [dateSorter]
         let fr = fetchRequestProvider.fetchRequest(object: News.self, sortDescriptors: sortDescriptors, predicate: nil, fetchLimit: 20)
         // TODO: extract to a const
         fr.fetchBatchSize = 20
-        
+
         let frc = frcManager.initialize(delegate: view, fetchRequest: fr)
         self.frc = frc
         try? frc.performFetch()
         let fetchedNewsCount = frc.sections?[0].numberOfObjects
-        
+
         return fetchedNewsCount ?? 0
     }
 
@@ -84,43 +98,61 @@ final class NewsListModel: INewsListModel {
 
     }
 
-    func presentNewsContent(at indexPath: IndexPath) {
+    func presentNewsContent(for indexPath: IndexPath) {
+        let object = frc.object(at: indexPath)
+        let id = object.id!
+        let title = object.title!
+        let content = object.content?.content
+        object.viewsCount += 1
+        syncer.sync(object) { (error) in
+            if let e = error {
+                log.debug("Error while syncing: \(e)!")
+            } else {
+                log.debug("successfully have synced obj!")
+            }
+        }
 
+        let model = NewsContentRoutingModel(id: id, title: title, content: content)
+        view.presentNewsDetails(model)
     }
-    
+
     func rowsCount(for section: Int) -> Int {
         let sections = frc.sections!
         let sectionInfo = sections[section]
-        
+
         return sectionInfo.numberOfObjects
     }
-    
+
     func displayModel(for indexPath: IndexPath) -> NewsListDisplayModel {
         let object = frc.object(at: indexPath)
         // TODO: date formatting
         let date = object.pubDate! as Date
         let viewsCount = Int(object.viewsCount)
         let title = object.title!
-        
+
         let model = NewsListDisplayModel(date: date, viewsCount: viewsCount, title: title)
-        
+
         return model
     }
 
     // MARK: - DI 
 
+    // TODO: use struct with depend.
+
     init(view: (NewsListViewDelegate & NSFetchedResultsControllerDelegate),
          newsProvider: INewsListProvider, fetchRequestProvider: IFetchRequestProvider.Type,
-         frcManager: IFetchedResultsControllerManager) {
+         frcManager: IFetchedResultsControllerManager, syncer: IManagedObjectSynchronizer) {
         self.view = view
         self.newsProvider = newsProvider
         self.fetchRequestProvider = fetchRequestProvider
         self.frcManager = frcManager
+        self.syncer = syncer
     }
 
     private let newsProvider: INewsListProvider
     private let fetchRequestProvider: IFetchRequestProvider.Type
     private let frcManager: IFetchedResultsControllerManager
+    private let syncer: IManagedObjectSynchronizer
 }
 
 // MARK: -
@@ -137,6 +169,25 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
         model.loadNews()
     }
 
+    func startLoadingAnimation() {
+        setLoadingEnabled(true)
+    }
+
+    func stopLoadingAnimation() {
+        setLoadingEnabled(false)
+    }
+
+    func presentNewsDetails(_ model: NewsContentRoutingModel) {
+        performSegue(withIdentifier: showContentSegueId, sender: model)
+    }
+
+
+    private func setLoadingEnabled(_ state: Bool) {
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = state
+        }
+    }
+
     var model: INewsListModel!
 
     private func inejctModel() -> INewsListModel {
@@ -148,11 +199,10 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
         let frp = FetchRequestProvider.self
         let newsProvider = buildNewsProvider()
         let frcManager = FetchedResultsControllerManager(context: contextManager.mainContext)
+        let syncer = ManagedObjectSynchronizer(contextManager: contextManager)
 
-        let model = NewsListModel(view: self,
-                newsProvider: newsProvider,
-                fetchRequestProvider: frp,
-                frcManager: frcManager)
+        let model = NewsListModel(view: self, newsProvider: newsProvider,
+                fetchRequestProvider: frp, frcManager: frcManager, syncer: syncer)
 
         return model
     }
@@ -219,10 +269,13 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let info = sender as? NewsInfo,
+        if let info = sender as? NewsContentRoutingModel,
            let dest = segue.destination as? NewsContentViewController {
             dest.newsId = info.id
             dest.newsTitle = info.title
+            if let content = info.content {
+                dest.newsContent = content
+            }
         }
     }
 
@@ -299,7 +352,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let count = model.rowsCount(for: section)
-        
+
         return count
     }
 
@@ -344,12 +397,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? NewsFeedCell {
-            let object = newsListFRC.object(at: indexPath)
-            let id = object.id!
-            let title = cell.newsTitleLabel.text!
-
-            let info = NewsInfo(id: id, title: title)
-            performSegue(withIdentifier: segueId, sender: info)
+            model.presentNewsContent(for: indexPath)
             tableView.deselectRow(at: indexPath, animated: true)
         }
     }
@@ -391,7 +439,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
 
     private let footerHeight: CGFloat = 10.0
     private let feedCellId = "idNewsFeedCell"
-    private let segueId = "idShowNewsContentSegue"
+    private let showContentSegueId = "idShowNewsContentSegue"
 
     // MARK: - Instance members
 

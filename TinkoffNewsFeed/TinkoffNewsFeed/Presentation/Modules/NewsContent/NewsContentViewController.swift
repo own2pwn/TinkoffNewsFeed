@@ -24,7 +24,6 @@ struct NewsContentDisplayModel {
 
 protocol NewsContentViewDelegate: class {
     func startLoadingAnimation()
-
     func stopLoadingAnimation()
 
     func present(_ content: NewsContentDisplayModel)
@@ -133,6 +132,7 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
 
     var newsId: String!
     var newsTitle: String!
+    var newsContent: String?
 
     private var currentContent: NSAttributedString! {
         didSet {
