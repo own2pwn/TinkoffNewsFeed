@@ -60,7 +60,14 @@ final class NewsListModel: INewsListModel{
     }
     
     private func initFetchedResultsController() {
+        let dateSorter = NSSortDescriptor(key: "pubDate", ascending: false)
+        let sortDescriptors = [dateSorter]
         let fr = fetchRequestProvider.fetchRequest(object: News.self)
+        // TODO: extract to a const
+        fr.fetchBatchSize = 20
+        fr.fetchLimit = 20
+        
+        
     }
     
     func loadMore(_ count: Int) {
