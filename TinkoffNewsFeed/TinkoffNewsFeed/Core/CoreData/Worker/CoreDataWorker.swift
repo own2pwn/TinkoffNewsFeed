@@ -42,7 +42,7 @@ final class CoreDataWorker: ICoreDataWorker {
         }
         let result = try? context.fetch(fr)
 
-        return result as? [T]
+        return result
     }
 
     func getFirst<T:NSManagedObject>(type: T.Type,

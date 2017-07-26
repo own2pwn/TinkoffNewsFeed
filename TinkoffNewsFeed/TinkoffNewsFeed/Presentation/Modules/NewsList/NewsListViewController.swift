@@ -21,82 +21,112 @@ struct NewsInfo {
 
 struct NewsListDisplayModel {
     let date: Date
-    let title: String
     let viewsCount: Int
+    let title: String
 }
 
 protocol NewsListViewDelegate: class {
-    
+
 }
 
 protocol INewsListModel: class {
     weak var view: (NewsListViewDelegate & NSFetchedResultsControllerDelegate)! { get set }
-    
-    func load()
+
+    func loadNews()
     func loadMore(_ count: Int)
     func update(_ batch: Int)
     func presentNewsContent(at indexPath: IndexPath)
+    
+    func rowsCount(for section: Int) -> Int
+    func displayModel(for indexPath: IndexPath) -> NewsListDisplayModel
 }
 
-final class NewsListModel: INewsListModel{
-    
+final class NewsListModel: INewsListModel {
+
     // MARK: - Members
-    
+
     weak var view: (NewsListViewDelegate & NSFetchedResultsControllerDelegate)!
-    
+    private var frc: NSFetchedResultsController<News>!
+
     // MARK: - INewsListModel
-    
-    func load() {
-        newsProvider.loadCached { (result) in
-            if let cachedNews = result, cachedNews.count > 0 {
-                log.debug("there are some cached news")
-            } else {
-                newsProvider.load(count: 20, completion: { 
-                    log.debug("Loaded news from api")
-                })
-                log.debug("there are not any cached news!")
-            }
+
+    func loadNews() {
+        let cachedNews = loadFromCache()
+        
+        if cachedNews == 0 {
+            newsProvider.load(count: 20, completion: { 
+                log.debug("Loaded news from api")
+            })
+            log.debug("there are not any cached news!")
         }
     }
     
-    private func initFetchedResultsController() {
+    private func loadFromCache() -> Int {
         let dateSorter = NSSortDescriptor(key: "pubDate", ascending: false)
         let sortDescriptors = [dateSorter]
-        let fr = fetchRequestProvider.fetchRequest(object: News.self)
+        let fr = fetchRequestProvider.fetchRequest(object: News.self, sortDescriptors: sortDescriptors, predicate: nil, fetchLimit: 20)
         // TODO: extract to a const
         fr.fetchBatchSize = 20
-        fr.fetchLimit = 20
         
+        let frc = frcManager.initialize(delegate: view, fetchRequest: fr)
+        self.frc = frc
+        try? frc.performFetch()
+        let fetchedNewsCount = frc.sections?[0].numberOfObjects
         
+        return fetchedNewsCount ?? 0
     }
-    
+
     func loadMore(_ count: Int) {
-        
+
     }
-    
+
     func update(_ batch: Int) {
-        
+
     }
-    
+
     func presentNewsContent(at indexPath: IndexPath) {
-        
+
     }
     
-    // MARK: - DI 
+    func rowsCount(for section: Int) -> Int {
+        let sections = frc.sections!
+        let sectionInfo = sections[section]
+        
+        return sectionInfo.numberOfObjects
+    }
     
-    init(newsProvider: INewsListProvider, fetchRequestProvider: IFetchRequestProvider.Type) {
+    func displayModel(for indexPath: IndexPath) -> NewsListDisplayModel {
+        let object = frc.object(at: indexPath)
+        // TODO: date formatting
+        let date = object.pubDate! as Date
+        let viewsCount = Int(object.viewsCount)
+        let title = object.title!
+        
+        let model = NewsListDisplayModel(date: date, viewsCount: viewsCount, title: title)
+        
+        return model
+    }
+
+    // MARK: - DI 
+
+    init(view: (NewsListViewDelegate & NSFetchedResultsControllerDelegate),
+         newsProvider: INewsListProvider, fetchRequestProvider: IFetchRequestProvider.Type,
+         frcManager: IFetchedResultsControllerManager) {
+        self.view = view
         self.newsProvider = newsProvider
         self.fetchRequestProvider = fetchRequestProvider
+        self.frcManager = frcManager
     }
-    
+
     private let newsProvider: INewsListProvider
     private let fetchRequestProvider: IFetchRequestProvider.Type
+    private let frcManager: IFetchedResultsControllerManager
 }
 
 // MARK: -
 
-final class NewsListViewController: UIViewController,
-        UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate {
+final class NewsListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,
+        NewsListViewDelegate, NSFetchedResultsControllerDelegate {
 
     // MARK: - Outlets
 
@@ -104,88 +134,66 @@ final class NewsListViewController: UIViewController,
 
     @IBAction func didTapLoadButton(_ sender: UIButton) {
         //newsProvider.load(count: 20)
-        model.load()
+        model.loadNews()
     }
 
-    private func initFRC() {
-        let controller = buildNewsFRC()
-        newsListFRC = controller
-    }
-    
     var model: INewsListModel!
-    
+
     private func inejctModel() -> INewsListModel {
         initContextManager()
         initObjectMapper()
         initCacheManager()
         initReqSender()
-        
+
         let frp = FetchRequestProvider.self
         let newsProvider = buildNewsProvider()
-        let model = NewsListModel(newsProvider: newsProvider, fetchRequestProvider: frp)
-        
+        let frcManager = FetchedResultsControllerManager(context: contextManager.mainContext)
+
+        let model = NewsListModel(view: self,
+                newsProvider: newsProvider,
+                fetchRequestProvider: frp,
+                frcManager: frcManager)
+
         return model
     }
-    
+
     private var cacheManager: INewsListCacheManager!
     private var requestSender: IRequestSender!
     private var contextManager: ICDContextManager!
     private var objectMapper: IStructToEntityMapper.Type!
-    
+
     private func initContextManager() -> ICDContextManager {
         let manager = CDStack()
         contextManager = manager
-        
+
         return manager
     }
-    
+
     private func initObjectMapper() -> IStructToEntityMapper.Type {
         let mapper = StructToEntityMapper.self
         objectMapper = mapper
-        
+
         return mapper
     }
-    
+
     private func initCacheManager() {
         let cm = NewsListCacheManager(contextManager: contextManager, objectMapper: objectMapper)
         cacheManager = cm
     }
-    
+
     private func initReqSender() {
         let rs = RequestSender()
         requestSender = rs
     }
-    
+
     private func buildNewsProvider() -> INewsListProvider {
         let provider = NewsListProvider(cacheManager: cacheManager, requestSender: requestSender)
-        
+
         return provider
     }
 
-    private func buildNewsFRC() -> NSFetchedResultsController<News> {
-        let name = String(describing: News.self)
-        let fr = NSFetchRequest<News>(entityName: name)
-
-        let dateSorter = NSSortDescriptor(key: "pubDate", ascending: false)
-        let sortDescriptors = [dateSorter]
-        fr.sortDescriptors = sortDescriptors
-        fr.fetchBatchSize = 20
-        fr.fetchLimit = 20
-        // fr.fetchOffset = 5
-
-        let frc = NSFetchedResultsController(fetchRequest: fr,
-                managedObjectContext: stack.mainContext,
-                sectionNameKeyPath: nil, cacheName: nil)
-        frc.delegate = self
-        // TODO: perform fetch only when needed
-        try! frc.performFetch()
-        fetchedNewsCount = frc.sections![0].numberOfObjects
-
-        return frc
-    }
-
     private func updateFetchedNewsCount() {
-        fetchedNewsCount = newsListFRC.sections![0].numberOfObjects
+        //fetchedNewsCount = newsListFRC.sections![0].numberOfObjects
         log.debug("New items count: \(fetchedNewsCount)")
     }
 
@@ -202,6 +210,8 @@ final class NewsListViewController: UIViewController,
 
         // TODO: remove
         model = inejctModel()
+        model.loadNews()
+
         initDepend()
         setupController()
     }
@@ -217,7 +227,6 @@ final class NewsListViewController: UIViewController,
     }
 
     private func initDepend() {
-        initFRC()
         initNewsProvider()
     }
 
@@ -289,12 +298,9 @@ final class NewsListViewController: UIViewController,
     // MARK: - UITableViewDataSource
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sections = newsListFRC.sections!
-        let sectionInfo = sections[section]
-
-        return sectionInfo.numberOfObjects
-
-        // return newsListFRC.fetchedObjects?.count ?? 0
+        let count = model.rowsCount(for: section)
+        
+        return count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -313,15 +319,14 @@ final class NewsListViewController: UIViewController,
     }
 
     private func configure(_ cell: NewsFeedCell, at indexPath: IndexPath) {
-        let object = newsListFRC.object(at: indexPath)
-        let date = object.pubDate! as Date
-        let viewsCount = object.viewsCount
-        let title = object.title!
+        let displayModel = model.displayModel(for: indexPath)
+        let date = displayModel.date
+        let viewsCount = displayModel.viewsCount
+        let title = displayModel.title
         let day = date.day
 
         //TODO: various date formatting
 
-        
         cell.newsDateLabel.text = day
         cell.newsTitleLabel.text = title
         cell.newsViewsCountLabel.text = viewsCount.stringValue

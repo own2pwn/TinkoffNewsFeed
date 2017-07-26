@@ -10,12 +10,12 @@ final class FetchedResultsControllerManager: IFetchedResultsControllerManager {
 
     // MARK: - FetchedResultsControllerManager
 
-    func initialize<Entity:NSManagedObject>(with delegate: NSFetchedResultsControllerDelegate,
+    func initialize<Entity:NSManagedObject>(delegate: NSFetchedResultsControllerDelegate,
                                             fetchRequest: NSFetchRequest<Entity>) -> NSFetchedResultsController<Entity> {
-        return initialize(with: delegate, fetchRequest: fetchRequest, sectionNameKeyPath: nil, cacheName: nil)
+        return initialize(delegate: delegate, fetchRequest: fetchRequest, sectionNameKeyPath: nil, cacheName: nil)
     }
 
-    func initialize<Entity:NSManagedObject>(with delegate: NSFetchedResultsControllerDelegate,
+    func initialize<Entity:NSManagedObject>(delegate: NSFetchedResultsControllerDelegate,
                                             fetchRequest: NSFetchRequest<Entity>,
                                             sectionNameKeyPath keyPath: String? = nil,
                                             cacheName: String? = nil) -> NSFetchedResultsController<Entity> {

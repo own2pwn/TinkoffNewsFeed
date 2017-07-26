@@ -71,6 +71,7 @@ final class NewsListProvider: INewsListProvider {
 
         let config = buildRequestConfig(offset: offset, count: count)
         requestSender.sendJSON(config: config) { [unowned self] (result) in
+            completion?()
             self.cache(result)
             // TODO: check if it save here to use unowned
             // or not to
