@@ -8,9 +8,14 @@ import CoreData
 
 final class NewsContentCacheManager {
     func cache(_ id: String, _ data: NewsContentPayload) {
+        
+        // TODO: use threads
+        
+        // search for existing news
         if let news = coreDataWorker.findFirst(by: "id", value: id, entity: News.self) {
+            
+            // if there is then check to update its content
             if let content = news.content {
-
                 // Updating existing cache
                 if data.modifiedAt > content.modifiedAt! as Date {
                     content.content = data.content
@@ -20,16 +25,13 @@ final class NewsContentCacheManager {
                     log.debug("Updating existing cache")
                     return
                 }
-                // TODO: do check in another place!
-                log.debug("There is existing content")
-                log.debug("Skipping caching!")
-                return
+            } else {
+                // no content - should add
+                var newsContent = NewsContent(context: saveContext)
+                objectMapper.map(data, &newsContent)
+                news.content = newsContent
+                contextManager.performSave(context: saveContext)
             }
-
-            var newsContent = NewsContent(context: saveContext)
-            objectMapper.map(data, &newsContent)
-            newsContent.news = news
-            contextManager.performSave(context: saveContext)
         } else {
             log.warning("Couldn't find news entity with id: \(id)!")
         }
