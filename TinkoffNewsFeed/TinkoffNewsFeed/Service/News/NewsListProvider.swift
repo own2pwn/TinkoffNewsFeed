@@ -38,6 +38,29 @@ final class NewsListProvider: INewsListProvider {
 
     }
 
+    func loadSaved(completion: ([News]?) -> Void) {
+        let news = coreDataWorker.
+    }
+    
+    // TODO: DI
+    
+    private func initContextManager() -> ICDContextManager {
+        let manager = CDStack()
+        contextManager = manager
+        
+        return manager
+    }
+    
+    private func initCoreDataWorker() -> ICoreDataWorker{
+        let worker = CoreDataWorker(context: contextManager.saveContext)
+        coreDataWorker = worker
+        
+        return worker
+    }
+    
+    private var coreDataWorker: ICoreDataWorker!
+    private var contextManager: ICDContextManager!
+
     func load(offset: Int = 0, count: Int,
               completion: (() -> Void)? = nil) {
         // offset always have to be lower than count
@@ -97,6 +120,9 @@ final class NewsListProvider: INewsListProvider {
     init(cacheManager: INewsListCacheManager, requestSender: IRequestSender) {
         self.cacheManager = cacheManager
         self.requestSender = requestSender
+        
+        _ = initContextManager()
+        _ = initCoreDataWorker()
     }
 
     private let requestSender: IRequestSender

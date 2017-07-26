@@ -26,7 +26,8 @@ struct NewsListDisplayModel {
 }
 
 final class NewsListModel {
-    func update(_ batch: Int) {
+    
+    func load() {
         
     }
     
@@ -34,7 +35,13 @@ final class NewsListModel {
         
     }
     
+    func update(_ batch: Int) {
+        
+    }
     
+    func presentNewsContent(at indexPath: IndexPath) {
+        
+    }
 }
 
 // MARK: -
