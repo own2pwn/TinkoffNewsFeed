@@ -180,14 +180,34 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
         let displayModel = model.displayModel(for: indexPath)
         let date = displayModel.date
         let viewsCount = displayModel.viewsCount
-        let title = displayModel.title
-        let day = date.day
+        let title = displayModel.title.decodeHTML()
+        let humanizedDate = humanDate(date)
 
         //TODO: various date formatting
 
-        cell.newsDateLabel.text = day
+        cell.newsDateLabel.text = humanizedDate
         cell.newsTitleLabel.text = title
         cell.newsViewsCountLabel.text = viewsCount.stringValue
+    }
+    
+    private func humanDate(_ date: Date) -> String {
+        
+        var humanizedDate = ""
+        
+        if date.isInToday {
+            humanizedDate = date.time
+        }
+        else if date.isInThisMonth {
+            humanizedDate = date.day
+        }
+        else if date.isInThisYear {
+            humanizedDate = date.dayMonth
+        }
+        else {
+            humanizedDate = date.dayMonthYear
+        }
+        
+        return humanizedDate
     }
 
     // MARK: - UITableViewDelegate
