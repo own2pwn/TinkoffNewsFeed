@@ -11,6 +11,7 @@ import PullToRefreshSwift
 
 
 /**
+ 
  If `error` is `true` then `content` is error message to be presented to user
  
  Else news content stored in `content`
@@ -165,9 +166,7 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
         model = inejctModel()
         model.view = self
 
-        model.loadNewsContent(by: newsId) {
-            log.debug("News content was loaded!")
-        }
+        model.loadNewsContent(by: newsId)
     }
     
     private func presentNewsTitle() {

@@ -11,7 +11,7 @@ protocol IStructToEntityMapper {
      
      Maps structure values to `object` ones.
      
-     It dead simple iterates through passed object attributes
+     Simple iterates through passed object attributes
      and uses `setValue` where
      
      - `keyPath` is *attribute name*.

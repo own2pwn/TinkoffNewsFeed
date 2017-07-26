@@ -13,7 +13,7 @@ final class NewsContentProvider: INewsContentProvider {
         let sender = requestSender()
 
         sender.sendJSON(config: config) { [unowned self] (response) in
-            self.cache(response, completion: completion)
+            self.cache(id, response, completion: completion)
         }
     }
 
@@ -31,7 +31,7 @@ final class NewsContentProvider: INewsContentProvider {
         return config
     }
 
-    private func cache(_ response: IResult<NewsContentAPIModel>,
+    private func cache(_ id: String, _ response: IResult<NewsContentAPIModel>,
                        completion: (NewsContentDisplayModel) -> Void) {
         switch response {
         case .error(let e):
@@ -39,15 +39,56 @@ final class NewsContentProvider: INewsContentProvider {
             let model = NewsContentDisplayModel(error: true, content: e)
             completion(model)
         case .success(let content):
-            let payload = content.payload
-            let model = NewsContentDisplayModel(error: false, content: payload!.content)
+            let payload = content.payload!
+            let model = NewsContentDisplayModel(error: false, content: payload.content)
             completion(model)
-                // cacheManager.cache(result)
+            cacheManager.cache(id, payload)
         }
     }
 
     // TODO: use protocol based parsers
     // extract it
+    
+    private var contextManager: ICDContextManager!
+    private var coreDataWorker: ICoreDataWorker!
+    private var objectMapper: IStructToEntityMapper.Type!
+    private var cacheManager: NewsContentCacheManager!
+    
+    private func initContextManager() -> ICDContextManager {
+        let manager = CDStack()
+        contextManager = manager
+        
+        return manager
+    }
+    
+    private func initCDWorker() -> ICoreDataWorker {
+        let worker = CoreDataWorker(context: contextManager.saveContext)
+        coreDataWorker = worker
+        
+        return worker
+    }
+    
+    private func initObjectMapper() -> IStructToEntityMapper.Type {
+        let mapper = StructToEntityMapper.self
+        objectMapper = mapper
+        
+        return mapper
+    }
+    
+    init() {
+        _ = initContextManager()
+        _ = initCDWorker()
+        _ = initObjectMapper()
+        _ = initCacheManager()
+    }
+    
+    private func initCacheManager() -> NewsContentCacheManager {
+        
+        let manager = NewsContentCacheManager(contextManager: contextManager, coreDataWorker: coreDataWorker, objectMapper: objectMapper)
+        cacheManager = manager
+        
+        return manager
+    }
 
     private func requestSender() -> IRequestSender {
         let sender = RequestSender()

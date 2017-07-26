@@ -14,7 +14,7 @@ final class NewsContentAPIModel: EVObject {
     override func setValue(_ value: Any!, forUndefinedKey key: String) {}
 }
 
-final class NewsContentPayload: EVObject {
+final class NewsContentPayload: EVObject, IEntityMappable {
     var content = ""
     var createdAt = Date()
     var modifiedAt = Date()
