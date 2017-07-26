@@ -10,6 +10,7 @@ import UIKit
 import ReachabilitySwift
 import CoreData
 import PullToRefreshSwift
+import SwiftDate
 
 struct NewsListDisplayModel {
     let date: Date
@@ -194,17 +195,14 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
         
         var humanizedDate = ""
         
-        if date.isInToday {
+        if date.isToday {
             humanizedDate = date.time
         }
-        else if date.isInThisMonth {
-            humanizedDate = date.day
-        }
-        else if date.isInThisYear {
-            humanizedDate = date.dayMonth
+        else if date.isYesterday {
+            humanizedDate = date.yesterdayFmt
         }
         else {
-            humanizedDate = date.dayMonthYear
+            humanizedDate = date.fullFmt
         }
         
         return humanizedDate
