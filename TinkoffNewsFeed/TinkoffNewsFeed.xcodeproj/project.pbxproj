@@ -818,7 +818,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = VD97XKT54M;
-				INFOPLIST_FILE = TinkoffNewsFeed/Info.plist;
+				INFOPLIST_FILE = TinkoffNewsFeed/Common/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = own2pwn.pp.TinkoffNewsFeed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -832,7 +832,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = VD97XKT54M;
-				INFOPLIST_FILE = TinkoffNewsFeed/Info.plist;
+				INFOPLIST_FILE = TinkoffNewsFeed/Common/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = own2pwn.pp.TinkoffNewsFeed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
