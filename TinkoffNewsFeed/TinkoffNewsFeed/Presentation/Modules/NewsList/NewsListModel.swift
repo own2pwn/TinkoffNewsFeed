@@ -48,15 +48,10 @@ final class NewsListModel: INewsListModel {
         if diff < newsBatchSize {
             let missingNews = count - diff
             log.debug("asking api for: \(missingNews) news")
-            
-            newsProvider.load(offset: countAfter, count: missingNews, completion: { [unowned self] (error) in
+
+            newsProvider.load(offset: countAfter, count: missingNews, completion: { [unowned self] error in
                 let newCount = self.fetchedNewsCount
-                if newCount == countAfter {
-                    //no news from api
-                }
                 let newDiff = newCount - countAfter + missingNews
-                //check new diff == 0
-                try? self.frc.performFetch()
                 completion?(error, newDiff, true)
             })
         } else {
@@ -85,10 +80,7 @@ final class NewsListModel: INewsListModel {
     }
 
     func rowsCount(for section: Int) -> Int {
-        let sections = frc.sections!
-        let sectionInfo = sections[section]
-
-        return sectionInfo.numberOfObjects
+        return frc.fetchedObjects!.count
     }
 
     func object(for indexPath: IndexPath) -> News {
