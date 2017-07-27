@@ -35,11 +35,7 @@ final class NewsListModel: INewsListModel {
         }
     }
 
-    func loadMore(_ count: Int, completion: ((String?, Int) -> Void)?) {
-        // check cache
-        // if none then use api
-        // if from cache < 20 then load from api 20-x
-
+    func loadMore(_ count: Int, completion: ((String?, Int, Bool) -> Void)?) {
         // TODO: frc.obj.count
         // or my func?
 
@@ -49,14 +45,22 @@ final class NewsListModel: INewsListModel {
         let countAfter = fetchedNewsCount
         let diff = countAfter - countBefore
 
-        if diff < 20 {
-            // ask api for `diff` news
-            log.debug("asking api for: \(diff) news")
-            let newDiff = fetchedNewsCount - countAfter + diff
-            // check newdiff == 0
-            // insert newDiff
+        if diff < newsBatchSize {
+            let missingNews = count - diff
+            log.debug("asking api for: \(missingNews) news")
+            
+            newsProvider.load(offset: countAfter, count: missingNews, completion: { [unowned self] (error) in
+                let newCount = self.fetchedNewsCount
+                if newCount == countAfter {
+                    //no news from api
+                }
+                let newDiff = newCount - countAfter + missingNews
+                //check new diff == 0
+                try? self.frc.performFetch()
+                completion?(error, newDiff, true)
+            })
         } else {
-            completion?(nil, diff)
+            completion?(nil, diff, false)
         }
     }
 

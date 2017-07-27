@@ -274,13 +274,15 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
 
     private func onLoadMore() {
         let beforeItemsCount = model.fetchedNewsCount
-        model.loadMore(newsBatchSize) { [unowned self] error, loadedCount in
+        model.loadMore(newsBatchSize) { [unowned self] error, loadedCount, usingAPI in
             DispatchQueue.main.async { [unowned self] in
                 self.newsFeedTableView.stopPushRefreshing()
             }
             if let e = error {
                 self.showError(title: "Can't load more!", subtitle: e)
             } else {
+                if usingAPI { return } // FRC will insert rows itself
+                
                 if loadedCount > 0 {
                     var ips = [IndexPath]()
                     for i in beforeItemsCount..<beforeItemsCount + loadedCount {
