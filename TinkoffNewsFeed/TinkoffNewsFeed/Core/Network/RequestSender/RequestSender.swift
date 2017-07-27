@@ -17,8 +17,8 @@ final class RequestSender: IRequestSender {
         
         request(urlRequest).responseJSON { response in
             if let e = response.error?.localizedDescription {
-                let e = "Got error for req: \(urlRequest)\nError: " + e
-                log.error(e)
+                let dm = "Got error for req: \(urlRequest)\nError: " + e
+                log.error(dm)
                 
                 completionHandler(error(e))
                 return

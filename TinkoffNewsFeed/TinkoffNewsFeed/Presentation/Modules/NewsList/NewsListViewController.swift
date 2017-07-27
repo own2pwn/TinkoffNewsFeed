@@ -128,18 +128,24 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     private func onPull() {
+        if isInternetAvailable {
+            model.update(20) { error in
+                if let e = error {
+                    self.showError(title: "Can't update news!", subtitle: e)
+                }
+                DispatchQueue.main.async { [unowned self] in
+                    self.newsFeedTableView.stopPullRefreshing()
+                }
+            }
+        } else {
+            showError(title: "Can't update news!", subtitle: "No internet connection!")
+        }
 
         // TODO: disable after treshold to not block ui
         // and show warning that data hasn't been loaded
-
-        DispatchQueue.main.async {
-            log.debug("pulled")
-            sleep(1)
-            log.debug("pulled [2]")
-
-            self.newsFeedTableView.stopPullRefreshing()
-        }
     }
+    
+    private var isInternetAvailable = false
 
     private func onLoadMore() {
 
@@ -312,6 +318,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     private func onActiveConnection(_ info: Reachability) {
+        isInternetAvailable = true
         DispatchQueue.main.async { [unowned self] in
             self.fillNewsIfEmpty()
             self.addPull2R()
@@ -319,21 +326,10 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     private func onLostConnection(_ info: Reachability) {
+        isInternetAvailable = false
         DispatchQueue.main.async { [unowned self] in
             self.showError(title: self.noConnectionTitle, subtitle: self.noConnectionSubtitle)
             self.removeP2R()
-        }
-    }
-
-    private func loadMore() {
-        // TODO: check if we've already reached end
-
-        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
-            log.debug("Load more fetched count: \(self.fetchedNewsCount)")
-        }
-
-        if fetchedNewsCount >= 40 {
-            return
         }
     }
 }
