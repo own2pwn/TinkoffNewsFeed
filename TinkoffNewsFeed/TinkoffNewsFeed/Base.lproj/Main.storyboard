@@ -18,7 +18,7 @@
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" misplaced="YES" id="8bC-Xf-vdC">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -35,19 +35,19 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="24.07.2017 в 23:59" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CPE-ls-O2r">
-                                                    <rect key="frame" x="8" y="8" width="146" height="21"/>
+                                                    <rect key="frame" x="12" y="8" width="146" height="21"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Some cool news" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8YI-ht-TSb">
-                                                    <rect key="frame" x="8" y="37" width="127" height="20"/>
+                                                    <rect key="frame" x="12" y="37" width="127" height="20"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="9999" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="79Z-g6-YbA">
-                                                    <rect key="frame" x="329" y="8" width="38" height="21"/>
+                                                    <rect key="frame" x="325" y="8" width="38" height="21"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -56,10 +56,10 @@
                                             <constraints>
                                                 <constraint firstItem="79Z-g6-YbA" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="CPE-ls-O2r" secondAttribute="trailing" constant="8" id="7ub-Sq-QS2"/>
                                                 <constraint firstItem="CPE-ls-O2r" firstAttribute="top" secondItem="UHJ-qg-Iwk" secondAttribute="topMargin" id="Abb-dA-TQy"/>
-                                                <constraint firstItem="79Z-g6-YbA" firstAttribute="trailing" secondItem="UHJ-qg-Iwk" secondAttribute="trailingMargin" id="ELh-3r-4ol"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="79Z-g6-YbA" secondAttribute="trailing" constant="4" id="ELh-3r-4ol"/>
                                                 <constraint firstItem="79Z-g6-YbA" firstAttribute="top" secondItem="UHJ-qg-Iwk" secondAttribute="topMargin" id="RAu-up-8sF"/>
-                                                <constraint firstItem="8YI-ht-TSb" firstAttribute="leading" secondItem="UHJ-qg-Iwk" secondAttribute="leadingMargin" id="SmJ-qJ-nUI"/>
-                                                <constraint firstItem="CPE-ls-O2r" firstAttribute="leading" secondItem="UHJ-qg-Iwk" secondAttribute="leadingMargin" id="UDZ-xB-A9h"/>
+                                                <constraint firstItem="8YI-ht-TSb" firstAttribute="leading" secondItem="UHJ-qg-Iwk" secondAttribute="leadingMargin" constant="4" id="SmJ-qJ-nUI"/>
+                                                <constraint firstItem="CPE-ls-O2r" firstAttribute="leading" secondItem="UHJ-qg-Iwk" secondAttribute="leadingMargin" constant="4" id="UDZ-xB-A9h"/>
                                                 <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="8YI-ht-TSb" secondAttribute="trailing" constant="8" id="gp5-x9-4HP"/>
                                                 <constraint firstItem="8YI-ht-TSb" firstAttribute="top" secondItem="CPE-ls-O2r" secondAttribute="bottom" constant="8" id="oEr-Uw-wXd"/>
                                                 <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="8YI-ht-TSb" secondAttribute="bottom" constant="8" id="ssm-Lx-iWe"/>

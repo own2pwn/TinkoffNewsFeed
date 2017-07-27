@@ -14,9 +14,9 @@ extension String {
         return string
     }
 
-    func decodeHTML() -> String {
+    func decodeHTML() -> String? {
         let decoded = self.decodeHTMLToAttributed()?.string
 
-        return decoded ?? ""
+        return decoded
     }
 }

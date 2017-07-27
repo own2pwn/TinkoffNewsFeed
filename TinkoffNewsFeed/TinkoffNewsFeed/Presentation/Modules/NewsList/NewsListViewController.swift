@@ -10,143 +10,54 @@ import UIKit
 import ReachabilitySwift
 import CoreData
 import PullToRefreshSwift
+import SwiftDate
+import PKHUD
 
-// TODO: add loading indicator while fetching
+protocol NewsListViewDelegate: class {
+    func startLoadingAnimation()
+    func stopLoadingAnimation()
 
-struct NewsInfo {
-    let id: String
-    let title: String
+    func presentNewsDetails(_ object: News)
 }
 
-final class NewsListViewController: UIViewController,
-        UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate {
+final class NewsListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,
+    NewsListViewDelegate, NSFetchedResultsControllerDelegate {
 
     // MARK: - Outlets
 
     @IBOutlet weak var newsFeedTableView: UITableView!
 
     @IBAction func didTapLoadButton(_ sender: UIButton) {
-        newsProvider.load(count: 20)
+        model.loadNews()
     }
 
-    private func initFRC() {
-        let controller = buildNewsFRC()
-        newsListFRC = controller
+    // MARK: - NewsListViewDelegate
+
+    func startLoadingAnimation() {
+        setLoadingEnabled(true)
     }
 
-    private func buildNewsFRC() -> NSFetchedResultsController<News> {
-        let name = String(describing: News.self)
-        let fr = NSFetchRequest<News>(entityName: name)
-
-        let dateSorter = NSSortDescriptor(key: "pubDate", ascending: false)
-        let sortDescriptors = [dateSorter]
-        fr.sortDescriptors = sortDescriptors
-        fr.fetchBatchSize = 20
-        fr.fetchLimit = 20
-        // fr.fetchOffset = 5
-
-        let frc = NSFetchedResultsController(fetchRequest: fr,
-                managedObjectContext: stack.mainContext,
-                sectionNameKeyPath: nil, cacheName: nil)
-        frc.delegate = self
-        // TODO: perform fetch only when needed
-        try! frc.performFetch()
-        fetchedNewsCount = frc.sections![0].numberOfObjects
-
-        return frc
+    func stopLoadingAnimation() {
+        setLoadingEnabled(false)
     }
 
-    private func updateFetchedNewsCount() {
-        fetchedNewsCount = newsListFRC.sections![0].numberOfObjects
-        log.debug("New items count: \(fetchedNewsCount)")
+    func presentNewsDetails(_ object: News) {
+        performSegue(withIdentifier: showContentSegueId, sender: object)
     }
-
-    private var newsListFRC: NSFetchedResultsController<News>!
-
-    private let stack = CDStack()
-
-    private var fetchedNewsCount = 0
 
     // MARK: - Overrides
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+
+        injectDependencies()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // TODO: remove
-        initDepend()
         setupController()
-    }
-
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let info = sender as? NewsInfo,
-           let dest = segue.destination as? NewsContentViewController {
-            dest.newsId = info.id
-            dest.newsTitle = info.title
-        }
-    }
-
-    private func initDepend() {
-        initFRC()
-        initNewsProvider()
-    }
-
-    private func addPull2R() {
-        if newsFeedTableView.viewWithTag(PullToRefreshConst.pullTag) == nil {
-            newsFeedTableView.addPullToRefresh(refreshCompletion: self.onPull)
-            if fetchedNewsCount > 0 {
-                addPush2R(force: true)
-            }
-        }
-    }
-
-    private func addPush2R(force: Bool = false) {
-        if force || newsFeedTableView.viewWithTag(PullToRefreshConst.pushTag) == nil {
-            newsFeedTableView.addPushToRefresh(refreshCompletion: self.onLoadMore)
-        }
-    }
-
-    private func removeP2R() {
-        newsFeedTableView.removePullToRefreshView()
-        newsFeedTableView.removePushToRefreshView()
-    }
-
-    private func onPull() {
-
-        // TODO: disable after treshold to not block ui
-        // and show warning that data hasn't been loaded
-
-        DispatchQueue.main.async {
-            log.debug("pulled")
-            sleep(1)
-            log.debug("pulled [2]")
-
-            self.newsFeedTableView.stopPullRefreshing()
-        }
-    }
-
-    private func onLoadMore() {
-
-        // TODO: disable after treshold to not block ui
-        // and show warning that data hasn't been loaded
-
-        DispatchQueue.main.async {
-            log.debug("pushed")
-            sleep(1)
-            log.debug("pushed [2]")
-
-            self.newsFeedTableView.stopPushRefreshing()
-        }
-    }
-
-    private func initNewsProvider() {
-        // TODO: make one protocol for newlist and news content
-        let mapper = StructToEntityMapper.self
-        let cm = NewsListCacheManager(contextManager: stack, objectMapper: mapper)
-        let rs = RequestSender()
-
-        newsProvider = NewsListProvider(cacheManager: cm, requestSender: rs)
+        setupView()
     }
 
     override func didReceiveMemoryWarning() {
@@ -157,45 +68,41 @@ final class NewsListViewController: UIViewController,
         connectionChecker?.stopNotifier()
     }
 
+    // MARK: Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let object = sender as? News,
+            let dest = segue.destination as? NewsContentViewController {
+            dest.assembler = assembler as! INewsContentDependencyManager
+            dest.newsId = object.id!
+            dest.newsTitle = object.title!
+            if let content = object.content?.content {
+                dest.newsContent = content
+            }
+        }
+    }
+
     // MARK: - UITableViewDataSource
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sections = newsListFRC.sections!
-        let sectionInfo = sections[section]
+        let count = model.rowsCount(for: section)
 
-        return sectionInfo.numberOfObjects
-
-        // return newsListFRC.fetchedObjects?.count ?? 0
+        return count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: feedCellId, for: indexPath) as! NewsFeedCell
         configure(cell, at: indexPath)
 
-        let row = indexPath.row
-
-        if row == fetchedNewsCount - 2 {
-            DispatchQueue.main.async {// [unowned self] in
-                // self.loadMore()
-            }
-        }
-
         return cell
     }
 
     private func configure(_ cell: NewsFeedCell, at indexPath: IndexPath) {
-        let object = newsListFRC.object(at: indexPath)
-        let date = object.pubDate! as Date
-        let viewsCount = object.viewsCount
-        let title = object.title!
-        let day = date.day
+        let object = model.object(for: indexPath)
 
-        //TODO: various date formatting
-
-        
-        cell.newsDateLabel.text = day
-        cell.newsTitleLabel.text = title
-        cell.newsViewsCountLabel.text = viewsCount.stringValue
+        cell.newsViewsCountLabel.text = "\(object.viewsCount)"
+        cell.newsTitleLabel.text = object.title!.decodeHTML()
+        cell.newsDateLabel.text = humanDate(object.pubDate! as Date)
     }
 
     // MARK: - UITableViewDelegate
@@ -209,15 +116,8 @@ final class NewsListViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) as? NewsFeedCell {
-            let object = newsListFRC.object(at: indexPath)
-            let id = object.id!
-            let title = cell.newsTitleLabel.text!
-
-            let info = NewsInfo(id: id, title: title)
-            performSegue(withIdentifier: segueId, sender: info)
-            tableView.deselectRow(at: indexPath, animated: true)
-        }
+        model.presentNewsContent(for: indexPath)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
     // MARK: - NSFetchedResultsControllerDelegate
@@ -227,13 +127,8 @@ final class NewsListViewController: UIViewController,
     }
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        updateFetchedNewsCount()
-        addPush2R()
+        addPush2Refresh()
         newsFeedTableView.endUpdates()
-    }
-
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        assertionFailure()
     }
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
@@ -253,40 +148,27 @@ final class NewsListViewController: UIViewController,
 
     // MARK: - Private
 
-    // MARK: - Constants
+    // MARK: Constants
 
     private let footerHeight: CGFloat = 10.0
+    private let hudFlashDelay = 1.0
+    private let newsBatchSize = 20
+
     private let feedCellId = "idNewsFeedCell"
-    private let segueId = "idShowNewsContentSegue"
+    private let showContentSegueId = "idShowNewsContentSegue"
+    private let noConnectionTitle = "No internet connection"
+    private let noConnectionSubtitle = "You still can see cached news"
 
     // MARK: - Instance members
 
     private let connectionChecker = Reachability(hostname: "api.tinkoff.ru")
-    // https:// ?
 
-    private var itemsCount = 20
+    private var isInternetAvailable = false
 
-    private let itemsPerBatch = 20
-
-    private var offset = 0
-
-    // MARK: - Methods
+    // MARK: - Controller
 
     private func setupController() {
         initConnectionListener()
-        setupView()
-    }
-
-    var newsProvider: INewsListProvider!
-
-    private func setupView() {
-
-        // MARK: - TableView
-        newsFeedTableView.estimatedRowHeight = 75
-        newsFeedTableView.rowHeight = UITableViewAutomaticDimension
-
-        // TODO: maybe use lib to p2r?
-        // MARK: - Pull2Refresh
     }
 
     private func initConnectionListener() {
@@ -300,37 +182,136 @@ final class NewsListViewController: UIViewController,
     }
 
     private func onActiveConnection(_ info: Reachability) {
-        let m = "Internet is available! | Info: \(info)"
-        log.info(m)
-
+        isInternetAvailable = true
         DispatchQueue.main.async { [unowned self] in
-            self.addPull2R()
+            self.fillNewsIfEmpty()
+            self.addPull2Refresh()
         }
     }
 
     private func onLostConnection(_ info: Reachability) {
-        // TODO: Use HUD to display connection error
-        // show
-
-        let m = "Internet is unavailable! | Info: \(info)"
-        log.info(m)
+        isInternetAvailable = false
         DispatchQueue.main.async { [unowned self] in
-            self.removeP2R()
+            self.showError(title: self.noConnectionTitle, subtitle: self.noConnectionSubtitle)
+            self.removePull2Refresh()
         }
     }
 
-    private func loadMore() {
-        // TODO: check if we've already reached end
+    // MARK: - View
 
-        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
-            log.debug("Load more fetched count: \(self.fetchedNewsCount)")
-            self.newsProvider.load(offset: self.fetchedNewsCount, count: 2) {
-                log.debug("News were loaded")
+    private func setupView() {
+        newsFeedTableView.estimatedRowHeight = 75
+        newsFeedTableView.rowHeight = UITableViewAutomaticDimension
+    }
+
+    private func fillNewsIfEmpty() {
+        if model.fetchedNewsCount == 0 {
+            model.loadNews(completion: { [unowned self] error in
+                self.displayError(error)
+            })
+        }
+    }
+
+    private func showError(title: String?, subtitle: String?) {
+        let hudContent: HUDContentType = .labeledError(title: title, subtitle: subtitle)
+        HUD.flash(hudContent, delay: hudFlashDelay)
+    }
+
+    private func setLoadingEnabled(_ state: Bool) {
+        DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = state
+        }
+    }
+
+    // MARK: Pull2Refresh
+
+    private func addPull2Refresh() {
+        if newsFeedTableView.viewWithTag(PullToRefreshConst.pullTag) == nil {
+            newsFeedTableView.addPullToRefresh(refreshCompletion: onPull)
+            if model.fetchedNewsCount > 0 {
+                addPush2Refresh(force: true)
             }
         }
+    }
 
-        if fetchedNewsCount >= 40 {
-            return
+    private func addPush2Refresh(force: Bool = false) {
+        if force || newsFeedTableView.viewWithTag(PullToRefreshConst.pushTag) == nil {
+            newsFeedTableView.addPushToRefresh(refreshCompletion: onLoadMore)
         }
+    }
+
+    private func removePull2Refresh() {
+        newsFeedTableView.removePullToRefreshView()
+        newsFeedTableView.removePushToRefreshView()
+    }
+
+    // MARK: - Utilities
+
+    private func onPull() {
+        if isInternetAvailable {
+            model.update(batch: newsBatchSize) { [unowned self] error in
+                DispatchQueue.main.async { [unowned self] in
+                    self.newsFeedTableView.stopPullRefreshing()
+                }
+                self.displayError(error)
+            }
+        } else {
+            showError(title: "Can't update news!", subtitle: "No internet connection!")
+        }
+    }
+
+    private func onLoadMore() {
+        let beforeItemsCount = model.fetchedNewsCount
+        model.loadMore(newsBatchSize) { [unowned self] error, loadedCount, usingAPI in
+            DispatchQueue.main.async { [unowned self] in
+                self.newsFeedTableView.stopPushRefreshing()
+            }
+            if let e = error {
+                self.showError(title: "Can't load more!", subtitle: e)
+            } else {
+                if usingAPI { return } // FRC will insert rows itself
+
+                if loadedCount > 0 {
+                    var ips = [IndexPath]()
+                    for i in beforeItemsCount..<beforeItemsCount + loadedCount {
+                        let ip = IndexPath(row: i, section: 0)
+                        ips.append(ip)
+                    }
+                    self.newsFeedTableView.insertRows(at: ips, with: .fade)
+                } else {
+                    let content: HUDContentType = .labeledSuccess(title: "You've viewed all the news!", subtitle: nil)
+                    HUD.flash(content, delay: self.hudFlashDelay)
+                }
+            }
+        }
+    }
+
+    private func displayError(_ error: String?) {
+        if let e = error {
+            showError(title: "Can't load more!", subtitle: e)
+        }
+    }
+
+    private func humanDate(_ date: Date) -> String {
+        var humanizedDate = ""
+
+        if date.isToday {
+            humanizedDate = date.time
+        } else if date.isYesterday {
+            humanizedDate = date.yesterdayFmt
+        } else {
+            humanizedDate = date.fullFmt
+        }
+
+        return humanizedDate
+    }
+
+    // MARK: - DI
+
+    var model: INewsListModel!
+    private let assembler: INewsListDependencyManager = DependencyManager()
+
+    private func injectDependencies() {
+        model = assembler.newsListModel(for: self)
     }
 }

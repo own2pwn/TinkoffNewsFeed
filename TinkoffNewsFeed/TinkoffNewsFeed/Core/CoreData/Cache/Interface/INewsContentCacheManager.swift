@@ -5,6 +5,6 @@
 
 import Foundation
 
-protocol INewsListCacheManager {
-    func cache(_ news: [NewsEntityModel])
+protocol INewsContentCacheManager {
+    func cache(_ id: String, _ data: NewsContentPayload)
 }

@@ -15,7 +15,7 @@ final class CDStack: ICDStack {
     }
 
     var persistentStoreCoordinator: NSPersistentStoreCoordinator {
-        return self.storeCoordinator
+        return storeCoordinator
     }
 
     // MARK: - ICDContextManager
@@ -42,15 +42,15 @@ final class CDStack: ICDStack {
     }
 
     lazy var masterContext: NSManagedObjectContext = {
-        return self.initMasterContext()
+        self.initMasterContext()
     }()
 
     lazy var mainContext: NSManagedObjectContext = {
-        return self.initMainContext()
+        self.initMainContext()
     }()
 
     lazy var saveContext: NSManagedObjectContext = {
-        return self.initSaveContext()
+        self.initSaveContext()
     }()
 
     // MARK: - CDStack
@@ -93,7 +93,7 @@ final class CDStack: ICDStack {
         do {
             let storePath = constructStorePath()
             try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil,
-                    at: storePath, options: nil)
+                                               at: storePath, options: nil)
 
             storeCoordinator = coordinator
         } catch {

@@ -6,65 +6,34 @@
 import Foundation
 import CoreData
 
-protocol ICoreDataWorker {
-    func find<T:NSManagedObject>(by attribute: String, value: String, entity: T.Type) -> [T]?
-
-    func findFirst<T:NSManagedObject>(by attribute: String, value: String, entity: T.Type) -> T?
-}
-
-final class CoreDataWorker: ICoreDataWorker {
-    func find<T:NSManagedObject>(by attribute: String, value: String, entity: T.Type) -> [T]? {
-        let name = T.entityName
-        let fr = NSFetchRequest<T>(entityName: name)
-        let predicate = NSPredicate(format: "%K == %@", attribute, value)
-        fr.predicate = predicate
-
-        let result = try? context.fetch(fr)
-
-        return result
-    }
-
-    func findFirst<T:NSManagedObject>(by attribute: String, value: String, entity: T.Type) -> T? {
-        let result = find(by: attribute, value: value, entity: entity)
-
-        return result?.first
-    }
-
-    // MARK: - DI
-
-    init(context: NSManagedObjectContext) {
-        self.context = context
-    }
-
-    private let context: NSManagedObjectContext
-}
-
-final class NewsContentCacheManager {
+final class NewsContentCacheManager: INewsContentCacheManager {
     func cache(_ id: String, _ data: NewsContentPayload) {
-        if let news = coreDataWorker.findFirst(by: "id", value: id, entity: News.self) {
-            if let content = news.content {
+        queue.sync { [weak self] in
+            if let strongSelf = self {
+                // search for existing news
+                if let news = strongSelf.coreDataWorker.findFirst(by: "id", value: id, entity: News.self) {
 
-                // Updating existing cache
-                if data.modifiedAt > content.modifiedAt! as Date {
-                    content.content = data.content
-                    content.modifiedAt = data.modifiedAt as NSDate
-                    contextManager.performSave(context: saveContext)
-                    
-                    log.debug("Updating existing cache")
-                    return
+                    // if any then check to update its content
+                    if let content = news.content {
+                        if data.modifiedAt > content.modifiedAt! as Date {
+                            content.content = data.content
+                            content.modifiedAt = data.modifiedAt as NSDate
+                            strongSelf.contextManager.performSave(context: strongSelf.saveContext)
+
+                            log.debug("Updating existing cache")
+                            return
+                        }
+                    } else {
+                        // no content - should add
+                        var newsContent = NewsContent(context: strongSelf.saveContext)
+                        strongSelf.objectMapper.map(data, &newsContent)
+                        news.content = newsContent
+                        strongSelf.contextManager.performSave(context: strongSelf.saveContext)
+                    }
+                } else {
+                    log.warning("Couldn't find news entity with id: \(id)!")
                 }
-                // TODO: do check in another place!
-                log.debug("There is existing content")
-                log.debug("Skipping caching!")
-                return
             }
-
-            var newsContent = NewsContent(context: saveContext)
-            objectMapper.map(data, &newsContent)
-            newsContent.news = news
-            contextManager.performSave(context: saveContext)
-        } else {
-            log.warning("Couldn't find news entity with id: \(id)!")
         }
     }
 
@@ -72,41 +41,19 @@ final class NewsContentCacheManager {
 
     // MARK: - DI
 
-    init(contextManager: ICDContextManager, coreDataWorker: ICoreDataWorker,
+    init(contextManager: ICDContextManager, saveContext: NSManagedObjectContext,
+         coreDataWorker: ICoreDataWorker,
          objectMapper: IStructToEntityMapper.Type) {
         self.contextManager = contextManager
-        saveContext = contextManager.saveContext
-
+        self.saveContext = saveContext
         self.coreDataWorker = coreDataWorker
         self.objectMapper = objectMapper
     }
 
     private let contextManager: ICDContextManager
-    //TODO: pass context in construct, rename member to context
     private let saveContext: NSManagedObjectContext
     private let coreDataWorker: ICoreDataWorker
     private let objectMapper: IStructToEntityMapper.Type
+
+    private let queue = DispatchQueue(label: "tnf.newscache")
 }
-
-
-/**
-
- let name = String(describing: News.self)
-        let fr = NSFetchRequest<News>(entityName: name)
-
-        let dateSorter = NSSortDescriptor(key: "pubDate", ascending: false)
-        let sortDescriptors = [dateSorter]
-        fr.sortDescriptors = sortDescriptors
-        fr.fetchBatchSize = 20
-        fr.fetchLimit = 20
-        // fr.fetchOffset = 5
-
-        let frc = NSFetchedResultsController(fetchRequest: fr,
-                managedObjectContext: stack.mainContext,
-                sectionNameKeyPath: nil, cacheName: nil)
-        frc.delegate = self
-        // TODO: perform fetch only when needed
-        try! frc.performFetch()
-        fetchedNewsCount = frc.sections![0].numberOfObjects
-
-*/
