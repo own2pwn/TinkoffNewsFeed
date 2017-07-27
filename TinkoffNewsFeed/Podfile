@@ -11,7 +11,6 @@ target 'TinkoffNewsFeed' do
   pod 'SwiftyBeaver'
 
   pod 'SwiftKVC'
-  pod 'ObjectMapper', '~> 2.2'
   pod "EVReflection"
 
   pod 'CryptoSwift'

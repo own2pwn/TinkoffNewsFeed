@@ -36,9 +36,6 @@ final class NewsListModel: INewsListModel {
     }
 
     func loadMore(_ count: Int, completion: ((String?, Int, Bool) -> Void)?) {
-        // TODO: frc.obj.count
-        // or my func?
-
         let countBefore = fetchedNewsCount
         frc.fetchRequest.fetchLimit = countBefore + count
         try? frc.performFetch()

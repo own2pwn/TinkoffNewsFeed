@@ -16,37 +16,30 @@ struct NewsContentProviderDependencies {
 final class NewsContentProvider: INewsContentProvider {
     func load(by id: String, completion: @escaping (NewsContentDisplayModel) -> Void) {
         let config = configBuilder.build(id)
-
-        requstSender.sendJSON(config: config) { [unowned self] response in
-            self.cache(id, response, completion: completion)
+        
+        requstSender.sendJSON(config: config) { [weak self] result in
+            switch result {
+            case .error(let e):
+                log.warning(e)
+                let model = NewsContentDisplayModel(error: true, content: e)
+                completion(model)
+            case .success(let data):
+                let payload = data.payload!
+                self?.cacheManager.cache(id, payload)
+                let model = NewsContentDisplayModel(error: false, content: payload.content)
+                completion(model)
+            }
         }
     }
-
-    // MARK: - Private
-
-    private func cache(_ id: String, _ response: IResult<NewsContentAPIModel>,
-                       completion: (NewsContentDisplayModel) -> Void) {
-        switch response {
-        case .error(let e):
-            log.error(e)
-            let model = NewsContentDisplayModel(error: true, content: e)
-            completion(model)
-        case .success(let content):
-            let payload = content.payload!
-            let model = NewsContentDisplayModel(error: false, content: payload.content)
-            completion(model)
-            cacheManager.cache(id, payload)
-        }
-    }
-
+    
     // MARK: - DI
-
+    
     init(dependencies: NewsContentProviderDependencies) {
         cacheManager = dependencies.cacheManager
         requstSender = dependencies.requstSender
         configBuilder = dependencies.configBuilder
     }
-
+    
     private let cacheManager: INewsContentCacheManager
     private let requstSender: IRequestSender
     private let configBuilder: INewsContentConfigBuilder

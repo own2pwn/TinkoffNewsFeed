@@ -88,7 +88,7 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     var newsTitle: String!
     var newsContent: String?
     
-    private var currentContent: NSAttributedString! {
+    private var currentContent = NSAttributedString() {
         didSet {
             contentTextView.attributedText = currentContent
         }
