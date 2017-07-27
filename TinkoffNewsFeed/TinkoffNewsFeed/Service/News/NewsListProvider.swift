@@ -72,16 +72,6 @@ final class NewsListProvider: INewsListProvider {
     
     // MARK: - Private
     
-    private func verify(_ response: IResult<NewsListAPIModel>) {
-        switch response {
-        case .error(let e):
-            log.error(e)
-        case .success(let result):
-            cacheManager.cache(result)
-            break
-        }
-    }
-    
     // MARK: - DI
     
     init(dependencies: NewsListProviderDependencies) {

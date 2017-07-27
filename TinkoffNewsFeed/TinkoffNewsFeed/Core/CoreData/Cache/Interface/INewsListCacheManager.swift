@@ -10,6 +10,4 @@ protocol INewsListCacheManager {
     // func updateCache(for news: [NewsEntityModel])
 
     func cache(_ payload: [NewsListPayload])
-    
-    func cache(_ data: NewsListAPIModel)
 }

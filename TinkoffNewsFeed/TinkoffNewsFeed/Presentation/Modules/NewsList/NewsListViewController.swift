@@ -116,7 +116,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
         let title = displayModel.title.decodeHTML()
         let humanizedDate = humanDate(date)
 
-        cell.newsDateLabel.text = "r: " + indexPath.row.stringValue + " " + humanizedDate
+        cell.newsDateLabel.text = humanizedDate
         cell.newsTitleLabel.text = title
         cell.newsViewsCountLabel.text = viewsCount.stringValue
     }
