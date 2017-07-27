@@ -36,11 +36,8 @@ final class NewsListModel: INewsListModel {
     }
 
     func loadMore(_ count: Int, completion: ((String?, Int, Bool) -> Void)?) {
-        // TODO: frc.obj.count
-        // or my func?
-
         let countBefore = fetchedNewsCount
-        frc.fetchRequest.fetchLimit += count
+        frc.fetchRequest.fetchLimit = countBefore + count
         try? frc.performFetch()
         let countAfter = fetchedNewsCount
         let diff = countAfter - countBefore
@@ -51,7 +48,7 @@ final class NewsListModel: INewsListModel {
 
             newsProvider.load(offset: countAfter, count: missingNews, completion: { [unowned self] error in
                 let newCount = self.fetchedNewsCount
-                let newDiff = newCount - countAfter + missingNews
+                let newDiff = newCount - countAfter
                 completion?(error, newDiff, true)
             })
         } else {

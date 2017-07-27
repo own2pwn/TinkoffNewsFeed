@@ -64,6 +64,7 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
         
         injectDependencies()
         setupView()
+        presentContent()
     }
     
     deinit {
@@ -87,7 +88,7 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     var newsTitle: String!
     var newsContent: String?
     
-    private var currentContent: NSAttributedString! {
+    private var currentContent = NSAttributedString() {
         didSet {
             contentTextView.attributedText = currentContent
         }
@@ -106,7 +107,9 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     private func onActiveConnection(_ info: Reachability) {
         isInternetAvailable = true
         DispatchQueue.main.async { [weak self] in
-            self?.loadContent()
+            if self?.newsContent == nil {
+                self?.loadContent()
+            }
         }
     }
     
@@ -121,7 +124,6 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     
     private func setupView() {
         model.view = self
-        displayNewsTitle()
         contentTextView.addPullToRefresh(refreshCompletion: onUpdate)
     }
     
@@ -143,19 +145,19 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     
     // MARK: - Content presentation
     
-    private func loadContent() {
+    private func presentContent() {
         displayNewsTitle()
-        if newsContent == nil {
-            log.debug("using api to load news content")
-            model.loadNewsContent(by: newsId, completion: { [weak self] error in
-                if let e = error {
-                    self?.showError(title: "Can't update news content!", subtitle: e)
-                } else {
-                    self?.displayNewsTitle()
-                }
-            })
-        } else {
+        if newsContent != nil {
             present(newsContent!)
+        }
+    }
+    
+    private func loadContent() {
+        log.debug("using api to load news content")
+        model.loadNewsContent(by: newsId) { [weak self] error in
+            if let e = error {
+                self?.showError(title: "Can't update news content!", subtitle: e)
+            }
         }
     }
     
@@ -183,8 +185,7 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
         
         let attr = buildFontAttributes(font, style)
         
-        let decoded = string.decodeHTML()!
-        let newsContent = decoded + "\n\n"
+        let newsContent = string + "\n\n"
         let heading = NSAttributedString(string: newsContent, attributes: attr)
         
         return heading

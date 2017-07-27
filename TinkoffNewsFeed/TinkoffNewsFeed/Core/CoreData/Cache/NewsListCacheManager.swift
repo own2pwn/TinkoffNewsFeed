@@ -23,8 +23,9 @@ final class NewsListCacheManager: INewsListCacheManager {
                 for news in payload where newNewsIds.contains(news.id) {
                     var mObject = News(context: strongSelf.saveContext)
                     strongSelf.objectMapper.map(news, &mObject)
-                    mObject.titleHash = news.title.sha1()
                     mObject.viewsCount = 0
+                    mObject.titleHash = news.title.sha1()
+                    mObject.title = mObject.title?.decodeHTML()
                 }
                 
                 strongSelf.contextManager.performSave(context: strongSelf.saveContext) { error in

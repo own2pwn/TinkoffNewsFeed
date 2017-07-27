@@ -97,7 +97,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
         let object = model.object(for: indexPath)
 
         cell.newsViewsCountLabel.text = "\(object.viewsCount)"
-        cell.newsTitleLabel.text = object.title!.decodeHTML()
+        cell.newsTitleLabel.text = object.title!
         cell.newsDateLabel.text = humanDate(object.pubDate! as Date)
     }
 
