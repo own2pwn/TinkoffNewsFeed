@@ -19,8 +19,9 @@ final class NewsListConfigBuilder: INewsListConfigBuilder {
     // MARK: - Private
 
     private func buildRequest(_ offset: Int, _ count: Int) -> URLRequest {
+        let fetchCount = normalizeFetchCount(offset, count)
         let url = String(format: urlFmt, apiHost, apiVersion, apiMethod)
-        let query = String(format: queryFmt, apiFetchFrom, offset, apiFetchTo, count)
+        let query = String(format: queryFmt, apiFetchFrom, offset, apiFetchTo, fetchCount)
         let endpoint = url + query
 
         let request = try! URLRequest(url: endpoint, method: apiRequestMethod)
@@ -32,6 +33,13 @@ final class NewsListConfigBuilder: INewsListConfigBuilder {
         let parser = NewsListParser()
 
         return parser
+    }
+
+    private func normalizeFetchCount(_ offset: Int, _ count: Int) -> Int {
+        // count must be greater than offset
+        let count = offset < count ? count : count + offset
+
+        return count
     }
 
     // MARK: - Constants

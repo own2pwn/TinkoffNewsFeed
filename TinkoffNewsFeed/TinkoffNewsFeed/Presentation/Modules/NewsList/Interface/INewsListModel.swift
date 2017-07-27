@@ -10,7 +10,7 @@ protocol INewsListModel: class {
     weak var view: (NewsListViewDelegate & NSFetchedResultsControllerDelegate)! { get set }
 
     func loadNews()
-    func update(_ batch: Int, completion: @escaping (String?) -> Void)
+    func update(batch: Int, completion: @escaping (String?) -> Void)
     func loadMore(_ count: Int)
 
     var fetchedNewsCount: Int { get }

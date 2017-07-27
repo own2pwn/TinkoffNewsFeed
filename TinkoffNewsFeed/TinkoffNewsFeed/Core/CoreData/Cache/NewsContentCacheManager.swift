@@ -8,31 +8,32 @@ import CoreData
 
 final class NewsContentCacheManager: INewsContentCacheManager {
     func cache(_ id: String, _ data: NewsContentPayload) {
+        queue.sync { [weak self] in
+            if let strongSelf = self {
+                // search for existing news
+                if let news = strongSelf.coreDataWorker.findFirst(by: "id", value: id, entity: News.self) {
 
-        // TODO: use threads
+                    // if any then check to update its content
+                    if let content = news.content {
+                        if data.modifiedAt > content.modifiedAt! as Date {
+                            content.content = data.content
+                            content.modifiedAt = data.modifiedAt as NSDate
+                            strongSelf.contextManager.performSave(context: strongSelf.saveContext)
 
-        // search for existing news
-        if let news = coreDataWorker.findFirst(by: "id", value: id, entity: News.self) {
-
-            // if any then check to update its content
-            if let content = news.content {
-                if data.modifiedAt > content.modifiedAt! as Date {
-                    content.content = data.content
-                    content.modifiedAt = data.modifiedAt as NSDate
-                    contextManager.performSave(context: saveContext)
-
-                    log.debug("Updating existing cache")
-                    return
+                            log.debug("Updating existing cache")
+                            return
+                        }
+                    } else {
+                        // no content - should add
+                        var newsContent = NewsContent(context: strongSelf.saveContext)
+                        strongSelf.objectMapper.map(data, &newsContent)
+                        news.content = newsContent
+                        strongSelf.contextManager.performSave(context: strongSelf.saveContext)
+                    }
+                } else {
+                    log.warning("Couldn't find news entity with id: \(id)!")
                 }
-            } else {
-                // no content - should add
-                var newsContent = NewsContent(context: saveContext)
-                objectMapper.map(data, &newsContent)
-                news.content = newsContent
-                contextManager.performSave(context: saveContext)
             }
-        } else {
-            log.warning("Couldn't find news entity with id: \(id)!")
         }
     }
 
@@ -53,4 +54,6 @@ final class NewsContentCacheManager: INewsContentCacheManager {
     private let saveContext: NSManagedObjectContext
     private let coreDataWorker: ICoreDataWorker
     private let objectMapper: IStructToEntityMapper.Type
+
+    private let queue = DispatchQueue(label: "tnf.newscache")
 }

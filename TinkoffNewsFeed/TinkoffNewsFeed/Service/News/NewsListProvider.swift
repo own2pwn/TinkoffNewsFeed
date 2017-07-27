@@ -23,16 +23,26 @@ final class NewsListProvider: INewsListProvider {
     }
     
     func update(offset: Int = 0, count: Int, completion: ((String?) -> Void)? = nil) {
-        let count = normalizeCount(offset, count)
         let config = configBuilder.build(offset: offset, count: count)
         
         requestSender.sendJSON(config: config) { [unowned self] result in
             switch result {
             case .error(let e):
                 completion?(e)
-            case .success:
-                let newOffset = offset + count
-                self.update(offset: newOffset, count: count, completion: completion)
+            case .success(let data):
+                if let payload = data.payload {
+                    let newsCount = payload.count
+                    if newsCount > 0 {
+                        self.cacheManager.cache(payload)
+                        let newOffset = offset + count
+                        self.update(offset: newOffset, count: count, completion: completion)
+                    } else {
+                        completion?(nil)
+                    }
+                } else {
+                    log.warning("no payload provided")
+                    completion?("no payload provided")
+                }
             }
         }
     }
@@ -48,7 +58,6 @@ final class NewsListProvider: INewsListProvider {
     }
     
     func load(offset: Int = 0, count: Int, completion: (() -> Void)? = nil) {
-        let count = normalizeCount(offset, count)
         let config = configBuilder.build(offset: offset, count: count)
         
         requestSender.sendJSON(config: config) { [unowned self] result in
@@ -61,13 +70,6 @@ final class NewsListProvider: INewsListProvider {
     }
     
     // MARK: - Private
-    
-    private func normalizeCount(_ offset: Int, _ count: Int) -> Int {
-        // count must be greater than offset
-        let count = offset < count ? count : count + offset
-        
-        return count
-    }
     
     private func verify(_ response: IResult<NewsListAPIModel>) {
         switch response {

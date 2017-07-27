@@ -129,7 +129,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
 
     private func onPull() {
         if isInternetAvailable {
-            model.update(20) { error in
+            model.update(batch: newsBatchSize) { [unowned self] error in
                 if let e = error {
                     self.showError(title: "Can't update news!", subtitle: e)
                 }
@@ -144,7 +144,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
         // TODO: disable after treshold to not block ui
         // and show warning that data hasn't been loaded
     }
-    
+
     private var isInternetAvailable = false
 
     private func onLoadMore() {
@@ -191,9 +191,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
         let title = displayModel.title.decodeHTML()
         let humanizedDate = humanDate(date)
 
-        // TODO: various date formatting
-
-        cell.newsDateLabel.text = humanizedDate
+        cell.newsDateLabel.text = "r: " + indexPath.row.stringValue + " " + humanizedDate
         cell.newsTitleLabel.text = title
         cell.newsViewsCountLabel.text = viewsCount.stringValue
     }
@@ -266,16 +264,11 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     private let hudFlashDelay = 1.0
     private let noConnectionTitle = "No internet connection"
     private let noConnectionSubtitle = "You still can see cached news"
+    private let newsBatchSize = 20
 
     // MARK: - Instance members
 
     private let connectionChecker = Reachability(hostname: "api.tinkoff.ru")
-
-    private var itemsCount = 20
-
-    private let itemsPerBatch = 20
-
-    private var offset = 0
 
     // MARK: - Methods
 

@@ -28,8 +28,12 @@ final class NewsListModel: INewsListModel {
         }
     }
 
-    func update(_ batch: Int, completion: @escaping (String?) -> Void) {
-        newsProvider.update(offset: 735, count: batch, completion: completion)
+    func update(batch: Int, completion: @escaping (String?) -> Void) {
+        view.startLoadingAnimation()
+        newsProvider.update(count: batch) { [unowned self] (error) in
+            self.view.stopLoadingAnimation()
+            completion(error)
+        }
     }
 
     func loadMore(_ count: Int) {

@@ -36,18 +36,43 @@ final class NewsListCacheManager: INewsListCacheManager {
     //        }
     //    }
 
-    func cache(_ data: NewsListAPIModel) {
-        let news = data.payload!
-
-        for single in news {
-            var mObject = News(context: saveContext)
-            objectMapper.map(single, &mObject)
-            mObject.titleHash = single.title.sha1()
-            mObject.viewsCount = 0
+    func cache(_ payload: [NewsListPayload]) {
+        queue.async { [weak self] in
+            for news in payload {
+                if let strongSelf = self {
+                    var mObject = News(context: strongSelf.saveContext)
+                    strongSelf.objectMapper.map(news, &mObject)
+                    mObject.titleHash = news.title.sha1()
+                    mObject.viewsCount = 0
+                }
+            }
+            if let strongSelf = self {
+                strongSelf.contextManager.performSave(context: strongSelf.saveContext) { error in
+                    if let e = error {
+                        log.error(e)
+                    }
+                }
+            }
         }
-        contextManager.performSave(context: saveContext) { error in
-            if let e = error {
-                log.error(e)
+    }
+
+    func cache(_ data: NewsListAPIModel) {
+        queue.async { [weak self] in
+            let news = data.payload!
+            for single in news {
+                if let strongSelf = self {
+                    var mObject = News(context: strongSelf.saveContext)
+                    strongSelf.objectMapper.map(single, &mObject)
+                    mObject.titleHash = single.title.sha1()
+                    mObject.viewsCount = 0
+                }
+            }
+            if let strongSelf = self {
+                strongSelf.contextManager.performSave(context: strongSelf.saveContext) { error in
+                    if let e = error {
+                        log.error(e)
+                    }
+                }
             }
         }
     }
@@ -66,4 +91,5 @@ final class NewsListCacheManager: INewsListCacheManager {
     private let saveContext: NSManagedObjectContext
     private let objectMapper: IStructToEntityMapper.Type
     private let coreDataWorker: ICoreDataWorker
+    private let queue: DispatchQueue = DispatchQueue(label: "tnf.newscache")
 }
