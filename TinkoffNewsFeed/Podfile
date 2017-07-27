@@ -1,0 +1,25 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'TinkoffNewsFeed' do
+  use_frameworks!
+
+  pod 'Alamofire', '~> 4.4'
+  pod 'ReachabilitySwift', '~> 3'
+
+  pod 'SwiftyJSON'
+  pod 'SwiftyBeaver'
+
+  pod 'SwiftKVC'
+  pod 'ObjectMapper', '~> 2.2'
+  pod "EVReflection"
+
+  pod 'CryptoSwift'
+
+  pod 'PullToRefreshSwift', :git => 'https://github.com/own2pwn/PullToRefreshSwift.git', :tag => '3.0.4'
+
+  pod 'SwiftDate', '~> 4.0'
+
+  pod 'PKHUD', '~> 4.0'
+
+end
