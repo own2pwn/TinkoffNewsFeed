@@ -219,9 +219,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     private func fillNewsIfEmpty() {
         if model.fetchedNewsCount == 0 {
             model.loadNews(completion: { [unowned self] error in
-                if let e = error {
-                    self.showError(title: "Can't load news!", subtitle: e)
-                }
+                self.displayError(error)
             })
         }
     }
@@ -264,12 +262,10 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     private func onPull() {
         if isInternetAvailable {
             model.update(batch: newsBatchSize) { [unowned self] error in
-                if let e = error {
-                    self.showError(title: "Can't update news!", subtitle: e)
-                }
                 DispatchQueue.main.async { [unowned self] in
                     self.newsFeedTableView.stopPullRefreshing()
                 }
+                self.displayError(error)
             }
         } else {
             showError(title: "Can't update news!", subtitle: "No internet connection!")
@@ -277,20 +273,32 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     private func onLoadMore() {
-        model.loadMore(newsBatchSize) { error in
-
-            let ip = IndexPath(row: 20, section: 0)
-            let ip2 = IndexPath(row: 21, section: 0)
-            let ip3 = IndexPath(row: 19, section: 0)
-            self.newsFeedTableView.insertRows(at: [ip, ip2], with: .fade)
-            //self.newsFeedTableView.reloadRows(at: [ip3], with: .fade)
-
-            if let e = error {
-                self.showError(title: "Can't load more!", subtitle: e)
-            }
+        let beforeItemsCount = model.fetchedNewsCount
+        model.loadMore(newsBatchSize) { [unowned self] error, loadedCount in
             DispatchQueue.main.async { [unowned self] in
                 self.newsFeedTableView.stopPushRefreshing()
             }
+            if let e = error {
+                self.showError(title: "Can't load more!", subtitle: e)
+            } else {
+                if loadedCount > 0 {
+                    var ips = [IndexPath]()
+                    for i in beforeItemsCount..<beforeItemsCount + loadedCount {
+                        let ip = IndexPath(row: i, section: 0)
+                        ips.append(ip)
+                    }
+                    self.newsFeedTableView.insertRows(at: ips, with: .fade)
+                } else {
+                    let content: HUDContentType = .labeledSuccess(title: "You've viewed all the news!", subtitle: nil)
+                    HUD.flash(content, delay: self.hudFlashDelay)
+                }
+            }
+        }
+    }
+
+    private func displayError(_ error: String?) {
+        if let e = error {
+            showError(title: "Can't load more!", subtitle: e)
         }
     }
 

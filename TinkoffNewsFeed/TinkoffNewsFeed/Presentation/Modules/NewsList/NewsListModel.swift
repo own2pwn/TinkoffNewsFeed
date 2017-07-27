@@ -35,20 +35,28 @@ final class NewsListModel: INewsListModel {
         }
     }
 
-    func loadMore(_ count: Int, completion: ((String?) -> Void)?) {
+    func loadMore(_ count: Int, completion: ((String?, Int) -> Void)?) {
         // check cache
         // if none then use api
         // if from cache < 20 then load from api 20-x
-        
-        let offset = fetchedNewsCount
-        newsProvider.loadCached(offset: offset) { news in
-            
-            frc.fetchRequest.fetchLimit = 22
-            //try! frc.performFetch()
-            
-            let t = news
-            _ = ""
-            completion?(nil)
+
+        // TODO: frc.obj.count
+        // or my func?
+
+        let countBefore = fetchedNewsCount
+        frc.fetchRequest.fetchLimit += count
+        try? frc.performFetch()
+        let countAfter = fetchedNewsCount
+        let diff = countAfter - countBefore
+
+        if diff < 20 {
+            // ask api for `diff` news
+            log.debug("asking api for: \(diff) news")
+            let newDiff = fetchedNewsCount - countAfter + diff
+            // check newdiff == 0
+            // insert newDiff
+        } else {
+            completion?(nil, diff)
         }
     }
 

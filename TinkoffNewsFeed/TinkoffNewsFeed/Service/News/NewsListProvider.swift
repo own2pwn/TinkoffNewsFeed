@@ -35,8 +35,6 @@ final class NewsListProvider: INewsListProvider {
                     } else {
                         completion?(nil)
                     }
-                } else {
-                    completion?("no payload provided")
                 }
             }
         }
@@ -53,8 +51,6 @@ final class NewsListProvider: INewsListProvider {
                 if let payload = data.payload {
                     self.cacheManager.cache(payload)
                     completion?(nil)
-                } else {
-                    completion?("no payload provided")
                 }
             }
         }
