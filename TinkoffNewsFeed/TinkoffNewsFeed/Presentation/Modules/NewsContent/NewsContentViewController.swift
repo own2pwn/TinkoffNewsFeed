@@ -64,7 +64,6 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
         
         injectDependencies()
         setupView()
-        loadContent()
     }
     
     deinit {
@@ -147,7 +146,13 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
         displayNewsTitle()
         if newsContent == nil {
             log.debug("using api to load news content")
-            model.loadNewsContent(by: newsId)
+            model.loadNewsContent(by: newsId, completion: { [weak self] error in
+                if let e = error {
+                    self?.showError(title: "Can't update news content!", subtitle: e)
+                } else {
+                    self?.displayNewsTitle()
+                }
+            })
         } else {
             present(newsContent!)
         }
@@ -201,6 +206,7 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     
     private func onUpdate() {
         if isInternetAvailable {
+            log.debug("using api to load news content")
             model.loadNewsContent(by: newsId) { [weak self] error in
                 if let e = error {
                     self?.showError(title: "Can't update news content!", subtitle: e)
