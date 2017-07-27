@@ -27,10 +27,6 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
 
     @IBOutlet weak var newsFeedTableView: UITableView!
 
-    @IBAction func didTapLoadButton(_ sender: UIButton) {
-        model.loadNews()
-    }
-
     // MARK: - NewsListViewDelegate
 
     func startLoadingAnimation() {
