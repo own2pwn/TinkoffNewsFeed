@@ -20,8 +20,7 @@ final class CDStack: ICDStack {
 
     // MARK: - ICDContextManager
 
-    func performSave(context: NSManagedObjectContext,
-                     completion: ((Error?) -> Void)? = nil) {
+    func performSave(context: NSManagedObjectContext, completion: ((Error?) -> Void)? = nil) {
         guard context.hasChanges else {
             completion?(nil)
             return

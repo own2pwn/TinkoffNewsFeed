@@ -36,6 +36,7 @@ final class NewsListConfigBuilder: INewsListConfigBuilder {
     }
 
     private func normalizeFetchCount(_ offset: Int, _ count: Int) -> Int {
+
         // count must be greater than offset
         let count = offset < count ? count : count + offset
 

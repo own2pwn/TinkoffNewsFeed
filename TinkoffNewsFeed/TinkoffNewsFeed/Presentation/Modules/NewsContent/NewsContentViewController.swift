@@ -121,6 +121,7 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     
     private func setupView() {
         model.view = self
+        displayNewsTitle()
         contentTextView.addPullToRefresh(refreshCompletion: onUpdate)
     }
     

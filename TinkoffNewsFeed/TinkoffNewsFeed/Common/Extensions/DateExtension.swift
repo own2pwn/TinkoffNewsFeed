@@ -19,6 +19,13 @@ extension Date {
         return dateFormatter.string(from: self)
     }
 
+    var dayMonthYear: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMM YYYY"
+
+        return dateFormatter.string(from: self)
+    }
+
     var yesterdayFmt: String {
         let fmt = "Вчера в " + self.time
 
@@ -29,26 +36,5 @@ extension Date {
         let fmt = self.dayMonthYear + " в " + self.time
 
         return fmt
-    }
-
-    var day: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd"
-
-        return dateFormatter.string(from: self)
-    }
-
-    var dayMonth: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd MMM"
-
-        return dateFormatter.string(from: self)
-    }
-
-    var dayMonthYear: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd MMM YYYY"
-
-        return dateFormatter.string(from: self)
     }
 }

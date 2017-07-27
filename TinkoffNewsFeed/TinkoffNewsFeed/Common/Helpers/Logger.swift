@@ -13,7 +13,7 @@ open class Logger {
         let console = ConsoleDestination()
         log.addDestination(console)
         log.info("Starting new instance!")
-        
+
         return true
     }
 }

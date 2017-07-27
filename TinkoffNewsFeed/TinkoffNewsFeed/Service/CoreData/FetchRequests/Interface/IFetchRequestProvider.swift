@@ -6,12 +6,12 @@
 import Foundation
 import CoreData
 
-protocol IFetchRequestProvider: INewsFetchRequestProvider {
+protocol IFetchRequestProvider {
 
-    static func fetchRequest<Object:NSManagedObject>(object: Object.Type) -> NSFetchRequest<Object>
+    static func fetchRequest<Object: NSManagedObject>(object: Object.Type) -> NSFetchRequest<Object>
 
-    static func fetchRequest<Object:NSManagedObject>(object: Object.Type,
-                                                     sortDescriptors: [NSSortDescriptor]?,
-                                                     predicate: NSPredicate?,
-                                                     fetchLimit: Int?) -> NSFetchRequest<Object>
+    static func fetchRequest<Object: NSManagedObject>(object: Object.Type,
+                                                      sortDescriptors: [NSSortDescriptor]?,
+                                                      predicate: NSPredicate?,
+                                                      fetchLimit: Int?) -> NSFetchRequest<Object>
 }

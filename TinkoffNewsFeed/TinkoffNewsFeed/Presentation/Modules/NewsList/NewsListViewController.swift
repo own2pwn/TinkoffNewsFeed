@@ -27,10 +27,6 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
 
     @IBOutlet weak var newsFeedTableView: UITableView!
 
-    @IBAction func didTapLoadButton(_ sender: UIButton) {
-        model.loadNews()
-    }
-
     // MARK: - NewsListViewDelegate
 
     func startLoadingAnimation() {
@@ -152,7 +148,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
 
     private let footerHeight: CGFloat = 10.0
     private let hudFlashDelay = 1.0
-    private let newsBatchSize = 20
+    private let newsBatchSize: Int = .TNF_API_REQUEST_NEWS_BATCH_SIZE
 
     private let feedCellId = "idNewsFeedCell"
     private let showContentSegueId = "idShowNewsContentSegue"

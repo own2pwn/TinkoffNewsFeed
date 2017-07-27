@@ -106,7 +106,7 @@ final class NewsListModel: INewsListModel {
 
     // MARK: - Constants
 
-    private let newsBatchSize = 20
+    private let newsBatchSize: Int = .TNF_API_REQUEST_NEWS_BATCH_SIZE
     private let sortByKey = "pubDate"
 
     // MARK: - DI

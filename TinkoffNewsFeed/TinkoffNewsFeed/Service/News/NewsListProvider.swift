@@ -56,14 +56,16 @@ final class NewsListProvider: INewsListProvider {
         }
     }
     
-    func loadCached(offset: Int, completion: ([News]?) -> Void) {
-        let sortDescriptor = [NSSortDescriptor(key: "pubDate", ascending: false)]
-        let news = coreDataWorker.get(type: News.self,
-                                      predicate: nil,
-                                      sortDescriptors: sortDescriptor,
-                                      offset: offset,
-                                      fetchLimit: 20)
-        completion(news)
+    func loadCached(offset: Int, completion: @escaping ([News]?) -> Void) {
+        queue.sync { [unowned self] in
+            let sortDescriptor = [NSSortDescriptor(key: "pubDate", ascending: false)]
+            let news = self.coreDataWorker.get(type: News.self,
+                                               predicate: nil,
+                                               sortDescriptors: sortDescriptor,
+                                               offset: offset,
+                                               fetchLimit: self.newsBatchSize)
+            completion(news)
+        }
     }
     
     // MARK: - Private
@@ -81,4 +83,7 @@ final class NewsListProvider: INewsListProvider {
     private let cacheManager: INewsListCacheManager
     private let coreDataWorker: ICoreDataWorker
     private let configBuilder: INewsListConfigBuilder
+    
+    private let queue = DispatchQueue(label: "tnf.service")
+    private let newsBatchSize: Int = .TNF_API_REQUEST_NEWS_BATCH_SIZE
 }

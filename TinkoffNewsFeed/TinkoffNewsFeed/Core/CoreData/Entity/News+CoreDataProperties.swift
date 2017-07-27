@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension News {
     @nonobjc public class func fetchRequest() -> NSFetchRequest<News> {
         return NSFetchRequest<News>(entityName: "News")
