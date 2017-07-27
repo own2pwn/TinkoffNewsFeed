@@ -19,12 +19,11 @@ final class NewsListModel: INewsListModel {
 
     weak var view: (NewsListViewDelegate & NSFetchedResultsControllerDelegate)!
 
-    func loadNews() {
+    func loadNews(completion: ((String?) -> Void)?) {
         view.startLoadingAnimation()
-        newsProvider.load(count: newsBatchSize) { [unowned self] in
+        newsProvider.load(count: newsBatchSize) { [unowned self] (error) in
             self.view.stopLoadingAnimation()
-            // TODO: check if load was successfull
-            log.debug("News were loaded from API")
+            completion?(error)
         }
     }
 

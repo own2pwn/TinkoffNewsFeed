@@ -228,7 +228,11 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
 
     private func fillNewsIfEmpty() {
         if model.fetchedNewsCount == 0 {
-            model.loadNews()
+            model.loadNews(completion: { [unowned self] error in
+                if let e = error {
+                    self.showError(title: "Can't load news!", subtitle: e)
+                }
+            })
         }
     }
 
@@ -280,21 +284,10 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
         } else {
             showError(title: "Can't update news!", subtitle: "No internet connection!")
         }
-
-        // TODO: disable after treshold to not block ui
-        // and show warning that data hasn't been loaded
     }
 
     private func onLoadMore() {
-
-        // TODO: disable after treshold to not block ui
-        // and show warning that data hasn't been loaded
-
         DispatchQueue.main.async {
-            log.debug("pushed")
-            sleep(1)
-            log.debug("pushed [2]")
-
             self.newsFeedTableView.stopPushRefreshing()
         }
     }

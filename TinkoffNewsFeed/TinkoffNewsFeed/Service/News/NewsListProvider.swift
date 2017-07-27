@@ -57,15 +57,29 @@ final class NewsListProvider: INewsListProvider {
         completion(news)
     }
     
-    func load(offset: Int = 0, count: Int, completion: (() -> Void)? = nil) {
+    func load(offset: Int = 0, count: Int, completion: ((String?) -> Void)? = nil) {
         let config = configBuilder.build(offset: offset, count: count)
         
         requestSender.sendJSON(config: config) { [unowned self] result in
-            completion?()
-            self.verify(result)
-            // TODO: maybe compelte with error if gained no data from api
-            // TODO: check if it save here to use unowned
-            // or not to
+            
+            switch result {
+            case.error(let e):
+                completion?(e)
+            case .success(let data):
+                if let payload = data.payload {
+                    let newsCount = payload.count
+                    if newsCount > 0 {
+                        self.cacheManager.cache(payload)
+                        let newOffset = offset + count
+                        self.update(offset: newOffset, count: count, completion: completion)
+                    } else {
+                        completion?(nil)
+                    }
+                } else {
+                    log.warning("no payload provided")
+                    completion?("no payload provided")
+                }
+            }
         }
     }
     

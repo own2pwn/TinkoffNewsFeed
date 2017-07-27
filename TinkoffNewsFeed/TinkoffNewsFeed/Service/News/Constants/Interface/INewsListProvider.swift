@@ -7,20 +7,18 @@ import Foundation
 
 protocol INewsListProvider {
     func loadCached(completion: ([News]?) -> Void)
-    
+
     func update(offset: Int, count: Int, completion: ((String?) -> Void)?)
-    
-    func load(offset: Int, count: Int, completion: (() -> Void)?)
+    func load(offset: Int, count: Int, completion: ((String?) -> Void)?)
 }
 
 extension INewsListProvider {
-    
+
     func update(offset: Int = 0, count: Int, completion: ((String?) -> Void)? = nil) {
         update(offset: offset, count: count, completion: completion)
     }
-    
-    func load(offset: Int = 0, count: Int,
-              completion: (() -> Void)? = nil) {
+
+    func load(offset: Int = 0, count: Int, completion: ((String?) -> Void)? = nil) {
         load(offset: offset, count: count, completion: completion)
     }
 }

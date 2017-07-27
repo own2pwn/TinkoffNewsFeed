@@ -9,7 +9,7 @@ import CoreData
 protocol INewsListModel: class {
     weak var view: (NewsListViewDelegate & NSFetchedResultsControllerDelegate)! { get set }
 
-    func loadNews()
+    func loadNews(completion: ((String?) -> Void)?)
     func update(batch: Int, completion: @escaping (String?) -> Void)
     func loadMore(_ count: Int)
 
@@ -18,4 +18,10 @@ protocol INewsListModel: class {
     func displayModel(for indexPath: IndexPath) -> NewsListDisplayModel
 
     func presentNewsContent(for indexPath: IndexPath)
+}
+
+extension INewsListModel {
+    func loadNews(completion: ((String?) -> Void)? = nil) {
+        loadNews(completion: completion)
+    }
 }
