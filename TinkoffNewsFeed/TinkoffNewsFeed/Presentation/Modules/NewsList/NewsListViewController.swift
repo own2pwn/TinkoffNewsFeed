@@ -13,23 +13,11 @@ import PullToRefreshSwift
 import SwiftDate
 import PKHUD
 
-struct NewsListDisplayModel {
-    let date: Date
-    let viewsCount: Int
-    let title: String
-}
-
 protocol NewsListViewDelegate: class {
     func startLoadingAnimation()
     func stopLoadingAnimation()
 
-    func presentNewsDetails(_ model: NewsContentRoutingModel)
-}
-
-struct NewsContentRoutingModel {
-    let id: String
-    let title: String
-    let content: String?
+    func presentNewsDetails(_ object: News)
 }
 
 final class NewsListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,
@@ -53,8 +41,8 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
         setLoadingEnabled(false)
     }
 
-    func presentNewsDetails(_ model: NewsContentRoutingModel) {
-        performSegue(withIdentifier: showContentSegueId, sender: model)
+    func presentNewsDetails(_ object: News) {
+        performSegue(withIdentifier: showContentSegueId, sender: object)
     }
 
     // MARK: - Overrides
@@ -83,12 +71,12 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     // MARK: Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let info = sender as? NewsContentRoutingModel,
+        if let object = sender as? News,
             let dest = segue.destination as? NewsContentViewController {
             dest.assembler = assembler as! INewsContentDependencyManager
-            dest.newsId = info.id
-            dest.newsTitle = info.title
-            if let content = info.content {
+            dest.newsId = object.id!
+            dest.newsTitle = object.title!
+            if let content = object.content?.content {
                 dest.newsContent = content
             }
         }
@@ -219,9 +207,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     private func fillNewsIfEmpty() {
         if model.fetchedNewsCount == 0 {
             model.loadNews(completion: { [unowned self] error in
-                if let e = error {
-                    self.showError(title: "Can't load news!", subtitle: e)
-                }
+                self.displayError(error)
             })
         }
     }
@@ -264,12 +250,10 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     private func onPull() {
         if isInternetAvailable {
             model.update(batch: newsBatchSize) { [unowned self] error in
-                if let e = error {
-                    self.showError(title: "Can't update news!", subtitle: e)
-                }
                 DispatchQueue.main.async { [unowned self] in
                     self.newsFeedTableView.stopPullRefreshing()
                 }
+                self.displayError(error)
             }
         } else {
             showError(title: "Can't update news!", subtitle: "No internet connection!")
@@ -277,8 +261,34 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     private func onLoadMore() {
-        DispatchQueue.main.async {
-            self.newsFeedTableView.stopPushRefreshing()
+        let beforeItemsCount = model.fetchedNewsCount
+        model.loadMore(newsBatchSize) { [unowned self] error, loadedCount, usingAPI in
+            DispatchQueue.main.async { [unowned self] in
+                self.newsFeedTableView.stopPushRefreshing()
+            }
+            if let e = error {
+                self.showError(title: "Can't load more!", subtitle: e)
+            } else {
+                if usingAPI { return } // FRC will insert rows itself
+
+                if loadedCount > 0 {
+                    var ips = [IndexPath]()
+                    for i in beforeItemsCount..<beforeItemsCount + loadedCount {
+                        let ip = IndexPath(row: i, section: 0)
+                        ips.append(ip)
+                    }
+                    self.newsFeedTableView.insertRows(at: ips, with: .fade)
+                } else {
+                    let content: HUDContentType = .labeledSuccess(title: "You've viewed all the news!", subtitle: nil)
+                    HUD.flash(content, delay: self.hudFlashDelay)
+                }
+            }
+        }
+    }
+
+    private func displayError(_ error: String?) {
+        if let e = error {
+            showError(title: "Can't load more!", subtitle: e)
         }
     }
 

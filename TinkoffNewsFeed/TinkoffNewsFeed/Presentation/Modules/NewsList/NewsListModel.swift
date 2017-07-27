@@ -21,7 +21,7 @@ final class NewsListModel: INewsListModel {
 
     func loadNews(completion: ((String?) -> Void)?) {
         view.startLoadingAnimation()
-        newsProvider.load(count: newsBatchSize) { [unowned self] (error) in
+        newsProvider.load(count: newsBatchSize) { [unowned self] error in
             self.view.stopLoadingAnimation()
             completion?(error)
         }
@@ -29,30 +29,40 @@ final class NewsListModel: INewsListModel {
 
     func update(batch: Int, completion: @escaping (String?) -> Void) {
         view.startLoadingAnimation()
-        newsProvider.update(count: batch) { [unowned self] (error) in
+        newsProvider.update(count: batch) { [unowned self] error in
             self.view.stopLoadingAnimation()
             completion(error)
         }
     }
 
-    func loadMore(_ count: Int) {
+    func loadMore(_ count: Int, completion: ((String?, Int, Bool) -> Void)?) {
+        // TODO: frc.obj.count
+        // or my func?
 
+        let countBefore = fetchedNewsCount
+        frc.fetchRequest.fetchLimit += count
+        try? frc.performFetch()
+        let countAfter = fetchedNewsCount
+        let diff = countAfter - countBefore
+
+        if diff < newsBatchSize {
+            let missingNews = count - diff
+            log.debug("asking api for: \(missingNews) news")
+
+            newsProvider.load(offset: countAfter, count: missingNews, completion: { [unowned self] error in
+                let newCount = self.fetchedNewsCount
+                let newDiff = newCount - countAfter + missingNews
+                completion?(error, newDiff, true)
+            })
+        } else {
+            completion?(nil, diff, false)
+        }
     }
 
     func presentNewsContent(for indexPath: IndexPath) {
         let object = frc.object(at: indexPath)
-        let id = object.id!
-        let title = object.title!
-        let content = object.content?.content
-        object.viewsCount += 1
-        syncer.sync(object) { error in
-            if let e = error {
-                log.debug("Error while syncing: \(e)!")
-            }
-        }
-
-        let model = NewsContentRoutingModel(id: id, title: title, content: content)
-        view.presentNewsDetails(model)
+        updateViewsCount(for: object)
+        view.presentNewsDetails(object)
     }
 
     var fetchedNewsCount: Int {
@@ -60,15 +70,12 @@ final class NewsListModel: INewsListModel {
     }
 
     func rowsCount(for section: Int) -> Int {
-        let sections = frc.sections!
-        let sectionInfo = sections[section]
-
-        return sectionInfo.numberOfObjects
+        return frc.fetchedObjects!.count
     }
 
     func object(for indexPath: IndexPath) -> News {
         let object = frc.object(at: indexPath)
-        
+
         return object
     }
 
@@ -81,11 +88,20 @@ final class NewsListModel: INewsListModel {
     private func initFRC() {
         let dateSorter = NSSortDescriptor(key: sortByKey, ascending: false)
         let sortDescriptors = [dateSorter]
-        let fr = fetchRequestProvider.fetchRequest(object: News.self, sortDescriptors: sortDescriptors, predicate: nil, fetchLimit: nil)
-        fr.fetchBatchSize = newsBatchSize
+        let fr = fetchRequestProvider.fetchRequest(object: News.self, sortDescriptors: sortDescriptors, predicate: nil, fetchLimit: newsBatchSize)
+        fr.fetchBatchSize = 2 * newsBatchSize
 
         frc = frcManager.initialize(delegate: view, fetchRequest: fr)
         try? frc.performFetch()
+    }
+
+    private func updateViewsCount(for object: News) {
+        object.viewsCount += 1
+        syncer.sync(object) { error in
+            if let e = error {
+                log.debug("Error incrementing views count: \(e)!")
+            }
+        }
     }
 
     // MARK: - Constants

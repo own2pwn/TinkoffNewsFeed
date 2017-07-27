@@ -11,7 +11,7 @@ protocol INewsListModel: class {
 
     func loadNews(completion: ((String?) -> Void)?)
     func update(batch: Int, completion: @escaping (String?) -> Void)
-    func loadMore(_ count: Int)
+    func loadMore(_ count: Int, completion: ((String?, Int, Bool) -> Void)?)
 
     var fetchedNewsCount: Int { get }
     func rowsCount(for section: Int) -> Int
@@ -23,5 +23,9 @@ protocol INewsListModel: class {
 extension INewsListModel {
     func loadNews(completion: ((String?) -> Void)? = nil) {
         loadNews(completion: completion)
+    }
+
+    func loadMore(_ count: Int, completion: ((String?) -> Void)? = nil) {
+        loadMore(count, completion: completion)
     }
 }
