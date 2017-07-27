@@ -29,11 +29,11 @@ final class NewsContentModel: INewsContentModel {
 
         contentProvider.load(by: id) { [weak self] displayModel in
             let error = displayModel.error
+            self?.view.stopLoadingAnimation()
             if error {
                 completion?(displayModel.content)
             } else {
                 completion?(nil)
-                self?.view.stopLoadingAnimation()
                 self?.view.present(displayModel)
             }
         }

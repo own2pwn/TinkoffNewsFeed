@@ -210,6 +210,7 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
             log.debug("using api to load news content")
             model.loadNewsContent(by: newsId) { [weak self] error in
                 if let e = error {
+                    self?.stopLoadingAnimation()
                     self?.showError(title: "Can't update news content!", subtitle: e)
                 } else {
                     self?.displayNewsTitle()
