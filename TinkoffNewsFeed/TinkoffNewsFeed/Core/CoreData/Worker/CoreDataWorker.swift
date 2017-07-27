@@ -27,7 +27,27 @@ final class CoreDataWorker: ICoreDataWorker {
         return result?.first
     }
 
-    // TODO: use threads
+    func getDict<T: NSManagedObject>(type: T.Type,
+                                     predicate: NSPredicate? = nil,
+                                     propertiesToFetch: [String]? = nil,
+                                     sortDescriptors: [NSSortDescriptor]? = nil,
+                                     fetchLimit: Int? = nil) -> [Any]? {
+        let name = T.entityName
+        let fr = NSFetchRequest<NSFetchRequestResult>(entityName: name)
+        fr.predicate = predicate
+        fr.sortDescriptors = sortDescriptors
+        fr.propertiesToFetch = propertiesToFetch
+        fr.resultType = .dictionaryResultType
+        fr.returnsDistinctResults = true
+
+        if let limit = fetchLimit {
+            fr.fetchLimit = limit
+        }
+
+        let result = try? context.fetch(fr)
+
+        return result
+    }
 
     func get<T: NSManagedObject>(type: T.Type,
                                  predicate: NSPredicate? = nil,
@@ -37,9 +57,11 @@ final class CoreDataWorker: ICoreDataWorker {
         let fr = NSFetchRequest<T>(entityName: name)
         fr.predicate = predicate
         fr.sortDescriptors = sortDescriptors
+
         if let limit = fetchLimit {
             fr.fetchLimit = limit
         }
+
         let result = try? context.fetch(fr)
 
         return result
@@ -49,6 +71,7 @@ final class CoreDataWorker: ICoreDataWorker {
                                       predicate: NSPredicate? = nil,
                                       sortDescriptors: [NSSortDescriptor]? = nil,
                                       fetchLimit: Int? = nil) -> T? {
+
         return get(type: type, predicate: predicate, sortDescriptors: sortDescriptors, fetchLimit: fetchLimit)?.first
     }
 
