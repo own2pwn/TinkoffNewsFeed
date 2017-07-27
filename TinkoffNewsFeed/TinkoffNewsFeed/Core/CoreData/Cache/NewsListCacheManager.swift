@@ -35,10 +35,10 @@ final class NewsListCacheManager: INewsListCacheManager {
 //            }
 //        }
 //    }
-    
+
     func cache(_ data: NewsListAPIModel) {
         let news = data.payload!
-        
+
         for single in news {
             var mObject = News(context: saveContext)
             objectMapper.map(single, &mObject)
@@ -51,17 +51,18 @@ final class NewsListCacheManager: INewsListCacheManager {
             }
         }
     }
-    
+
     // MARK: - DI
-    
-    init(contextManager: ICDContextManager, objectMapper: IStructToEntityMapper.Type, coreDataWorker: ICoreDataWorker) {
+
+    init(contextManager: ICDContextManager, saveContext: NSManagedObjectContext,
+         objectMapper: IStructToEntityMapper.Type, coreDataWorker: ICoreDataWorker) {
         self.contextManager = contextManager
-        saveContext = contextManager.saveContext
-        
+        self.saveContext = saveContext
+
         self.objectMapper = objectMapper
         self.coreDataWorker = coreDataWorker
     }
-    
+
     private let contextManager: ICDContextManager
     private let saveContext: NSManagedObjectContext
     private let objectMapper: IStructToEntityMapper.Type

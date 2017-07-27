@@ -41,17 +41,16 @@ final class NewsContentCacheManager: INewsContentCacheManager {
 
     // MARK: - DI
 
-    init(contextManager: ICDContextManager, coreDataWorker: ICoreDataWorker,
+    init(contextManager: ICDContextManager, saveContext: NSManagedObjectContext,
+         coreDataWorker: ICoreDataWorker,
          objectMapper: IStructToEntityMapper.Type) {
         self.contextManager = contextManager
-        saveContext = contextManager.saveContext
-
+        self.saveContext = saveContext
         self.coreDataWorker = coreDataWorker
         self.objectMapper = objectMapper
     }
 
     private let contextManager: ICDContextManager
-    //TODO: pass context in constructor, rename member to context
     private let saveContext: NSManagedObjectContext
     private let coreDataWorker: ICoreDataWorker
     private let objectMapper: IStructToEntityMapper.Type
