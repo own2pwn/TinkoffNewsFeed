@@ -13,23 +13,11 @@ import PullToRefreshSwift
 import SwiftDate
 import PKHUD
 
-struct NewsListDisplayModel {
-    let date: Date
-    let viewsCount: Int
-    let title: String
-}
-
 protocol NewsListViewDelegate: class {
     func startLoadingAnimation()
     func stopLoadingAnimation()
 
-    func presentNewsDetails(_ model: NewsContentRoutingModel)
-}
-
-struct NewsContentRoutingModel {
-    let id: String
-    let title: String
-    let content: String?
+    func presentNewsDetails(_ object: News)
 }
 
 final class NewsListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,
@@ -53,8 +41,8 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
         setLoadingEnabled(false)
     }
 
-    func presentNewsDetails(_ model: NewsContentRoutingModel) {
-        performSegue(withIdentifier: showContentSegueId, sender: model)
+    func presentNewsDetails(_ object: News) {
+        performSegue(withIdentifier: showContentSegueId, sender: object)
     }
 
     // MARK: - Overrides
@@ -83,12 +71,12 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     // MARK: Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let info = sender as? NewsContentRoutingModel,
+        if let object = sender as? News,
             let dest = segue.destination as? NewsContentViewController {
             dest.assembler = assembler as! INewsContentDependencyManager
-            dest.newsId = info.id
-            dest.newsTitle = info.title
-            if let content = info.content {
+            dest.newsId = object.id!
+            dest.newsTitle = object.title!
+            if let content = object.content?.content {
                 dest.newsContent = content
             }
         }
@@ -282,7 +270,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
                 self.showError(title: "Can't load more!", subtitle: e)
             } else {
                 if usingAPI { return } // FRC will insert rows itself
-                
+
                 if loadedCount > 0 {
                     var ips = [IndexPath]()
                     for i in beforeItemsCount..<beforeItemsCount + loadedCount {

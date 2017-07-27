@@ -61,18 +61,8 @@ final class NewsListModel: INewsListModel {
 
     func presentNewsContent(for indexPath: IndexPath) {
         let object = frc.object(at: indexPath)
-        let id = object.id!
-        let title = object.title!
-        let content = object.content?.content
-        object.viewsCount += 1
-        syncer.sync(object) { error in
-            if let e = error {
-                log.debug("Error while syncing: \(e)!")
-            }
-        }
-
-        let model = NewsContentRoutingModel(id: id, title: title, content: content)
-        view.presentNewsDetails(model)
+        updateViewsCount(for: object)
+        view.presentNewsDetails(object)
     }
 
     var fetchedNewsCount: Int {
@@ -103,6 +93,15 @@ final class NewsListModel: INewsListModel {
 
         frc = frcManager.initialize(delegate: view, fetchRequest: fr)
         try? frc.performFetch()
+    }
+
+    private func updateViewsCount(for object: News) {
+        object.viewsCount += 1
+        syncer.sync(object) { error in
+            if let e = error {
+                log.debug("Error incrementing views count: \(e)!")
+            }
+        }
     }
 
     // MARK: - Constants
