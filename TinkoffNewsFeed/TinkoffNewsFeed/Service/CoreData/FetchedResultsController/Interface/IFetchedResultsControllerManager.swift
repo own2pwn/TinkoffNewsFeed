@@ -8,11 +8,11 @@ import CoreData
 
 protocol IFetchedResultsControllerManager {
 
-    func initialize<Entity:NSManagedObject>(delegate: NSFetchedResultsControllerDelegate,
-                                            fetchRequest: NSFetchRequest<Entity>) -> NSFetchedResultsController<Entity>
+    func initialize<Entity: NSManagedObject>(delegate: NSFetchedResultsControllerDelegate,
+                                             fetchRequest: NSFetchRequest<Entity>) -> NSFetchedResultsController<Entity>
 
-    func initialize<Entity:NSManagedObject>(delegate: NSFetchedResultsControllerDelegate,
-                                            fetchRequest: NSFetchRequest<Entity>,
-                                            sectionNameKeyPath keyPath: String?,
-                                            cacheName: String?) -> NSFetchedResultsController<Entity>
+    func initialize<Entity: NSManagedObject>(delegate: NSFetchedResultsControllerDelegate,
+                                             fetchRequest: NSFetchRequest<Entity>,
+                                             sectionNameKeyPath keyPath: String?,
+                                             cacheName: String?) -> NSFetchedResultsController<Entity>
 }

@@ -5,8 +5,11 @@
 
 import Foundation
 import CoreData
+import CryptoSwift
 
 final class NewsListCacheManager: INewsListCacheManager {
+    
+    // MARK: - INewsListCacheManager
     
     func cache(_ payload: [NewsListPayload]) {
         queue.sync { [weak self] in
@@ -47,6 +50,7 @@ final class NewsListCacheManager: INewsListCacheManager {
             newsHashes.insert(hash)
         }
         
+        // if title hash has been changed we have to update title itself
         let fmt = "id IN %@ AND (NOT (titleHash in %@))"
         let predicate = NSPredicate(format: fmt, newsIds, newsHashes)
         
@@ -99,5 +103,6 @@ final class NewsListCacheManager: INewsListCacheManager {
     private let saveContext: NSManagedObjectContext
     private let objectMapper: IStructToEntityMapper.Type
     private let coreDataWorker: ICoreDataWorker
+    
     private let queue: DispatchQueue = DispatchQueue(label: "tnf.newscache")
 }

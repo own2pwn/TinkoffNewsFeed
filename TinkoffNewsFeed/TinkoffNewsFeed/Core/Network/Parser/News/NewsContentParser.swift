@@ -43,8 +43,8 @@ final class NewsContentPayload: EVObject, IEntityMappable {
 
     // MARK: - Constants
 
-    private let contentCreatedAtKey = "creationDate"
-    private let contentModifiedAtKey = "lastModificationDate"
+    private let contentCreatedAtKey: String = .TNF_API_NEWS_CONTENT_RESPONSE_CREATION_DATE_KEY
+    private let contentModifiedAtKey: String = .TNF_API_NEWS_CONTENT_RESPONSE_MODIFICATION_DATE_KEY
     private let msKey: String = .TNF_API_NEWS_RESPONSE_MS_KEY
     private let timeFormat = TNFAPINewsTimeFormat.milliseconds.rawValue
 }
@@ -60,7 +60,7 @@ final class NewsContentParser: IParser<NewsContentAPIModel, JSON> {
         return apiModel
     }
 
-    // MARK: - Private 
+    // MARK: - Private
 
     private func verifyResponseCode(_ code: String) {
         if code != expectedCode {

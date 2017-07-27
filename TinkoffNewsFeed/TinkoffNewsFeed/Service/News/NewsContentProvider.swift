@@ -8,9 +8,6 @@ import Alamofire
 import SwiftyJSON
 
 struct NewsContentProviderDependencies {
-    let contextManager: ICDContextManager
-    let coreDataWorker: ICoreDataWorker
-    let objectMapper: IStructToEntityMapper.Type
     let cacheManager: INewsContentCacheManager
     let requstSender: IRequestSender
     let configBuilder: INewsContentConfigBuilder
@@ -26,9 +23,6 @@ final class NewsContentProvider: INewsContentProvider {
     }
 
     // MARK: - Private
-
-    // TODO: user protocol based generic
-    // buildConfig<T> -> T ...
 
     private func cache(_ id: String, _ response: IResult<NewsContentAPIModel>,
                        completion: (NewsContentDisplayModel) -> Void) {
@@ -48,17 +42,11 @@ final class NewsContentProvider: INewsContentProvider {
     // MARK: - DI
 
     init(dependencies: NewsContentProviderDependencies) {
-        contextManager = dependencies.contextManager
-        coreDataWorker = dependencies.coreDataWorker
-        objectMapper = dependencies.objectMapper
         cacheManager = dependencies.cacheManager
         requstSender = dependencies.requstSender
         configBuilder = dependencies.configBuilder
     }
 
-    private let contextManager: ICDContextManager
-    private let coreDataWorker: ICoreDataWorker
-    private let objectMapper: IStructToEntityMapper.Type
     private let cacheManager: INewsContentCacheManager
     private let requstSender: IRequestSender
     private let configBuilder: INewsContentConfigBuilder

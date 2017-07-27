@@ -21,8 +21,6 @@ protocol INewsContentDependencyManager {
     func newsContentModel() -> INewsContentModel
 }
 
-// TODO: maybe make only CD stack static lazy
-
 final class DependencyManager: IDependencyManager {
 
     // MARK: - INewsListDependencyManager
@@ -77,10 +75,7 @@ final class DependencyManager: IDependencyManager {
     }()
 
     private lazy var newsContentProviderDependencies: NewsContentProviderDependencies = {
-        let d = NewsContentProviderDependencies(contextManager: self.contextManager,
-                                                coreDataWorker: self.coreDataWorker,
-                                                objectMapper: self.objectMapper,
-                                                cacheManager: self.newsContentCacheManager,
+        let d = NewsContentProviderDependencies(cacheManager: self.newsContentCacheManager,
                                                 requstSender: self.requestSender,
                                                 configBuilder: self.newsContentConfigBuilder)
 

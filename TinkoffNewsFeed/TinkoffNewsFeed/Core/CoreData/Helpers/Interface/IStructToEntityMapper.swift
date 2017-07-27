@@ -6,7 +6,7 @@
 import Foundation
 
 protocol IStructToEntityMapper {
-
+    
     /**
      
      Maps KVC-compliant object values to `object` ones.
@@ -21,6 +21,6 @@ protocol IStructToEntityMapper {
      
      - Parameter object: Generic `NSManagedObject`
      
-    */
+     */
     static func map<T>(_ model: IEntityMappable, _ object: inout T)
 }

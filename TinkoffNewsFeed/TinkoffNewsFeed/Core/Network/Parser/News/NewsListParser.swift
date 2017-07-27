@@ -5,9 +5,7 @@
 
 import Foundation
 import SwiftyJSON
-import CryptoSwift
 import EVReflection
-import ObjectMapper
 
 final class NewsListAPIModel: EVObject {
     var resultCode = ""
@@ -42,8 +40,8 @@ final class NewsListPayload: EVObject, IEntityMappable {
     
     // MARK: - Constants
     
-    private let newsPubDateKey = "publicationDate"
-    private let newsTitleKey = "text"
+    private let newsPubDateKey: String = .TNF_API_NEWS_LIST_RESPONSE_PUB_DATE_KEY
+    private let newsTitleKey: String = .TNF_API_NEWS_LIST_RESPONSE_TITLE_KEY
     private let msKey: String = .TNF_API_NEWS_RESPONSE_MS_KEY
     private let timeFormat = TNFAPINewsTimeFormat.milliseconds.rawValue
 }

@@ -11,7 +11,7 @@ import CoreData
 final class StructToEntityMapper: IStructToEntityMapper {
 
     // MARK: - IStructToEntityMapper
-    
+
     class func map<T>(_ model: IEntityMappable, _ object: inout T) {
         let object = object as! NSManagedObject
         let entity = object.entity
