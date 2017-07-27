@@ -60,13 +60,13 @@ final class NewsListProvider: INewsListProvider {
         }
     }
     
-    func loadCached(completion: ([News]?) -> Void) {
+    func loadCached(offset: Int, completion: ([News]?) -> Void) {
         let sortDescriptor = [NSSortDescriptor(key: "pubDate", ascending: false)]
         let news = coreDataWorker.get(type: News.self,
                                       predicate: nil,
                                       sortDescriptors: sortDescriptor,
-                                      fetchLimit: nil)
-        log.debug("Retrieved news count: \(news!.count)")
+                                      offset: offset,
+                                      fetchLimit: 20)
         completion(news)
     }
     

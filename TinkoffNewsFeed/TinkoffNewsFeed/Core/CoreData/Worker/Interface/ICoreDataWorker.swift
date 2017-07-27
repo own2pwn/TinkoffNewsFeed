@@ -20,6 +20,7 @@ protocol ICoreDataWorker {
     func get<T: NSManagedObject>(type: T.Type,
                                  predicate: NSPredicate?,
                                  sortDescriptors: [NSSortDescriptor]?,
+                                 offset: Int?,
                                  fetchLimit: Int?) -> [T]?
 
     func getFirst<T: NSManagedObject>(type: T.Type,
@@ -45,10 +46,12 @@ extension ICoreDataWorker {
     func get<T: NSManagedObject>(type: T.Type,
                                  predicate: NSPredicate? = nil,
                                  sortDescriptors: [NSSortDescriptor]? = nil,
+                                 offset: Int? = nil,
                                  fetchLimit: Int? = nil) -> [T]? {
         return get(type: type,
                    predicate: predicate,
                    sortDescriptors: sortDescriptors,
+                   offset: offset,
                    fetchLimit: fetchLimit)
     }
 

@@ -8,7 +8,7 @@ import Foundation
 protocol INewsListProvider {
     func update(offset: Int, count: Int, completion: ((String?) -> Void)?)
     func load(offset: Int, count: Int, completion: ((String?) -> Void)?)
-    func loadCached(completion: ([News]?) -> Void)
+    func loadCached(offset: Int, completion: ([News]?) -> Void)
 }
 
 extension INewsListProvider {

@@ -52,6 +52,7 @@ final class CoreDataWorker: ICoreDataWorker {
     func get<T: NSManagedObject>(type: T.Type,
                                  predicate: NSPredicate? = nil,
                                  sortDescriptors: [NSSortDescriptor]? = nil,
+                                 offset: Int? = nil,
                                  fetchLimit: Int? = nil) -> [T]? {
         let name = T.entityName
         let fr = NSFetchRequest<T>(entityName: name)
@@ -60,6 +61,9 @@ final class CoreDataWorker: ICoreDataWorker {
 
         if let limit = fetchLimit {
             fr.fetchLimit = limit
+        }
+        if let offset = offset {
+            fr.fetchOffset = offset
         }
 
         let result = try? context.fetch(fr)

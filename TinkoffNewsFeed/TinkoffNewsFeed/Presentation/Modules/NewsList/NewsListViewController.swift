@@ -277,8 +277,20 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     private func onLoadMore() {
-        DispatchQueue.main.async {
-            self.newsFeedTableView.stopPushRefreshing()
+        model.loadMore(newsBatchSize) { error in
+
+            let ip = IndexPath(row: 20, section: 0)
+            let ip2 = IndexPath(row: 21, section: 0)
+            let ip3 = IndexPath(row: 19, section: 0)
+            self.newsFeedTableView.insertRows(at: [ip, ip2], with: .fade)
+            //self.newsFeedTableView.reloadRows(at: [ip3], with: .fade)
+
+            if let e = error {
+                self.showError(title: "Can't load more!", subtitle: e)
+            }
+            DispatchQueue.main.async { [unowned self] in
+                self.newsFeedTableView.stopPushRefreshing()
+            }
         }
     }
 

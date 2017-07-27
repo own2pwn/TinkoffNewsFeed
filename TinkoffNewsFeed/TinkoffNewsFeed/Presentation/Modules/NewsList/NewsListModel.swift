@@ -21,7 +21,7 @@ final class NewsListModel: INewsListModel {
 
     func loadNews(completion: ((String?) -> Void)?) {
         view.startLoadingAnimation()
-        newsProvider.load(count: newsBatchSize) { [unowned self] (error) in
+        newsProvider.load(count: newsBatchSize) { [unowned self] error in
             self.view.stopLoadingAnimation()
             completion?(error)
         }
@@ -29,14 +29,27 @@ final class NewsListModel: INewsListModel {
 
     func update(batch: Int, completion: @escaping (String?) -> Void) {
         view.startLoadingAnimation()
-        newsProvider.update(count: batch) { [unowned self] (error) in
+        newsProvider.update(count: batch) { [unowned self] error in
             self.view.stopLoadingAnimation()
             completion(error)
         }
     }
 
-    func loadMore(_ count: Int) {
-
+    func loadMore(_ count: Int, completion: ((String?) -> Void)?) {
+        // check cache
+        // if none then use api
+        // if from cache < 20 then load from api 20-x
+        
+        let offset = fetchedNewsCount
+        newsProvider.loadCached(offset: offset) { news in
+            
+            frc.fetchRequest.fetchLimit = 22
+            //try! frc.performFetch()
+            
+            let t = news
+            _ = ""
+            completion?(nil)
+        }
     }
 
     func presentNewsContent(for indexPath: IndexPath) {
@@ -68,7 +81,7 @@ final class NewsListModel: INewsListModel {
 
     func object(for indexPath: IndexPath) -> News {
         let object = frc.object(at: indexPath)
-        
+
         return object
     }
 
@@ -81,8 +94,8 @@ final class NewsListModel: INewsListModel {
     private func initFRC() {
         let dateSorter = NSSortDescriptor(key: sortByKey, ascending: false)
         let sortDescriptors = [dateSorter]
-        let fr = fetchRequestProvider.fetchRequest(object: News.self, sortDescriptors: sortDescriptors, predicate: nil, fetchLimit: nil)
-        fr.fetchBatchSize = newsBatchSize
+        let fr = fetchRequestProvider.fetchRequest(object: News.self, sortDescriptors: sortDescriptors, predicate: nil, fetchLimit: newsBatchSize)
+        fr.fetchBatchSize = 2 * newsBatchSize
 
         frc = frcManager.initialize(delegate: view, fetchRequest: fr)
         try? frc.performFetch()
