@@ -185,8 +185,7 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
         
         let attr = buildFontAttributes(font, style)
         
-        let decoded = string.decodeHTML()!
-        let newsContent = decoded + "\n\n"
+        let newsContent = string + "\n\n"
         let heading = NSAttributedString(string: newsContent, attributes: attr)
         
         return heading
