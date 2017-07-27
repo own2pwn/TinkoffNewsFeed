@@ -37,7 +37,7 @@ final class NewsListCacheManager: INewsListCacheManager {
     //    }
 
     func cache(_ payload: [NewsListPayload]) {
-        queue.async { [weak self] in
+        queue.sync { [weak self] in
             for news in payload {
                 if let strongSelf = self {
                     var mObject = News(context: strongSelf.saveContext)
@@ -57,7 +57,7 @@ final class NewsListCacheManager: INewsListCacheManager {
     }
 
     func cache(_ data: NewsListAPIModel) {
-        queue.async { [weak self] in
+        queue.sync { [weak self] in
             let news = data.payload!
             for single in news {
                 if let strongSelf = self {
