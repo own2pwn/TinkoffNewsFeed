@@ -218,12 +218,6 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     private func setupView() {
         newsFeedTableView.estimatedRowHeight = 75
         newsFeedTableView.rowHeight = UITableViewAutomaticDimension
-
-        if connectionChecker!.isReachable {
-            fillNewsIfEmpty()
-        } else {
-            showError(title: noConnectionTitle, subtitle: noConnectionSubtitle)
-        }
     }
 
     private func fillNewsIfEmpty() {

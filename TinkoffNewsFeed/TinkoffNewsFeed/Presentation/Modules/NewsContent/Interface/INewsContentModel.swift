@@ -7,11 +7,11 @@ import Foundation
 
 protocol INewsContentModel: class {
     weak var view: NewsContentViewDelegate! { get set }
-    func loadNewsContent(by id: String, completion: (() -> Void)?)
+    func loadNewsContent(by id: String, completion: ((String?) -> Void)?)
 }
 
 extension INewsContentModel {
-    func loadNewsContent(by id: String, completion: (() -> Void)? = nil) {
+    func loadNewsContent(by id: String, completion: ((String?) -> Void)? = nil) {
         loadNewsContent(by: id, completion: completion)
     }
 }

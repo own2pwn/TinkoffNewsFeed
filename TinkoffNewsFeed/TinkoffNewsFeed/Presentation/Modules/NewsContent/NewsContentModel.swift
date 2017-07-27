@@ -10,7 +10,7 @@ import Foundation
  If `error` is `true` then `content` is error message to be shown to user
 
  Else news content stored in `content`
-*/
+ */
 struct NewsContentDisplayModel {
     let error: Bool
     let content: String
@@ -24,12 +24,18 @@ final class NewsContentModel: INewsContentModel {
 
     // MARK: - INewsContentModel
 
-    func loadNewsContent(by id: String, completion: (() -> Void)? = nil) {
+    func loadNewsContent(by id: String, completion: ((String?) -> Void)? = nil) {
         view.startLoadingAnimation()
-        contentProvider.load(by: id) { [weak self] (displayModel) in
-            completion?()
-            self?.view.stopLoadingAnimation()
-            self?.view.present(displayModel)
+
+        contentProvider.load(by: id) { [weak self] displayModel in
+            let error = displayModel.error
+            if error {
+                completion?(displayModel.content)
+            } else {
+                completion?(nil)
+                self?.view.stopLoadingAnimation()
+                self?.view.present(displayModel)
+            }
         }
     }
 

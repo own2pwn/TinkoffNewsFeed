@@ -30,26 +30,6 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     
     @IBOutlet weak var contentTextView: UITextView!
     
-    // MARK: - Overrides
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        
-        observeReachability()
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        injectDependencies()
-        setupView()
-        loadContent()
-    }
-    
-    deinit {
-        reachability.stopNotifier()
-    }
-    
     // MARK: - NewsContentViewDelegate
     
     func startLoadingAnimation() {
@@ -71,31 +51,52 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
         }
     }
     
-    // MARK: - DI
+    // MARK: - Overrides
     
-    var model: INewsContentModel!
-    
-    var assembler: INewsContentDependencyManager!
-    
-    private func injectDependencies() {
-        model = assembler.newsContentModel()
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        observeReachability()
     }
     
-    // MARK: - Members
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        injectDependencies()
+        setupView()
+        loadContent()
+    }
+    
+    deinit {
+        reachability.stopNotifier()
+    }
+    
+    // MARK: - Private
+    
+    // MARK: Constants
+    
+    private let hudFlashDelay = 1.0
+    
+    private let noConnectionTitle = "Error while loading news"
+    private let noConnectionSubtitle = "Check your internet connection?"
+    
+    // MARK: - Instance Members
+    
+    let reachability = Reachability(hostname: "api.tinkoff.ru")!
     
     var newsId: String!
     var newsTitle: String!
     var newsContent: String?
     
-    let reachability = Reachability(hostname: "api.tinkoff.ru")!
+    private var currentContent: NSAttributedString! {
+        didSet {
+            contentTextView.attributedText = currentContent
+        }
+    }
     
-    // MARK: - Constants
+    private var isInternetAvailable = false
     
-    private let noConnectionTitle = "Error while loading news"
-    private let noConnectionSubtitle = "Check your internet connection?"
-    private let hudFlashDelay = 1.0
-    
-    // MARK: - Methods
+    // MARK: - Controller
     
     private func observeReachability() {
         try? reachability.startNotifier()
@@ -103,40 +104,40 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
         reachability.whenUnreachable = onLostConnection
     }
     
-    private func showError(title: String? = nil, subtitle: String? = nil) {
-        let hudContent: HUDContentType = .labeledError(title: title, subtitle: subtitle)
-        HUD.flash(hudContent, delay: hudFlashDelay)
-    }
-    
     private func onActiveConnection(_ info: Reachability) {
+        isInternetAvailable = true
         DispatchQueue.main.async { [weak self] in
-            if self?.newsContent == nil {
-                if let newsId = self?.newsId {
-                    self?.model.loadNewsContent(by: newsId)
-                }
-            }
+            self?.loadContent()
         }
     }
     
     private func onLostConnection(_ info: Reachability) {
+        isInternetAvailable = false
         DispatchQueue.main.async { [weak self] in
             self?.showError(title: "No internet connection")
         }
     }
+    
+    // MARK: - View
     
     private func setupView() {
         model.view = self
         contentTextView.addPullToRefresh(refreshCompletion: onUpdate)
     }
     
-    private func onUpdate() {
-        // TODO: upd content
-        contentTextView.stopPullRefreshing()
+    private func showError(title: String? = nil, subtitle: String? = nil) {
+        let hudContent: HUDContentType = .labeledError(title: title, subtitle: subtitle)
+        HUD.flash(hudContent, delay: hudFlashDelay)
     }
     
-    private var currentContent: NSAttributedString! {
-        didSet {
-            contentTextView.attributedText = currentContent
+    private func setLoadingEnabled(_ state: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            UIApplication.shared.isNetworkActivityIndicatorVisible = state
+            if state {
+                self?.loadingIndicator.startAnimating()
+            } else {
+                self?.loadingIndicator.stopAnimating()
+            }
         }
     }
     
@@ -161,6 +162,7 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
         newContent.append(mainContent)
         
         currentContent = newContent
+        newsContent = content
     }
     
     private func displayNewsTitle() {
@@ -195,25 +197,38 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
         return content
     }
     
-    // MARK: - View
+    // MARK: - Utilities
     
-    private func setLoadingEnabled(_ state: Bool) {
-        DispatchQueue.main.async { [weak self] in
-            UIApplication.shared.isNetworkActivityIndicatorVisible = state
-            if state {
-                self?.loadingIndicator.startAnimating()
-            } else {
-                self?.loadingIndicator.stopAnimating()
+    private func onUpdate() {
+        if isInternetAvailable {
+            model.loadNewsContent(by: newsId) { [weak self] error in
+                if let e = error {
+                    self?.showError(title: "Can't update news content!", subtitle: e)
+                } else {
+                    self?.displayNewsTitle()
+                }
+                self?.contentTextView.stopPullRefreshing()
             }
+        } else {
+            contentTextView.stopPullRefreshing()
+            showError(title: "Can't update news content!", subtitle: "No internet connection available!")
         }
     }
-    
-    // MARK: - Helpers
     
     private func buildFontAttributes(_ font: UIFont, _ style: NSMutableParagraphStyle) -> [String: NSObject] {
         let attr = [NSFontAttributeName: font,
                     NSParagraphStyleAttributeName: style]
         
         return attr
+    }
+    
+    // MARK: - DI
+    
+    var model: INewsContentModel!
+    
+    var assembler: INewsContentDependencyManager!
+    
+    private func injectDependencies() {
+        model = assembler.newsContentModel()
     }
 }

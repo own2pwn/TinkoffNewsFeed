@@ -71,7 +71,6 @@ final class DependencyManager: IDependencyManager {
         let d = NewsListProviderDependencies(requestSender: self.requestSender,
                                              cacheManager: self.newsListCacheManager,
                                              coreDataWorker: self.coreDataWorker,
-                                             contextManager: self.contextManager,
                                              configBuilder: self.newsListConfigBuilder)
 
         return d
