@@ -110,15 +110,11 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     private func configure(_ cell: NewsFeedCell, at indexPath: IndexPath) {
-        let displayModel = model.displayModel(for: indexPath)
-        let date = displayModel.date
-        let viewsCount = displayModel.viewsCount
-        let title = displayModel.title.decodeHTML()
-        let humanizedDate = humanDate(date)
+        let object = model.object(for: indexPath)
 
-        cell.newsDateLabel.text = humanizedDate
-        cell.newsTitleLabel.text = title
-        cell.newsViewsCountLabel.text = viewsCount.stringValue
+        cell.newsViewsCountLabel.text = "\(object.viewsCount)"
+        cell.newsTitleLabel.text = object.title!.decodeHTML()
+        cell.newsDateLabel.text = humanDate(object.pubDate! as Date)
     }
 
     // MARK: - UITableViewDelegate

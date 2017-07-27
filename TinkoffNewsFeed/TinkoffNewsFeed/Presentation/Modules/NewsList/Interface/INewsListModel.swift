@@ -15,7 +15,7 @@ protocol INewsListModel: class {
 
     var fetchedNewsCount: Int { get }
     func rowsCount(for section: Int) -> Int
-    func displayModel(for indexPath: IndexPath) -> NewsListDisplayModel
+    func object(for indexPath: IndexPath) -> News
 
     func presentNewsContent(for indexPath: IndexPath)
 }

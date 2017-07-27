@@ -66,16 +66,10 @@ final class NewsListModel: INewsListModel {
         return sectionInfo.numberOfObjects
     }
 
-    func displayModel(for indexPath: IndexPath) -> NewsListDisplayModel {
+    func object(for indexPath: IndexPath) -> News {
         let object = frc.object(at: indexPath)
-        // TODO: date formatting
-        let date = object.pubDate! as Date
-        let viewsCount = Int(object.viewsCount)
-        let title = object.title!
-
-        let model = NewsListDisplayModel(date: date, viewsCount: viewsCount, title: title)
-
-        return model
+        
+        return object
     }
 
     // MARK: - Members
@@ -87,7 +81,7 @@ final class NewsListModel: INewsListModel {
     private func initFRC() {
         let dateSorter = NSSortDescriptor(key: sortByKey, ascending: false)
         let sortDescriptors = [dateSorter]
-        let fr = fetchRequestProvider.fetchRequest(object: News.self, sortDescriptors: sortDescriptors, predicate: nil, fetchLimit: newsBatchSize)
+        let fr = fetchRequestProvider.fetchRequest(object: News.self, sortDescriptors: sortDescriptors, predicate: nil, fetchLimit: nil)
         fr.fetchBatchSize = newsBatchSize
 
         frc = frcManager.initialize(delegate: view, fetchRequest: fr)
