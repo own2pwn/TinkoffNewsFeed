@@ -14,9 +14,8 @@ final class NewsContentCacheManager: INewsContentCacheManager {
         // search for existing news
         if let news = coreDataWorker.findFirst(by: "id", value: id, entity: News.self) {
 
-            // if there is then check to update its content
+            // if any then check to update its content
             if let content = news.content {
-                // Updating existing cache
                 if data.modifiedAt > content.modifiedAt! as Date {
                     content.content = data.content
                     content.modifiedAt = data.modifiedAt as NSDate

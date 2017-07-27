@@ -7,34 +7,34 @@ import Foundation
 import CoreData
 
 final class NewsListCacheManager: INewsListCacheManager {
-//    func updateCache(for news: [NewsEntityModel]) {
-//        var newsIds = [String]()
-//        var newsHashes = [String]()
-//        
-//        for single in news {
-//            let id = single.id
-//            let hash = single.titleHash
-//            
-//            newsIds.append(id)
-//            newsHashes.append(hash)
-//        }
-//        
-//        let fmt = "id IN %@ AND (NOT (titleHash in %@))"
-//        let predicate = NSPredicate(format: fmt, newsIds, newsHashes)
-//        
-//        if let toUpdate = coreDataWorker.get(type: News.self, predicate: predicate, sortDescriptors: nil, fetchLimit: nil) {
-//            for oldNews in toUpdate {
-//                var updatedNews = oldNews
-//                let newNews = news.first(where: { $0.id == oldNews.id! })
-//                objectMapper.map(newNews!, &updatedNews)
-//            }
-//            contextManager.performSave(context: saveContext) { error in
-//                if let e = error {
-//                    log.error(e)
-//                }
-//            }
-//        }
-//    }
+    //    func updateCache(for news: [NewsEntityModel]) {
+    //        var newsIds = [String]()
+    //        var newsHashes = [String]()
+    //
+    //        for single in news {
+    //            let id = single.id
+    //            let hash = single.titleHash
+    //
+    //            newsIds.append(id)
+    //            newsHashes.append(hash)
+    //        }
+    //
+    //        let fmt = "id IN %@ AND (NOT (titleHash in %@))"
+    //        let predicate = NSPredicate(format: fmt, newsIds, newsHashes)
+    //
+    //        if let toUpdate = coreDataWorker.get(type: News.self, predicate: predicate, sortDescriptors: nil, fetchLimit: nil) {
+    //            for oldNews in toUpdate {
+    //                var updatedNews = oldNews
+    //                let newNews = news.first(where: { $0.id == oldNews.id! })
+    //                objectMapper.map(newNews!, &updatedNews)
+    //            }
+    //            contextManager.performSave(context: saveContext) { error in
+    //                if let e = error {
+    //                    log.error(e)
+    //                }
+    //            }
+    //        }
+    //    }
 
     func cache(_ data: NewsListAPIModel) {
         let news = data.payload!
@@ -58,7 +58,6 @@ final class NewsListCacheManager: INewsListCacheManager {
          objectMapper: IStructToEntityMapper.Type, coreDataWorker: ICoreDataWorker) {
         self.contextManager = contextManager
         self.saveContext = saveContext
-
         self.objectMapper = objectMapper
         self.coreDataWorker = coreDataWorker
     }

@@ -10,7 +10,7 @@ final class CoreDataWorker: ICoreDataWorker {
 
     // MARK: - ICoreDataWorker
 
-    func find<T:NSManagedObject>(by attribute: String, value: String, entity: T.Type) -> [T]? {
+    func find<T: NSManagedObject>(by attribute: String, value: String, entity: T.Type) -> [T]? {
         let name = T.entityName
         let fr = NSFetchRequest<T>(entityName: name)
         let predicate = NSPredicate(format: "%K == %@", attribute, value)
@@ -21,18 +21,18 @@ final class CoreDataWorker: ICoreDataWorker {
         return result
     }
 
-    func findFirst<T:NSManagedObject>(by attribute: String, value: String, entity: T.Type) -> T? {
+    func findFirst<T: NSManagedObject>(by attribute: String, value: String, entity: T.Type) -> T? {
         let result = find(by: attribute, value: value, entity: entity)
 
         return result?.first
     }
 
-    //TODO: use threads
+    // TODO: use threads
 
-    func get<T:NSManagedObject>(type: T.Type,
-                                predicate: NSPredicate? = nil,
-                                sortDescriptors: [NSSortDescriptor]? = nil,
-                                fetchLimit: Int? = nil) -> [T]? {
+    func get<T: NSManagedObject>(type: T.Type,
+                                 predicate: NSPredicate? = nil,
+                                 sortDescriptors: [NSSortDescriptor]? = nil,
+                                 fetchLimit: Int? = nil) -> [T]? {
         let name = T.entityName
         let fr = NSFetchRequest<T>(entityName: name)
         fr.predicate = predicate
@@ -45,10 +45,10 @@ final class CoreDataWorker: ICoreDataWorker {
         return result
     }
 
-    func getFirst<T:NSManagedObject>(type: T.Type,
-                                     predicate: NSPredicate? = nil,
-                                     sortDescriptors: [NSSortDescriptor]? = nil,
-                                     fetchLimit: Int? = nil) -> T? {
+    func getFirst<T: NSManagedObject>(type: T.Type,
+                                      predicate: NSPredicate? = nil,
+                                      sortDescriptors: [NSSortDescriptor]? = nil,
+                                      fetchLimit: Int? = nil) -> T? {
         return get(type: type, predicate: predicate, sortDescriptors: sortDescriptors, fetchLimit: fetchLimit)?.first
     }
 

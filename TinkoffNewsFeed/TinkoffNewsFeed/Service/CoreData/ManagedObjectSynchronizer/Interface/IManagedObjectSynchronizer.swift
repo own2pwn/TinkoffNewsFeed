@@ -7,11 +7,11 @@ import Foundation
 import CoreData
 
 protocol IManagedObjectSynchronizer {
-    func sync<Object:NSManagedObject>(_ object: Object, completion: ((Error?) -> Void)?)
+    func sync<Object: NSManagedObject>(_ object: Object, completion: ((Error?) -> Void)?)
 }
 
 extension IManagedObjectSynchronizer {
-    func sync<Object:NSManagedObject>(_ object: Object, completion: ((Error?) -> Void)? = nil) {
+    func sync<Object: NSManagedObject>(_ object: Object, completion: ((Error?) -> Void)? = nil) {
         sync(object, completion: completion)
     }
 }

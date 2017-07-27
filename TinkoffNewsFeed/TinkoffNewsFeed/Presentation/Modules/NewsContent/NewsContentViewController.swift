@@ -78,7 +78,7 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     var assembler: INewsContentDependencyManager!
     
     private func injectDependencies() {
-        model = assembler.newsContenModel()
+        model = assembler.newsContentModel()
     }
     
     // MARK: - Members

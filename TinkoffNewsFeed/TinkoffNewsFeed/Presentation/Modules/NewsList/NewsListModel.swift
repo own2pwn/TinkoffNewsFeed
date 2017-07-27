@@ -23,14 +23,15 @@ final class NewsListModel: INewsListModel {
         view.startLoadingAnimation()
         newsProvider.load(count: newsBatchSize) { [unowned self] in
             self.view.stopLoadingAnimation()
+            // TODO: check if load was successfull
             log.debug("News were loaded from API")
         }
     }
 
     func update(_ batch: Int) {
-        
+
     }
-    
+
     func loadMore(_ count: Int) {
 
     }
@@ -41,7 +42,7 @@ final class NewsListModel: INewsListModel {
         let title = object.title!
         let content = object.content?.content
         object.viewsCount += 1
-        syncer.sync(object) { (error) in
+        syncer.sync(object) { error in
             if let e = error {
                 log.debug("Error while syncing: \(e)!")
             }
@@ -54,7 +55,7 @@ final class NewsListModel: INewsListModel {
     var fetchedNewsCount: Int {
         return rowsCount(for: 0)
     }
-    
+
     func rowsCount(for section: Int) -> Int {
         let sections = frc.sections!
         let sectionInfo = sections[section]
@@ -77,21 +78,21 @@ final class NewsListModel: INewsListModel {
     // MARK: - Members
 
     private var frc: NSFetchedResultsController<News>!
-    
+
     // MARK: - Methods
-    
+
     private func initFRC() {
         let dateSorter = NSSortDescriptor(key: sortByKey, ascending: false)
         let sortDescriptors = [dateSorter]
         let fr = fetchRequestProvider.fetchRequest(object: News.self, sortDescriptors: sortDescriptors, predicate: nil, fetchLimit: newsBatchSize)
         fr.fetchBatchSize = newsBatchSize
-        
+
         frc = frcManager.initialize(delegate: view, fetchRequest: fr)
         try? frc.performFetch()
     }
-    
+
     // MARK: - Constants
-    
+
     private let newsBatchSize = 20
     private let sortByKey = "pubDate"
 
@@ -104,7 +105,7 @@ final class NewsListModel: INewsListModel {
         fetchRequestProvider = dependencies.fetchRequestProvider
         frcManager = dependencies.frcManager
         syncer = dependencies.syncer
-        
+
         initFRC()
     }
 

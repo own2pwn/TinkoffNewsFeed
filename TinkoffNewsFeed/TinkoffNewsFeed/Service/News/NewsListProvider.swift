@@ -36,10 +36,10 @@ final class NewsListProvider: INewsListProvider {
         let count = offset < count ? count : count + offset
         
         let config = configBuilder.build(offset: offset, count: count)
-        requestSender.sendJSON(config: config) { [unowned self] (result) in
+        requestSender.sendJSON(config: config) { [unowned self] result in
             completion?()
             self.verify(result)
-            //TODO: maybe compelte with error if gained no data from api
+            // TODO: maybe compelte with error if gained no data from api
             // TODO: check if it save here to use unowned
             // or not to
         }

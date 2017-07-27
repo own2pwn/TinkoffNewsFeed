@@ -8,13 +8,13 @@ import Alamofire
 import SwiftyJSON
 
 final class RequestSender: IRequestSender {
-
+    
     func sendJSON<R>(config: RequestConfig<R, JSON>,
                      completionHandler: @escaping (IResult<R>) -> Void) {
-
+        
         let urlRequest = config.request
         let error = IResult<R>.error
-
+        
         request(urlRequest).responseJSON { response in
             if let e = response.error?.localizedDescription {
                 let e = "Got error for req: \(urlRequest)\nError: " + e
@@ -30,16 +30,16 @@ final class RequestSender: IRequestSender {
                 completionHandler(error(e))
                 return
             }
-
+            
             let json = JSON(response)
             if let parsed = config.parser.parse(json) {
                 let success = IResult.success(parsed)
                 
                 completionHandler(success)
             } else {
-                let e = "Received data can't be parsed!"
+                let e = "Received JSON couldn't be parsed!"
                 log.error(e)
-                log.info("Data: \(json)")
+                log.info("JSON: \(json)")
                 
                 completionHandler(error(e))
             }

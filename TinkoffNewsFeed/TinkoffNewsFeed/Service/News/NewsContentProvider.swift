@@ -20,7 +20,7 @@ final class NewsContentProvider: INewsContentProvider {
     func load(by id: String, completion: @escaping (NewsContentDisplayModel) -> Void) {
         let config = configBuilder.build(id)
 
-        requstSender.sendJSON(config: config) { [unowned self] (response) in
+        requstSender.sendJSON(config: config) { [unowned self] response in
             self.cache(id, response, completion: completion)
         }
     }
@@ -44,9 +44,9 @@ final class NewsContentProvider: INewsContentProvider {
             cacheManager.cache(id, payload)
         }
     }
-    
+
     // MARK: - DI
-    
+
     init(dependencies: NewsContentProviderDependencies) {
         contextManager = dependencies.contextManager
         coreDataWorker = dependencies.coreDataWorker
@@ -55,7 +55,7 @@ final class NewsContentProvider: INewsContentProvider {
         requstSender = dependencies.requstSender
         configBuilder = dependencies.configBuilder
     }
-    
+
     private let contextManager: ICDContextManager
     private let coreDataWorker: ICoreDataWorker
     private let objectMapper: IStructToEntityMapper.Type

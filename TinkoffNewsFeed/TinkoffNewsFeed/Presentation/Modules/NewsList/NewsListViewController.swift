@@ -33,7 +33,7 @@ struct NewsContentRoutingModel {
 }
 
 final class NewsListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,
-        NewsListViewDelegate, NSFetchedResultsControllerDelegate {
+    NewsListViewDelegate, NSFetchedResultsControllerDelegate {
 
     // MARK: - Outlets
 
@@ -62,33 +62,33 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     private func updateFetchedNewsCount() {
-        //fetchedNewsCount = newsListFRC.sections![0].numberOfObjects
+        // fetchedNewsCount = newsListFRC.sections![0].numberOfObjects
         log.debug("New items count: \(fetchedNewsCount)")
     }
 
     private var fetchedNewsCount = 0
 
     // MARK: - Overrides
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
+
         injectDependencies()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupController()
         setupView()
     }
-    
+
     // MARK: - DI
-    
+
     var model: INewsListModel!
-    
+
     private let assembler: INewsListDependencyManager = DependencyManager()
-    
+
     private func injectDependencies() {
         model = assembler.newsListModel(for: self)
     }
@@ -97,7 +97,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let info = sender as? NewsContentRoutingModel,
-           let dest = segue.destination as? NewsContentViewController {
+            let dest = segue.destination as? NewsContentViewController {
             dest.assembler = assembler as! INewsContentDependencyManager
             dest.newsId = info.id
             dest.newsTitle = info.title
@@ -109,7 +109,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
 
     private func addPull2R() {
         if newsFeedTableView.viewWithTag(PullToRefreshConst.pullTag) == nil {
-            newsFeedTableView.addPullToRefresh(refreshCompletion: self.onPull)
+            newsFeedTableView.addPullToRefresh(refreshCompletion: onPull)
             if fetchedNewsCount > 0 {
                 addPush2R(force: true)
             }
@@ -118,7 +118,7 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
 
     private func addPush2R(force: Bool = false) {
         if force || newsFeedTableView.viewWithTag(PullToRefreshConst.pushTag) == nil {
-            newsFeedTableView.addPushToRefresh(refreshCompletion: self.onLoadMore)
+            newsFeedTableView.addPushToRefresh(refreshCompletion: onLoadMore)
         }
     }
 
@@ -185,27 +185,25 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
         let title = displayModel.title.decodeHTML()
         let humanizedDate = humanDate(date)
 
-        //TODO: various date formatting
+        // TODO: various date formatting
 
         cell.newsDateLabel.text = humanizedDate
         cell.newsTitleLabel.text = title
         cell.newsViewsCountLabel.text = viewsCount.stringValue
     }
-    
+
     private func humanDate(_ date: Date) -> String {
-        
+
         var humanizedDate = ""
-        
+
         if date.isToday {
             humanizedDate = date.time
-        }
-        else if date.isYesterday {
+        } else if date.isYesterday {
             humanizedDate = date.yesterdayFmt
-        }
-        else {
+        } else {
             humanizedDate = date.fullFmt
         }
-        
+
         return humanizedDate
     }
 
@@ -291,12 +289,12 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
             showError(title: noConnectionTitle, subtitle: noConnectionSubtitle)
         }
     }
-    
+
     private func showError(title: String?, subtitle: String?) {
         let hudContent: HUDContentType = .labeledError(title: title, subtitle: subtitle)
         HUD.flash(hudContent, delay: hudFlashDelay)
     }
-    
+
     private func fillNewsIfEmpty() {
         if model.fetchedNewsCount == 0 {
             model.loadNews()

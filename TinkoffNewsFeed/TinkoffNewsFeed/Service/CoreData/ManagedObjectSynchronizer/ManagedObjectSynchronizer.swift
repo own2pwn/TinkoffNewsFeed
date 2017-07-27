@@ -10,11 +10,10 @@ final class ManagedObjectSynchronizer: IManagedObjectSynchronizer {
 
     // MARK: - IManagedObjectSynchronizer
 
-    func sync<Object:NSManagedObject>(_ object: Object, completion: ((Error?) -> Void)? = nil) {
+    func sync<Object: NSManagedObject>(_ object: Object,
+                                       completion: ((Error?) -> Void)? = nil) {
         let ctx = object.managedObjectContext!
-        queue.async { [weak self] in
-            self?.contextManager.performSave(context: ctx, completion: completion)
-        }
+        contextManager.performSave(context: ctx, completion: completion)
     }
 
     // TODO: make queue for CD?
@@ -26,5 +25,4 @@ final class ManagedObjectSynchronizer: IManagedObjectSynchronizer {
     }
 
     private let contextManager: ICDContextManager
-    private let queue = DispatchQueue(label: "tnf.cd.queue")
 }
