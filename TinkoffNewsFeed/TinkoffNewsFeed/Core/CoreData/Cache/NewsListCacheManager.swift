@@ -10,23 +10,20 @@ final class NewsListCacheManager: INewsListCacheManager {
     
     func cache(_ payload: [NewsListPayload]) {
         queue.sync { [weak self] in
-            
-            // get saved news where hash is different and update them
-            
-            self?.updateCache(for: payload)
-            
-            // delete already existing news from payload
-            // store new news
-            
-            for news in payload {
-                if let strongSelf = self {
+            if let strongSelf = self {
+                strongSelf.updateCache(for: payload)
+                
+                let existingNewsIds = strongSelf.getExistingNewsIds()
+                let newsIds = strongSelf.getNewsIds(payload)
+                let newNewsIds = newsIds.subtracting(existingNewsIds)
+                
+                for news in payload where newNewsIds.contains(news.id) {
                     var mObject = News(context: strongSelf.saveContext)
                     strongSelf.objectMapper.map(news, &mObject)
                     mObject.titleHash = news.title.sha1()
                     mObject.viewsCount = 0
                 }
-            }
-            if let strongSelf = self {
+                
                 strongSelf.contextManager.performSave(context: strongSelf.saveContext) { error in
                     if let e = error {
                         log.error(e)
@@ -38,7 +35,7 @@ final class NewsListCacheManager: INewsListCacheManager {
     
     // MARK: - Private
     
-    func updateCache(for news: [NewsListPayload]) {
+    private func updateCache(for news: [NewsListPayload]) {
         var newsIds = Set<String>()
         var newsHashes = Set<String>()
         
@@ -60,6 +57,32 @@ final class NewsListCacheManager: INewsListCacheManager {
                 objectMapper.map(newNews, &updatedNews)
             }
         }
+    }
+    
+    private func getNewsIds(_ news: [NewsListPayload]) -> Set<String> {
+        var ids = Set<String>()
+        
+        for single in news {
+            let id = single.id
+            ids.insert(id)
+        }
+        
+        return ids
+    }
+    
+    private func getExistingNewsIds() -> Set<String> {
+        var ids = Set<String>()
+        
+        let properties = ["id"]
+        if let existingNews = self.coreDataWorker.getDict(type: News.self, predicate: nil, propertiesToFetch: properties) {
+            for news in existingNews {
+                let newsInfo = news as! [String: String]
+                let id = newsInfo["id"]!
+                ids.insert(id)
+            }
+        }
+        
+        return ids
     }
     
     // MARK: - DI
