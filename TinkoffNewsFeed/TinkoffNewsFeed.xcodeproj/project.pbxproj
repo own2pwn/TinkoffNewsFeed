@@ -56,6 +56,7 @@
 		B91A8BD61F2A356500AFA94C /* NewsContentParserConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91A8BD51F2A356500AFA94C /* NewsContentParserConstants.swift */; };
 		B92B96AC1F274110003B767E /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92B96AB1F274110003B767E /* DateExtension.swift */; };
 		B92B96AE1F27A46A003B767E /* NewsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92B96AD1F27A46A003B767E /* NewsContentViewController.swift */; };
+		B96D90CC1F35D0A40000A122 /* NewsContentCacheManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96D90CB1F35D0A40000A122 /* NewsContentCacheManagerTests.swift */; };
 		B96FB7D11F290124006EE83F /* DependencyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96FB7D01F290124006EE83F /* DependencyManager.swift */; };
 		B96FB7D31F290FC8006EE83F /* NewsContentConfigBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96FB7D21F290FC8006EE83F /* NewsContentConfigBuilder.swift */; };
 		B96FB7D51F2910AF006EE83F /* INewsContentConfigBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96FB7D41F2910AF006EE83F /* INewsContentConfigBuilder.swift */; };
@@ -72,9 +73,24 @@
 		B9D0CE761F2668F200117C9B /* NewsContent+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0CE721F2668F200117C9B /* NewsContent+CoreDataProperties.swift */; };
 		B9D0CE771F2668F200117C9B /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0CE731F2668F200117C9B /* News.swift */; };
 		B9D0CE781F2668F200117C9B /* News+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0CE741F2668F200117C9B /* News+CoreDataProperties.swift */; };
+		B9D2D6F01F35BBE700E08E4F /* TinkoffNewsFeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D2D6EF1F35BBE700E08E4F /* TinkoffNewsFeedTests.swift */; };
+		B9D2D6F81F35BDA000E08E4F /* NewsListProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D2D6F71F35BDA000E08E4F /* NewsListProviderTests.swift */; };
+		B9D2D6FA1F35BDD000E08E4F /* NewsListCacheManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D2D6F91F35BDD000E08E4F /* NewsListCacheManagerTests.swift */; };
+		BF45644357A5C09526D88662 /* Pods_TinkoffNewsFeedTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F63F99A53180FE6E82C8068 /* Pods_TinkoffNewsFeedTests.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		B9D2D6F21F35BBE700E08E4F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B97BDF111F25FE0300568C3F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B97BDF181F25FE0300568C3F;
+			remoteInfo = TinkoffNewsFeed;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		0F63F99A53180FE6E82C8068 /* Pods_TinkoffNewsFeedTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinkoffNewsFeedTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1064A0A1BCFD7B549589303F /* UIFontExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFontExtension.swift; sourceTree = "<group>"; };
 		1064A0BBCF3DE709E476872B /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		1064A1942A608856F5BBC4B4 /* NewsListConfigBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsListConfigBuilder.swift; sourceTree = "<group>"; };
@@ -122,9 +138,11 @@
 		1064AE9D14040D726FF4090E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		1064AFCB0E2B64D885D37BCA /* FetchedResultsControllerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsControllerManager.swift; sourceTree = "<group>"; };
 		442A130EC7E9DF11BC28F57D /* Pods_TinkoffNewsFeed.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinkoffNewsFeed.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A57CB636A565714645480E3 /* Pods-TinkoffNewsFeedTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinkoffNewsFeedTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TinkoffNewsFeedTests/Pods-TinkoffNewsFeedTests.release.xcconfig"; sourceTree = "<group>"; };
 		B91A8BD51F2A356500AFA94C /* NewsContentParserConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsContentParserConstants.swift; sourceTree = "<group>"; };
 		B92B96AB1F274110003B767E /* DateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		B92B96AD1F27A46A003B767E /* NewsContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsContentViewController.swift; sourceTree = "<group>"; };
+		B96D90CB1F35D0A40000A122 /* NewsContentCacheManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsContentCacheManagerTests.swift; sourceTree = "<group>"; };
 		B96FB7D01F290124006EE83F /* DependencyManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DependencyManager.swift; sourceTree = "<group>"; };
 		B96FB7D21F290FC8006EE83F /* NewsContentConfigBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsContentConfigBuilder.swift; sourceTree = "<group>"; };
 		B96FB7D41F2910AF006EE83F /* INewsContentConfigBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = INewsContentConfigBuilder.swift; sourceTree = "<group>"; };
@@ -142,8 +160,14 @@
 		B9D0CE721F2668F200117C9B /* NewsContent+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NewsContent+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		B9D0CE731F2668F200117C9B /* News.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
 		B9D0CE741F2668F200117C9B /* News+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "News+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		B9D2D6ED1F35BBE700E08E4F /* TinkoffNewsFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TinkoffNewsFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9D2D6EF1F35BBE700E08E4F /* TinkoffNewsFeedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinkoffNewsFeedTests.swift; sourceTree = "<group>"; };
+		B9D2D6F11F35BBE700E08E4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B9D2D6F71F35BDA000E08E4F /* NewsListProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsListProviderTests.swift; sourceTree = "<group>"; };
+		B9D2D6F91F35BDD000E08E4F /* NewsListCacheManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsListCacheManagerTests.swift; sourceTree = "<group>"; };
 		BEC257A59A58469B7AA05447 /* Pods-TinkoffNewsFeed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinkoffNewsFeed.release.xcconfig"; path = "Pods/Target Support Files/Pods-TinkoffNewsFeed/Pods-TinkoffNewsFeed.release.xcconfig"; sourceTree = "<group>"; };
 		C17511B1132E6AFDE7C994E9 /* Pods-TinkoffNewsFeed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinkoffNewsFeed.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TinkoffNewsFeed/Pods-TinkoffNewsFeed.debug.xcconfig"; sourceTree = "<group>"; };
+		EBBC787878849DC6AFD85B62 /* Pods-TinkoffNewsFeedTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinkoffNewsFeedTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TinkoffNewsFeedTests/Pods-TinkoffNewsFeedTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +176,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				865CE61B31A84DDC8DE9A1DF /* Pods_TinkoffNewsFeed.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B9D2D6EA1F35BBE700E08E4F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF45644357A5C09526D88662 /* Pods_TinkoffNewsFeedTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -591,14 +623,25 @@
 			isa = PBXGroup;
 			children = (
 				442A130EC7E9DF11BC28F57D /* Pods_TinkoffNewsFeed.framework */,
+				0F63F99A53180FE6E82C8068 /* Pods_TinkoffNewsFeedTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B9639A1F1F35D3C3005F81BB /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				B9D2D6F91F35BDD000E08E4F /* NewsListCacheManagerTests.swift */,
+				B96D90CB1F35D0A40000A122 /* NewsContentCacheManagerTests.swift */,
+			);
+			name = Cache;
 			sourceTree = "<group>";
 		};
 		B97BDF101F25FE0300568C3F = {
 			isa = PBXGroup;
 			children = (
 				B97BDF1B1F25FE0300568C3F /* TinkoffNewsFeed */,
+				B9D2D6EE1F35BBE700E08E4F /* TinkoffNewsFeedTests */,
 				B97BDF1A1F25FE0300568C3F /* Products */,
 				CB20571C03ED6F8F7A8C2D9C /* Pods */,
 				2908066EF0A85BBC7B70E852 /* Frameworks */,
@@ -609,6 +652,7 @@
 			isa = PBXGroup;
 			children = (
 				B97BDF191F25FE0300568C3F /* TinkoffNewsFeed.app */,
+				B9D2D6ED1F35BBE700E08E4F /* TinkoffNewsFeedTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -624,11 +668,24 @@
 			path = TinkoffNewsFeed;
 			sourceTree = "<group>";
 		};
+		B9D2D6EE1F35BBE700E08E4F /* TinkoffNewsFeedTests */ = {
+			isa = PBXGroup;
+			children = (
+				B9639A1F1F35D3C3005F81BB /* Cache */,
+				B9D2D6EF1F35BBE700E08E4F /* TinkoffNewsFeedTests.swift */,
+				B9D2D6F71F35BDA000E08E4F /* NewsListProviderTests.swift */,
+				B9D2D6F11F35BBE700E08E4F /* Info.plist */,
+			);
+			path = TinkoffNewsFeedTests;
+			sourceTree = "<group>";
+		};
 		CB20571C03ED6F8F7A8C2D9C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
 				C17511B1132E6AFDE7C994E9 /* Pods-TinkoffNewsFeed.debug.xcconfig */,
 				BEC257A59A58469B7AA05447 /* Pods-TinkoffNewsFeed.release.xcconfig */,
+				EBBC787878849DC6AFD85B62 /* Pods-TinkoffNewsFeedTests.debug.xcconfig */,
+				6A57CB636A565714645480E3 /* Pods-TinkoffNewsFeedTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -656,6 +713,27 @@
 			productReference = B97BDF191F25FE0300568C3F /* TinkoffNewsFeed.app */;
 			productType = "com.apple.product-type.application";
 		};
+		B9D2D6EC1F35BBE700E08E4F /* TinkoffNewsFeedTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B9D2D6F61F35BBE700E08E4F /* Build configuration list for PBXNativeTarget "TinkoffNewsFeedTests" */;
+			buildPhases = (
+				16F94909D855DB761DCAAA1F /* [CP] Check Pods Manifest.lock */,
+				B9D2D6E91F35BBE700E08E4F /* Sources */,
+				B9D2D6EA1F35BBE700E08E4F /* Frameworks */,
+				B9D2D6EB1F35BBE700E08E4F /* Resources */,
+				C306BC368A19F4999E596DB1 /* [CP] Embed Pods Frameworks */,
+				7C3166049C89E22DACE56433 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B9D2D6F31F35BBE700E08E4F /* PBXTargetDependency */,
+			);
+			name = TinkoffNewsFeedTests;
+			productName = TinkoffNewsFeedTests;
+			productReference = B9D2D6ED1F35BBE700E08E4F /* TinkoffNewsFeedTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -670,6 +748,12 @@
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = VD97XKT54M;
 						ProvisioningStyle = Automatic;
+					};
+					B9D2D6EC1F35BBE700E08E4F = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = VD97XKT54M;
+						ProvisioningStyle = Automatic;
+						TestTargetID = B97BDF181F25FE0300568C3F;
 					};
 				};
 			};
@@ -687,6 +771,7 @@
 			projectRoot = "";
 			targets = (
 				B97BDF181F25FE0300568C3F /* TinkoffNewsFeed */,
+				B9D2D6EC1F35BBE700E08E4F /* TinkoffNewsFeedTests */,
 			);
 		};
 /* End PBXProject section */
@@ -702,22 +787,65 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B9D2D6EB1F35BBE700E08E4F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		16F94909D855DB761DCAAA1F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TinkoffNewsFeedTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		19ACCC2E7749E8B58142BCC6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TinkoffNewsFeed-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7C3166049C89E22DACE56433 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinkoffNewsFeedTests/Pods-TinkoffNewsFeedTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		81A6DF8B7C1E087E5A7BD404 /* [CP] Copy Pods Resources */ = {
@@ -735,15 +863,64 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinkoffNewsFeed/Pods-TinkoffNewsFeed-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		C306BC368A19F4999E596DB1 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-TinkoffNewsFeedTests/Pods-TinkoffNewsFeedTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/Swinject/Swinject.framework",
+				"${BUILT_PRODUCTS_DIR}/SwinjectStoryboard/SwinjectStoryboard.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swinject.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwinjectStoryboard.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinkoffNewsFeedTests/Pods-TinkoffNewsFeedTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		F8CFFB9E8B359BF876A65197 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-TinkoffNewsFeed/Pods-TinkoffNewsFeed-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/EVReflection/EVReflection.framework",
+				"${BUILT_PRODUCTS_DIR}/PKHUD/PKHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/PullToRefreshSwift/PullToRefreshSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/ReachabilitySwift.framework",
+				"${BUILT_PRODUCTS_DIR}/Reflection/Reflection.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftDate/SwiftDate.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftKVC/SwiftKVC.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyBeaver/SwiftyBeaver.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/Swinject/Swinject.framework",
+				"${BUILT_PRODUCTS_DIR}/SwinjectStoryboard/SwinjectStoryboard.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EVReflection.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PKHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PullToRefreshSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReachabilitySwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reflection.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftDate.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftKVC.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyBeaver.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swinject.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwinjectStoryboard.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -821,7 +998,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B9D2D6E91F35BBE700E08E4F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B9D2D6F01F35BBE700E08E4F /* TinkoffNewsFeedTests.swift in Sources */,
+				B9D2D6FA1F35BDD000E08E4F /* NewsListCacheManagerTests.swift in Sources */,
+				B9D2D6F81F35BDA000E08E4F /* NewsListProviderTests.swift in Sources */,
+				B96D90CC1F35D0A40000A122 /* NewsContentCacheManagerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B9D2D6F31F35BBE700E08E4F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B97BDF181F25FE0300568C3F /* TinkoffNewsFeed */;
+			targetProxy = B9D2D6F21F35BBE700E08E4F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		1064A2BA95B5D78DDC6B2545 /* LaunchScreen.storyboard */ = {
@@ -966,6 +1162,36 @@
 			};
 			name = Release;
 		};
+		B9D2D6F41F35BBE700E08E4F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EBBC787878849DC6AFD85B62 /* Pods-TinkoffNewsFeedTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = VD97XKT54M;
+				INFOPLIST_FILE = TinkoffNewsFeedTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = own2pwn.pp.TinkoffNewsFeedTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TinkoffNewsFeed.app/TinkoffNewsFeed";
+			};
+			name = Debug;
+		};
+		B9D2D6F51F35BBE700E08E4F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6A57CB636A565714645480E3 /* Pods-TinkoffNewsFeedTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = VD97XKT54M;
+				INFOPLIST_FILE = TinkoffNewsFeedTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = own2pwn.pp.TinkoffNewsFeedTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TinkoffNewsFeed.app/TinkoffNewsFeed";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -983,6 +1209,15 @@
 			buildConfigurations = (
 				B97BDF2C1F25FE0300568C3F /* Debug */,
 				B97BDF2D1F25FE0300568C3F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B9D2D6F61F35BBE700E08E4F /* Build configuration list for PBXNativeTarget "TinkoffNewsFeedTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B9D2D6F41F35BBE700E08E4F /* Debug */,
+				B9D2D6F51F35BBE700E08E4F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

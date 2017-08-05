@@ -54,8 +54,8 @@ final class CDStack: ICDStack {
 
     // MARK: - CDStack
 
-    init() {
-        initStack()
+    init(storeType: String = NSSQLiteStoreType) {
+        initStack(with: storeType)
     }
 
     // MARK: - Constants
@@ -71,9 +71,9 @@ final class CDStack: ICDStack {
 
     // MARK: - Methods
 
-    private func initStack() {
+    private func initStack(with storeType: String) {
         initObjectModel()
-        initStoreCoordinator()
+        initStoreCoordinator(with: storeType)
     }
 
     private func initObjectModel() {
@@ -87,13 +87,15 @@ final class CDStack: ICDStack {
         }
     }
 
-    private func initStoreCoordinator() {
+    private func initStoreCoordinator(with storeType: String) {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: objectModel)
         do {
-            let storePath = constructStorePath()
-            try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil,
-                                               at: storePath, options: nil)
+            var storePath: URL?
+            if storeType == NSSQLiteStoreType {
+                storePath = constructStorePath()
+            }
 
+            try coordinator.addPersistentStore(ofType: storeType, configurationName: nil, at: storePath, options: nil)
             storeCoordinator = coordinator
         } catch {
             assertionFailure("Can't add persistent store to coordinator. Error: \(error)")

@@ -32,4 +32,13 @@ target 'TinkoffNewsFeed' do
 
   pod 'PKHUD', '~> 4.0'
 
+  ## Tests
+  target 'TinkoffNewsFeedTests' do
+    inherit! :search_paths
+    pod 'Swinject', '~> 2.0.0'
+    pod 'SwinjectStoryboard', '~> 1.0.0'
+    pod 'CryptoSwift'
+
+  end
+
 end

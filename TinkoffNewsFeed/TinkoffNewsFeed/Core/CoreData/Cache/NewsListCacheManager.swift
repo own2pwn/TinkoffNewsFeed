@@ -60,6 +60,7 @@ final class NewsListCacheManager: INewsListCacheManager {
                 var updatedNews = oldNews
                 let newNews = news.first(where: { $0.id == oldNews.id! })!
                 objectMapper.map(newNews, &updatedNews)
+                updatedNews.titleHash = newNews.title.sha1()
             }
         }
     }
