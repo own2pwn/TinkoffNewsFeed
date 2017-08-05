@@ -40,7 +40,7 @@ final class CDStack: ICDStack {
         }
     }
 
-    lazy var masterContext: NSManagedObjectContext = {
+    private lazy var masterContext: NSManagedObjectContext = {
         self.initMasterContext()
     }()
 
