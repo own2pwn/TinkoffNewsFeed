@@ -72,7 +72,18 @@
 		B9D0CE761F2668F200117C9B /* NewsContent+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0CE721F2668F200117C9B /* NewsContent+CoreDataProperties.swift */; };
 		B9D0CE771F2668F200117C9B /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0CE731F2668F200117C9B /* News.swift */; };
 		B9D0CE781F2668F200117C9B /* News+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D0CE741F2668F200117C9B /* News+CoreDataProperties.swift */; };
+		B9D2D6F01F35BBE700E08E4F /* TinkoffNewsFeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D2D6EF1F35BBE700E08E4F /* TinkoffNewsFeedTests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B9D2D6F21F35BBE700E08E4F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B97BDF111F25FE0300568C3F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B97BDF181F25FE0300568C3F;
+			remoteInfo = TinkoffNewsFeed;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1064A0A1BCFD7B549589303F /* UIFontExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFontExtension.swift; sourceTree = "<group>"; };
@@ -142,6 +153,9 @@
 		B9D0CE721F2668F200117C9B /* NewsContent+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NewsContent+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		B9D0CE731F2668F200117C9B /* News.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
 		B9D0CE741F2668F200117C9B /* News+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "News+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		B9D2D6ED1F35BBE700E08E4F /* TinkoffNewsFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TinkoffNewsFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9D2D6EF1F35BBE700E08E4F /* TinkoffNewsFeedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinkoffNewsFeedTests.swift; sourceTree = "<group>"; };
+		B9D2D6F11F35BBE700E08E4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BEC257A59A58469B7AA05447 /* Pods-TinkoffNewsFeed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinkoffNewsFeed.release.xcconfig"; path = "Pods/Target Support Files/Pods-TinkoffNewsFeed/Pods-TinkoffNewsFeed.release.xcconfig"; sourceTree = "<group>"; };
 		C17511B1132E6AFDE7C994E9 /* Pods-TinkoffNewsFeed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinkoffNewsFeed.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TinkoffNewsFeed/Pods-TinkoffNewsFeed.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -152,6 +166,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				865CE61B31A84DDC8DE9A1DF /* Pods_TinkoffNewsFeed.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B9D2D6EA1F35BBE700E08E4F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -599,6 +620,7 @@
 			isa = PBXGroup;
 			children = (
 				B97BDF1B1F25FE0300568C3F /* TinkoffNewsFeed */,
+				B9D2D6EE1F35BBE700E08E4F /* TinkoffNewsFeedTests */,
 				B97BDF1A1F25FE0300568C3F /* Products */,
 				CB20571C03ED6F8F7A8C2D9C /* Pods */,
 				2908066EF0A85BBC7B70E852 /* Frameworks */,
@@ -609,6 +631,7 @@
 			isa = PBXGroup;
 			children = (
 				B97BDF191F25FE0300568C3F /* TinkoffNewsFeed.app */,
+				B9D2D6ED1F35BBE700E08E4F /* TinkoffNewsFeedTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -622,6 +645,15 @@
 				1064A58713F2388AB7490813 /* Service */,
 			);
 			path = TinkoffNewsFeed;
+			sourceTree = "<group>";
+		};
+		B9D2D6EE1F35BBE700E08E4F /* TinkoffNewsFeedTests */ = {
+			isa = PBXGroup;
+			children = (
+				B9D2D6EF1F35BBE700E08E4F /* TinkoffNewsFeedTests.swift */,
+				B9D2D6F11F35BBE700E08E4F /* Info.plist */,
+			);
+			path = TinkoffNewsFeedTests;
 			sourceTree = "<group>";
 		};
 		CB20571C03ED6F8F7A8C2D9C /* Pods */ = {
@@ -656,6 +688,24 @@
 			productReference = B97BDF191F25FE0300568C3F /* TinkoffNewsFeed.app */;
 			productType = "com.apple.product-type.application";
 		};
+		B9D2D6EC1F35BBE700E08E4F /* TinkoffNewsFeedTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B9D2D6F61F35BBE700E08E4F /* Build configuration list for PBXNativeTarget "TinkoffNewsFeedTests" */;
+			buildPhases = (
+				B9D2D6E91F35BBE700E08E4F /* Sources */,
+				B9D2D6EA1F35BBE700E08E4F /* Frameworks */,
+				B9D2D6EB1F35BBE700E08E4F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B9D2D6F31F35BBE700E08E4F /* PBXTargetDependency */,
+			);
+			name = TinkoffNewsFeedTests;
+			productName = TinkoffNewsFeedTests;
+			productReference = B9D2D6ED1F35BBE700E08E4F /* TinkoffNewsFeedTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -670,6 +720,12 @@
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = VD97XKT54M;
 						ProvisioningStyle = Automatic;
+					};
+					B9D2D6EC1F35BBE700E08E4F = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = VD97XKT54M;
+						ProvisioningStyle = Automatic;
+						TestTargetID = B97BDF181F25FE0300568C3F;
 					};
 				};
 			};
@@ -687,6 +743,7 @@
 			projectRoot = "";
 			targets = (
 				B97BDF181F25FE0300568C3F /* TinkoffNewsFeed */,
+				B9D2D6EC1F35BBE700E08E4F /* TinkoffNewsFeedTests */,
 			);
 		};
 /* End PBXProject section */
@@ -699,6 +756,13 @@
 				1064AC410AA90468CFFA5C3A /* LaunchScreen.storyboard in Resources */,
 				1064A470AEA1344A8EFE007C /* Main.storyboard in Resources */,
 				1064AE9DC7BA41B7E7CFB20C /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B9D2D6EB1F35BBE700E08E4F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -821,7 +885,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B9D2D6E91F35BBE700E08E4F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B9D2D6F01F35BBE700E08E4F /* TinkoffNewsFeedTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B9D2D6F31F35BBE700E08E4F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B97BDF181F25FE0300568C3F /* TinkoffNewsFeed */;
+			targetProxy = B9D2D6F21F35BBE700E08E4F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		1064A2BA95B5D78DDC6B2545 /* LaunchScreen.storyboard */ = {
@@ -966,6 +1046,34 @@
 			};
 			name = Release;
 		};
+		B9D2D6F41F35BBE700E08E4F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = VD97XKT54M;
+				INFOPLIST_FILE = TinkoffNewsFeedTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = own2pwn.pp.TinkoffNewsFeedTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TinkoffNewsFeed.app/TinkoffNewsFeed";
+			};
+			name = Debug;
+		};
+		B9D2D6F51F35BBE700E08E4F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = VD97XKT54M;
+				INFOPLIST_FILE = TinkoffNewsFeedTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = own2pwn.pp.TinkoffNewsFeedTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TinkoffNewsFeed.app/TinkoffNewsFeed";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -986,6 +1094,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		B9D2D6F61F35BBE700E08E4F /* Build configuration list for PBXNativeTarget "TinkoffNewsFeedTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B9D2D6F41F35BBE700E08E4F /* Debug */,
+				B9D2D6F51F35BBE700E08E4F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 
