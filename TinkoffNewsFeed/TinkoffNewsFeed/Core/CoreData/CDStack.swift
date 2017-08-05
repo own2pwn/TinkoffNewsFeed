@@ -90,9 +90,12 @@ final class CDStack: ICDStack {
     private func initStoreCoordinator(with storeType: String) {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: objectModel)
         do {
-            let storePath = constructStorePath()
-            try coordinator.addPersistentStore(ofType: storeType, configurationName: nil, at: storePath, options: nil)
+            var storePath: URL?
+            if storeType == NSSQLiteStoreType {
+                storePath = constructStorePath()
+            }
 
+            try coordinator.addPersistentStore(ofType: storeType, configurationName: nil, at: storePath, options: nil)
             storeCoordinator = coordinator
         } catch {
             assertionFailure("Can't add persistent store to coordinator. Error: \(error)")
