@@ -31,6 +31,7 @@ final class NewsListCacheManagerTests: XCTestCase {
         XCTAssertEqual(cachedNews.pubDate! as Date, newsPubDate)
         XCTAssertEqual(cachedNews.title, newsTitle)
         XCTAssertEqual(cachedNews.titleHash, titleHash)
+        XCTAssertEqual(cachedNews.viewsCount, exNewsViewsCount)
     }
     
     private func buildCacheManager() -> INewsListCacheManager {
@@ -45,6 +46,7 @@ final class NewsListCacheManagerTests: XCTestCase {
     private let newsId = "1"
     private let newsPubDate = Date(timeIntervalSince1970: 10_000)
     private let newsTitle = "News title"
+    private let exNewsViewsCount: Int64 = 0
     
     private let stack = CDStack(storeType: NSInMemoryStoreType)
 }
