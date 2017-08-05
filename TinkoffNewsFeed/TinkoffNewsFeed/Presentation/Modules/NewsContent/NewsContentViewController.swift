@@ -11,10 +11,6 @@ import PullToRefreshSwift
 import PKHUD
 import ReachabilitySwift
 
-struct NewsContentDependencies {
-    let model: INewsContentModel
-}
-
 protocol NewsContentViewDelegate: class {
     func startLoadingAnimation()
     func stopLoadingAnimation()
@@ -62,7 +58,6 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        injectDependencies()
         setupView()
         presentContent()
     }
@@ -235,10 +230,4 @@ final class NewsContentViewController: UIViewController, NewsContentViewDelegate
     // MARK: - DI
     
     var model: INewsContentModel!
-    
-    var assembler: INewsContentDependencyManager!
-    
-    private func injectDependencies() {
-        model = assembler.newsContentModel()
-    }
 }

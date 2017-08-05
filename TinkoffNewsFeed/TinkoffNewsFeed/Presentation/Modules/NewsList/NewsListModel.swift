@@ -6,10 +6,11 @@
 import Foundation
 import CoreData
 
+typealias NewsListModelViewDependency = (NSFetchedResultsControllerDelegate & NewsListViewDelegate)
+
 struct NewsListModelDependencies {
     let newsProvider: INewsListProvider
-    let fetchRequestProvider: IFetchRequestProvider.Type
-    let frcManager: IFetchedResultsControllerManager
+    let frc: NSFetchedResultsController<News>
     let syncer: IManagedObjectSynchronizer
 }
 
@@ -76,19 +77,9 @@ final class NewsListModel: INewsListModel {
         return object
     }
 
-    // MARK: - Members
-
-    private var frc: NSFetchedResultsController<News>!
-
     // MARK: - Methods
 
-    private func initFRC() {
-        let dateSorter = NSSortDescriptor(key: sortByKey, ascending: false)
-        let sortDescriptors = [dateSorter]
-        let fr = fetchRequestProvider.fetchRequest(object: News.self, sortDescriptors: sortDescriptors, predicate: nil, fetchLimit: newsBatchSize)
-        fr.fetchBatchSize = 2 * newsBatchSize
-
-        frc = frcManager.initialize(delegate: view, fetchRequest: fr)
+    private func initFetch() {
         try? frc.performFetch()
     }
 
@@ -104,7 +95,6 @@ final class NewsListModel: INewsListModel {
     // MARK: - Constants
 
     private let newsBatchSize: Int = .TNF_API_REQUEST_NEWS_BATCH_SIZE
-    private let sortByKey = "pubDate"
 
     // MARK: - DI
 
@@ -112,15 +102,13 @@ final class NewsListModel: INewsListModel {
         self.view = view
 
         newsProvider = dependencies.newsProvider
-        fetchRequestProvider = dependencies.fetchRequestProvider
-        frcManager = dependencies.frcManager
+        frc = dependencies.frc
         syncer = dependencies.syncer
 
-        initFRC()
+        initFetch()
     }
 
     private let newsProvider: INewsListProvider
-    private let fetchRequestProvider: IFetchRequestProvider.Type
-    private let frcManager: IFetchedResultsControllerManager
+    private let frc: NSFetchedResultsController<News>
     private let syncer: IManagedObjectSynchronizer
 }
