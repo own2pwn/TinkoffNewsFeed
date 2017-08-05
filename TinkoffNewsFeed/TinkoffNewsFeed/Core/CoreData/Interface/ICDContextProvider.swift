@@ -11,7 +11,6 @@ protocol ICDContextManager {
     func performSave(context: NSManagedObjectContext,
                      completion: ((Error?) -> Void)?)
 
-    // var masterContext: NSManagedObjectContext { get }
     var mainContext: NSManagedObjectContext { get }
     var saveContext: NSManagedObjectContext { get }
 }
