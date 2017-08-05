@@ -15,20 +15,18 @@ extension SwinjectStoryboard {
         // MARK: - NewsListViewController
         
         defaultContainer.storyboardInitCompleted(NewsListViewController.self) { r, c in
-            c.model = r.resolve(INewsListModel.self)!
+            c.model = r.resolve(INewsListModel.self, argument: c)!
         }
         
         // MARK: - INewsListModel
         
-        defaultContainer.register(INewsListModel.self) { (r, view: NewsListModelViewDependency) in
+        defaultContainer.register(INewsListModel.self) { (r, view: NewsListViewController) in
             let nlProvider = r.resolve(INewsListProvider.self)!
-            let frProvider = r.resolve(IFetchRequestProvider.Type.self)!
-            let frcManager = r.resolve(IFetchedResultsControllerManager.self)!
+            let frc = r.resolve(NSFetchedResultsController<News>.self, argument: view)!
             let syncer = r.resolve(IManagedObjectSynchronizer.self)!
             
             let d = NewsListModelDependencies(newsProvider: nlProvider,
-                                              fetchRequestProvider: frProvider,
-                                              frcManager: frcManager,
+                                              frc: frc,
                                               syncer: syncer)
             
             return NewsListModel(view: view, dependencies: d)
@@ -88,6 +86,33 @@ extension SwinjectStoryboard {
         }
         
         // MARK: - Core
+        
+        defaultContainer.register(NSFetchRequest<News>.self) { r in
+            let frProvider = r.resolve(IFetchRequestProvider.Type.self)!
+            
+            let sortKey = #keyPath(News.pubDate)
+            let pubDateSorter = NSSortDescriptor(key: sortKey, ascending: false)
+            let newsBatchSize: Int = .TNF_API_REQUEST_NEWS_BATCH_SIZE
+            
+            let fr = frProvider.fetchRequest(object: News.self, sortDescriptors: [pubDateSorter], predicate: nil, fetchLimit: newsBatchSize)
+            fr.fetchBatchSize = 2 * newsBatchSize
+            
+            return fr
+        }
+        
+        defaultContainer.register(NSFetchedResultsController<News>.self) { (r, delegate: NewsListViewController) in
+            let fr = r.resolve(NSFetchRequest<News>.self)!
+            let ctxManager = r.resolve(ICDContextManager.self)!
+            
+            let frc = NSFetchedResultsController(fetchRequest: fr,
+                                                 managedObjectContext: ctxManager.mainContext,
+                                                 sectionNameKeyPath: nil,
+                                                 cacheName: nil)
+            
+            frc.delegate = delegate
+            
+            return frc
+        }
         
         defaultContainer.register(IManagedObjectSynchronizer.self) { r in
             let ctxManager = r.resolve(ICDContextManager.self)!

@@ -43,12 +43,6 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
 
     // MARK: - Overrides
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-
-        injectDependencies()
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -69,7 +63,6 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let object = sender as? News,
             let dest = segue.destination as? NewsContentViewController {
-            dest.assembler = assembler as! INewsContentDependencyManager
             dest.newsId = object.id!
             dest.newsTitle = object.title!
             if let content = object.content?.content {
@@ -305,9 +298,4 @@ final class NewsListViewController: UIViewController, UITableViewDataSource, UIT
     // MARK: - DI
 
     var model: INewsListModel!
-    private let assembler: INewsListDependencyManager = DependencyManager()
-
-    private func injectDependencies() {
-        model = assembler.newsListModel(for: self)
-    }
 }
