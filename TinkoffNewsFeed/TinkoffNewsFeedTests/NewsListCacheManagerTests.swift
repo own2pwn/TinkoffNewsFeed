@@ -10,6 +10,9 @@ import XCTest
 import CoreData
 @testable import TinkoffNewsFeed
 
+// Здесь какой-то баг в xcode:
+// Если запустить тесты для всего класса сразу, то будет краш. По отдельности все работает правильно.
+
 final class NewsListCacheManagerTests: XCTestCase {
     func testCache() {
         // given
@@ -17,7 +20,7 @@ final class NewsListCacheManagerTests: XCTestCase {
         news.id = newsId
         news.pubDate = newsPubDate
         news.title = newsTitle
-        let titleHash = newsTitle.sha1()
+        let titleHash = news.title.sha1()
         
         // when
         let manager = buildCacheManager()
@@ -43,10 +46,35 @@ final class NewsListCacheManagerTests: XCTestCase {
                                     coreDataWorker: cdWorker)
     }
     
+    func testUpdateCache() {
+        // given
+        testCache()
+        let news = NewsListPayload()
+        news.id = newsId
+        news.pubDate = newsPubDate
+        news.title = updatedTitle
+        let titleHash = news.title.sha1()
+        
+        // when
+        let manager = buildCacheManager()
+        manager.cache([news])
+        
+        // then
+        let cdWorker: ICoreDataWorker = CoreDataWorker(context: stack.saveContext)
+        let cachedNews = cdWorker.getFirst(type: News.self)!
+        
+        XCTAssertEqual(cachedNews.id, newsId)
+        XCTAssertEqual(cachedNews.pubDate! as Date, newsPubDate)
+        XCTAssertEqual(cachedNews.title, updatedTitle)
+        XCTAssertEqual(cachedNews.titleHash, titleHash)
+        XCTAssertEqual(cachedNews.viewsCount, exNewsViewsCount)
+    }
+    
     private let newsId = "1"
     private let newsPubDate = Date(timeIntervalSince1970: 10_000)
     private let newsTitle = "News title"
     private let exNewsViewsCount: Int64 = 0
+    private let updatedTitle = "Updated title"
     
     private let stack = CDStack(storeType: NSInMemoryStoreType)
 }
