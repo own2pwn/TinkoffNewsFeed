@@ -17,13 +17,20 @@ final class NewsListCacheManagerTests: XCTestCase {
         news.id = newsId
         news.pubDate = newsPubDate
         news.title = newsTitle
+        let titleHash = newsTitle.sha1()
         
         // when
         let manager = buildCacheManager()
         manager.cache([news])
         
         // then
+        let cdWorker: ICoreDataWorker = CoreDataWorker(context: stack.saveContext)
+        let cachedNews = cdWorker.getFirst(type: News.self)!
         
+        XCTAssertEqual(cachedNews.id, newsId)
+        XCTAssertEqual(cachedNews.pubDate! as Date, newsPubDate)
+        XCTAssertEqual(cachedNews.title, newsTitle)
+        XCTAssertEqual(cachedNews.titleHash, titleHash)
     }
     
     private func buildCacheManager() -> INewsListCacheManager {
