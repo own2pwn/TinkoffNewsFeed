@@ -37,18 +37,10 @@ final class NewsListCacheManagerTests: XCTestCase {
         XCTAssertEqual(cachedNews.viewsCount, exNewsViewsCount)
     }
     
-    private func buildCacheManager() -> INewsListCacheManager {
-        let cdWorker = CoreDataWorker(context: stack.saveContext)
-        
-        return NewsListCacheManager(contextManager: stack,
-                                    saveContext: stack.saveContext,
-                                    objectMapper: StructToEntityMapper.self,
-                                    coreDataWorker: cdWorker)
-    }
-    
     func testUpdateCache() {
         // given
         testCache()
+        
         let news = NewsListPayload()
         news.id = newsId
         news.pubDate = newsPubDate
@@ -70,10 +62,22 @@ final class NewsListCacheManagerTests: XCTestCase {
         XCTAssertEqual(cachedNews.viewsCount, exNewsViewsCount)
     }
     
+    // MARK: - Private
+    
+    private func buildCacheManager() -> INewsListCacheManager {
+        let cdWorker = CoreDataWorker(context: stack.saveContext)
+        
+        return NewsListCacheManager(contextManager: stack,
+                                    saveContext: stack.saveContext,
+                                    objectMapper: StructToEntityMapper.self,
+                                    coreDataWorker: cdWorker)
+    }
+    
     private let newsId = "1"
     private let newsPubDate = Date(timeIntervalSince1970: 10_000)
     private let newsTitle = "News title"
     private let exNewsViewsCount: Int64 = 0
+    
     private let updatedTitle = "Updated title"
     
     private let stack = CDStack(storeType: NSInMemoryStoreType)
