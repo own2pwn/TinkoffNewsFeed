@@ -24,7 +24,7 @@ final class FetchedResultsControllerManager: IFetchedResultsControllerManager {
                                              cacheName: String? = nil) -> NSFetchedResultsController<Entity> {
 
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                             managedObjectContext: context,
+                                             managedObjectContext: uiContext,
                                              sectionNameKeyPath: keyPath,
                                              cacheName: cacheName)
         frc.delegate = delegate
@@ -34,9 +34,9 @@ final class FetchedResultsControllerManager: IFetchedResultsControllerManager {
 
     // MARK: - DI
 
-    init(context: NSManagedObjectContext) {
-        self.context = context
+    init(uiContext: NSManagedObjectContext) {
+        self.uiContext = uiContext
     }
 
-    private let context: NSManagedObjectContext
+    private let uiContext: NSManagedObjectContext
 }

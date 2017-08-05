@@ -6,6 +6,8 @@
 import Foundation
 import CoreData
 
+typealias NewsListModelViewDependency = (NSFetchedResultsControllerDelegate & NewsListViewDelegate)
+
 struct NewsListModelDependencies {
     let newsProvider: INewsListProvider
     let fetchRequestProvider: IFetchRequestProvider.Type
