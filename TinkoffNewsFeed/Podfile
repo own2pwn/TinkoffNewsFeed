@@ -4,21 +4,41 @@
 target 'TinkoffNewsFeed' do
   use_frameworks!
 
+  ## Network
   pod 'Alamofire', '~> 4.4'
   pod 'ReachabilitySwift', '~> 3'
 
-  pod 'SwiftyJSON'
+  ## Logging
   pod 'SwiftyBeaver'
 
+  ## Parsing
+  pod 'SwiftyJSON'
+
+  ## KVC
   pod 'SwiftKVC'
   pod "EVReflection"
 
+  ## DI
+  pod 'Swinject', '~> 2.0.0'
+  pod 'SwinjectStoryboard', '~> 1.0.0'
+
+  ## Crypto
   pod 'CryptoSwift'
 
+  ## Other
   pod 'PullToRefreshSwift', :git => 'https://github.com/own2pwn/PullToRefreshSwift.git', :tag => '3.0.4'
 
   pod 'SwiftDate', '~> 4.0'
 
   pod 'PKHUD', '~> 4.0'
+
+  ## Tests
+  target 'TinkoffNewsFeedTests' do
+    inherit! :search_paths
+    pod 'Swinject', '~> 2.0.0'
+    pod 'SwinjectStoryboard', '~> 1.0.0'
+    pod 'CryptoSwift'
+
+  end
 
 end
